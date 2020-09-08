@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,17 +46,34 @@ public class UsuarioEndPoint {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listar(@PathVariable(value = "id") long id) {
 		Optional<Usuario> user = usuarioControle.listar(id);
-		if (user == null) {
-			// throw new ResourceNotFoundException("Usuario n encontrado para ID : " + id);
-		}
+		return new ResponseEntity<>(usuarioResposta(user.get()), HttpStatus.OK);
+	}
+	@ApiOperation(value = "Retorna um Usuario unico pelo CPF")
+	@GetMapping("/{id}")
+	public ResponseEntity<?> listarCpf(@PathVariable(value = "id") long id) {
+		Optional<Usuario> user = usuarioControle.listar(id);
 		return new ResponseEntity<>(usuarioResposta(user.get()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Salva um Usuario")
 	@PostMapping("")
-	public ResponseEntity<?> salvar(@RequestBody UsuarioDTO usuarioDTO) {
+	public ResponseEntity<?> salvar(@RequestBody @Valid UsuarioDTO usuarioDTO) {
 		Usuario usuario = usuarioControle.salvar(usuarioDTO);
 		return new ResponseEntity<>(usuarioResposta(usuario), HttpStatus.CREATED);
+	}
+
+	@ApiOperation(value = "Edita um Usuario")
+	@PutMapping("")
+	public ResponseEntity<?> editar(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+		Usuario usuario = usuarioControle.editar(usuarioDTO);
+		return new ResponseEntity<>(usuarioResposta(usuario), HttpStatus.ACCEPTED);
+	}
+
+	@ApiOperation(value = "Deleta um Usuario por Id")
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
+		usuarioControle.deletarById(id);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// ----------- METODOS AUXILIARES -------------------------

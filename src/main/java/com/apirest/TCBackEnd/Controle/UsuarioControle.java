@@ -44,6 +44,12 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		usuarioRespository.save(usuario);
 	}
 
+	public Optional<Usuario> listarPorCpf(String cpf) {
+		Optional<Usuario> retorno = usuarioRespository.findByCpf(cpf);
+		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o CPF: " + cpf));
+		return retorno;
+	}
+
 //---------------------METODOS AUXILIARES-----------------------------------------
 	private void verificaExiste(long id) {
 		Optional<Usuario> retorno = usuarioRespository.findById(id);
@@ -51,9 +57,9 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	}
 
 	private void verificaCpf(String cpf) {
-		Usuario user = usuarioRespository.findByCpf(cpf);
+		Optional<Usuario> user = usuarioRespository.findByCpf(cpf);
 		if (user != null) {
-			throw new ResourceNotFoundException(MenssagemErro() + " ja existente para o  CPF: " + user.getCpf());
+			throw new ResourceNotFoundException(MenssagemErro() + " ja existente para o  CPF: " + user.get().getCpf());
 		}
 	}
 

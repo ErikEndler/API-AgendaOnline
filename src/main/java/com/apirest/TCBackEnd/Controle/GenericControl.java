@@ -29,7 +29,7 @@ public abstract class GenericControl<MODELO, DTO, REPOSITORIO extends CrudReposi
 	}
 
 	// Metodo Principal ATUALIZAR (UPDATE) ---------------
-	public MODELO atualizar(DTO dto) {
+	public MODELO editar(DTO dto) {
 		verifyIfObjectExists(((AbstractModel) dto).getId());
 		verificUpdate(dto);
 		MODELO modelo = transformaEditar(dto);
