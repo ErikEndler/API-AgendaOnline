@@ -1,7 +1,6 @@
 package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -46,7 +45,8 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	public Optional<Usuario> listarPorCpf(String cpf) {
 		Optional<Usuario> retorno = usuarioRespository.findByCpf(cpf);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o CPF: " + cpf));
+		retorno.orElseThrow(
+				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o CPF: " + cpf));
 		return retorno;
 	}
 
@@ -57,9 +57,12 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	}
 
 	private void verificaCpf(String cpf) {
+		// Busca usuario pelo cpf
 		Optional<Usuario> user = usuarioRespository.findByCpf(cpf);
-		if (user != null) {
-			throw new ResourceNotFoundException(MenssagemErro() + " ja existente para o  CPF: " + user.get().getCpf());
+		// Verifica se variavel "user" esta vazia ou nao
+		if (user.isPresent()) {
+			// Se não estiver vazia retorna uma esceção conforme abaixo
+			throw new ResourceNotFoundException(" Usuartio ja existenta para CPF:" + cpf);
 		}
 	}
 
@@ -98,15 +101,13 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	}
 
 	@Override
-	protected void verificaList(Long id) {
-		// TODO Auto-generated method stub
-
+	protected void verificaList(long id) {
+		verificaExiste(id);
 	}
 
 	@Override
 	protected void verificaDeletar(long id) {
-		// TODO Auto-generated method stub
-
+		verificaExiste(id);
 	}
 
 	@Override
@@ -117,6 +118,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Override
 	protected void verificUpdate(UsuarioDTO dto) {
+		verificaExiste(dto.getId());
 		validaRole(dto);
 	}
 

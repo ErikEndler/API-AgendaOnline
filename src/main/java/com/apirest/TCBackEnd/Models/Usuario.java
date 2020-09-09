@@ -6,8 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +28,6 @@ public class Usuario {
 	private long id;
 	@ManyToOne
 	private Role role;
-	
 	private String nome;
 	private String cpf;
 	private String telefone;
@@ -34,6 +38,17 @@ public class Usuario {
 	private List<Agendamento> agendamentosCliente;
 	@OneToMany(mappedBy = "funcionario")
 	private List<Atendimento> atendimentosFuncionario;
+
+	// @ManyToMany
+	// @JoinTable(name = "usuario_role",
+	// joinColumns = @JoinColumn(name="usuario_id", referencedColumnName = "id"),
+	// inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id")
+	// )
+	@ManyToMany
+	
+	@JoinTable(name = "usuario_servico", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "servico_id", referencedColumnName = "id"))
+	
+	private List<Servico> servicos;
 
 	public Usuario(long id, Role role, String nome, String cpf, String telefone, String whatsapp, String email,
 			int senha) {

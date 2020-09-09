@@ -49,8 +49,8 @@ public class UsuarioEndPoint {
 		return new ResponseEntity<>(usuarioResposta(user.get()), HttpStatus.OK);
 	}
 	@ApiOperation(value = "Retorna um Usuario unico pelo CPF")
-	@GetMapping("/{id}")
-	public ResponseEntity<?> listarCpf(@PathVariable(value = "id") long id) {
+	@GetMapping("/cpf/{cpf}")
+	public ResponseEntity<?> listarCpf(@PathVariable(value = "cpf") long id) {
 		Optional<Usuario> user = usuarioControle.listar(id);
 		return new ResponseEntity<>(usuarioResposta(user.get()), HttpStatus.OK);
 	}
