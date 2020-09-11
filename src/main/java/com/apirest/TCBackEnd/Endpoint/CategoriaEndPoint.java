@@ -73,7 +73,7 @@ public class CategoriaEndPoint {
 		return new CategoriaDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
 	}
 
-	// Recebe uma lista de usuarios e transforma a lista para o formato de resposta
+	// Recebe uma lista de categorias e transforma a lista para o formato de resposta
 	private Iterable<CategoriaDTO> listarResposta(Iterable<Categoria> listaUsuarios) {
 		// Cria a lista que sera retornada
 		List<CategoriaDTO> listaDTO = new ArrayList<CategoriaDTO>();
