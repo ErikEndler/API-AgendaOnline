@@ -31,9 +31,24 @@ public class Servico {
 	private List<Escala> escalas;
 
 	@OneToMany(mappedBy = "servico")
-	private List<Agendamento> servico;
+	private List<Agendamento> agendamento;
 
 	@OneToMany(mappedBy = "servico")
 	private List<ServicoFuncionario> servico_funcionario;
+
+	public Servico(long id, Categoria categoria, String nome, String descricao) {
+		super();
+		this.id = id;
+		this.categoria = categoria;
+		this.nome = nome;
+		this.descricao = descricao;
+	}
+
+	public Servico(Categoria categoria, String nome, String descricao) {
+		super();
+		this.categoria = categoria;
+		this.nome = nome;
+		this.descricao = descricao;
+	}
 
 }

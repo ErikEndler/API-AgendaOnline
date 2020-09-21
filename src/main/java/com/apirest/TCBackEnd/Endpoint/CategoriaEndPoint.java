@@ -1,7 +1,5 @@
 package com.apirest.TCBackEnd.Endpoint;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -37,28 +35,28 @@ public class CategoriaEndPoint {
 	@ApiOperation(value = "Retorna uma lista de Categorias")
 	@GetMapping("")
 	public ResponseEntity<?> listarTodos() {
-		return new ResponseEntity<>(listarResposta(categoriaControle.listarTodos()), HttpStatus.OK);
+		return new ResponseEntity<>(CategoriaDTO.listarResposta(categoriaControle.listarTodos()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna uma Categoria unico pelo ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listar(@PathVariable(value = "id") long id) {
 		Optional<Categoria> categoria = categoriaControle.listar(id);
-		return new ResponseEntity<>(categoriaResposta(categoria.get()), HttpStatus.OK);
+		return new ResponseEntity<>(CategoriaDTO.categoriaResposta(categoria.get()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Salva uma Categoria")
 	@PostMapping("")
 	public ResponseEntity<?> salvar(@RequestBody @Valid CategoriaDTO categoriaDTO) {
 		Categoria categoria = categoriaControle.salvar(categoriaDTO);
-		return new ResponseEntity<>(categoriaResposta(categoria), HttpStatus.CREATED);
+		return new ResponseEntity<>(CategoriaDTO.categoriaResposta(categoria), HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "Edita uma Categoria")
 	@PutMapping("")
 	public ResponseEntity<?> editar(@RequestBody @Valid CategoriaDTO categoriaDTO) {
 		Categoria categoria = categoriaControle.editar(categoriaDTO);
-		return new ResponseEntity<>(categoriaResposta(categoria), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(CategoriaDTO.categoriaResposta(categoria), HttpStatus.ACCEPTED);
 	}
 
 	@ApiOperation(value = "Deleta uma Categoria por Id")
@@ -66,22 +64,6 @@ public class CategoriaEndPoint {
 	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
 		categoriaControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	// ----------- METODOS AUXILIARES -------------------------
-	private CategoriaDTO categoriaResposta(Categoria categoria) {
-		return new CategoriaDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
-	}
-
-	// Recebe uma lista de categorias e transforma a lista para o formato de resposta
-	private Iterable<CategoriaDTO> listarResposta(Iterable<Categoria> listaUsuarios) {
-		// Cria a lista que sera retornada
-		List<CategoriaDTO> listaDTO = new ArrayList<CategoriaDTO>();
-		// Faz um for na lista recebida no metodo
-		for (Categoria categoria : listaUsuarios) {
-			listaDTO.add(categoriaResposta(categoria));
-		}
-		return listaDTO;
 	}
 
 }
