@@ -14,13 +14,11 @@ import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 public class ServicoControle extends GenericControl<Servico, ServicoDTO, ServicoRepository> {
 
 	@Autowired
-	ServicoRepository servicoRepository;
-	@Autowired
 	CategoriaRepository categoriaRepository;
 
 	@Override
 	protected void verificaSalvar(ServicoDTO dto) {
-
+		verificaCategoria(dto);
 	}
 
 	@Override
@@ -47,14 +45,12 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	@Override
 	protected Servico transformaSalvar(ServicoDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Servico(verificaCategoria(dto), dto.getNome(), dto.getDescricao());
 	}
 
 	@Override
 	protected Servico transformaEditar(ServicoDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Servico(dto.getId(), verificaCategoria(dto), dto.getNome(), dto.getDescricao());
 	}
 
 	protected String MenssagemErro() {
@@ -64,13 +60,17 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	// -----------------------------
 	private void verifiaExiste(long id) {
-		Optional<Servico> retorno = servicoRepository.findById(id);
+		Optional<Servico> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
-	private void verificaCategoria(ServicoDTO dto) {
+	private Categoria verificaCategoria(ServicoDTO dto) {
+		if (dto.getCategoria() == 0) {
+			new ResourceNotFoundException("Campo categoria não informado corretamente !!");
+		}
 		Optional<Categoria> retorno = categoriaRepository.findById(dto.getCategoria());
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + dto.getCategoria()));
+		return retorno.orElseThrow(() -> new ResourceNotFoundException(
+				MenssagemErro() + " nao encontrado para o ID: " + dto.getCategoria()));
 	}
 
 }

@@ -18,8 +18,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	RoleRespository rolereposiRespository;
-	@Autowired
-	UsuarioRespository usuarioRespository;
+	
 	@Autowired
 	RoleControle roleControle;
 
@@ -27,7 +26,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	@EventListener(ContextRefreshedEvent.class)
 	private void verificaUsers() {
 		roleControle.verificaRoles();
-		if (usuarioRespository.count() == 0) {
+		if (repositorio.count() == 0) {
 			System.out.println("Sistema não possui Usuarios cadastrados !!!");
 			System.out.println("Iniciando Incersao de Usuario default....");
 			cadastrarUsuarios();
@@ -40,11 +39,11 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		usuario.setNome("admin");
 		usuario.setSenha(123);
 		usuario.setRole(rolereposiRespository.findByNameRole("ROLE_ADMIN").get());
-		usuarioRespository.save(usuario);
+		repositorio.save(usuario);
 	}
 
 	public Optional<Usuario> listarPorCpf(String cpf) {
-		Optional<Usuario> retorno = usuarioRespository.findByCpf(cpf);
+		Optional<Usuario> retorno = repositorio.findByCpf(cpf);
 		retorno.orElseThrow(
 				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o CPF: " + cpf));
 		return retorno;
@@ -52,13 +51,13 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 //---------------------METODOS AUXILIARES-----------------------------------------
 	private void verificaExiste(long id) {
-		Optional<Usuario> retorno = usuarioRespository.findById(id);
+		Optional<Usuario> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
 	private void verificaCpf(String cpf) {
 		// Busca usuario pelo cpf
-		Optional<Usuario> user = usuarioRespository.findByCpf(cpf);
+		Optional<Usuario> user = repositorio.findByCpf(cpf);
 		// Verifica se variavel "user" esta vazia ou nao
 		if (user.isPresent()) {
 			// Se não estiver vazia retorna uma esceção conforme abaixo
@@ -112,6 +111,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Override
 	protected void verificaSalvar(UsuarioDTO dto) {
+		System.out.println("-----------ID:"+dto.getId());
 		verificaCpf(dto.getCpf());
 		validaRole(dto);
 	}

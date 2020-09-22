@@ -10,7 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class ItemEscala {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +21,23 @@ public class ItemEscala {
 	private String hrInicial;
 	private String hrFinal;
 	private int qtd;
+
+	public ItemEscala(long id, Escala escala, String hrInicial, String hrFinal, int qtd) {
+		super();
+		this.id = id;
+		this.escala = escala;
+		this.hrInicial = hrInicial;
+		this.hrFinal = hrFinal;
+		this.qtd = qtd;
+	}
+
+	public ItemEscala(Escala escala, String hrInicial, String hrFinal, int qtd) {
+		super();
+		this.escala = escala;
+		this.hrInicial = hrInicial;
+		this.hrFinal = hrFinal;
+		this.qtd = qtd;
+	}
+	
 
 }
