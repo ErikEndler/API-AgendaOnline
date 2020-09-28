@@ -2,11 +2,9 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
-import com.apirest.TCBackEnd.DTO.EscalaDTO;
 import com.apirest.TCBackEnd.DTO.ItemEscalaDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ItemEscala;
-import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;

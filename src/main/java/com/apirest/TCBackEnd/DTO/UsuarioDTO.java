@@ -26,11 +26,12 @@ public class UsuarioDTO {
 	private String telefone;
 	private String whatsapp;
 	private String email;
-	private int senha;
+	private String sexo;
+	private String senha;
 
 	public static UsuarioDTO usuarioResposta(Usuario usuario) {
 		return new UsuarioDTO(usuario.getId(), usuario.getRole().getNameRole(), usuario.getNome(), usuario.getCpf(),
-				usuario.getTelefone(), usuario.getWhatsapp(), usuario.getEmail(), usuario.getSenha());
+				usuario.getTelefone(), usuario.getWhatsapp(), usuario.getEmail(), usuario.getSexo(), usuario.getSenha());
 	}
 
 	// Recebe uma lista de usuarios e transforma a lista para o formato de resposta

@@ -1,24 +1,26 @@
 package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.UsuarioDTO;
 import com.apirest.TCBackEnd.Models.Role;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.RoleRespository;
-import com.apirest.TCBackEnd.Repository.UsuarioRespository;
+import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
 @Service
-public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, UsuarioRespository> {
+public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, UsuarioRepository> {
 
 	@Autowired
 	RoleRespository rolereposiRespository;
-	
+
 	@Autowired
 	RoleControle roleControle;
 
@@ -35,9 +37,9 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	private void cadastrarUsuarios() {
 		Usuario usuario = new Usuario();
-		usuario.setCpf("00000000000");
+		usuario.setCpf("123");
 		usuario.setNome("admin");
-		usuario.setSenha(123);
+		usuario.setSenha(new BCryptPasswordEncoder().encode("123"));
 		usuario.setRole(rolereposiRespository.findByNameRole("ROLE_ADMIN").get());
 		repositorio.save(usuario);
 	}
@@ -67,13 +69,19 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	protected Usuario transformaSalvar(UsuarioDTO usuarioDTO) {
 		return new Usuario(buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(), usuarioDTO.getCpf(),
-				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSenha());
+				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSexo(),
+				senhaCripto(usuarioDTO.getSenha()));
 	}
 
 	protected Usuario transformaEditar(UsuarioDTO usuarioDTO) {
 		return new Usuario(usuarioDTO.getId(), buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(),
-				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(),
-				usuarioDTO.getSenha());
+				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getSexo(),
+				usuarioDTO.getEmail(), senhaCripto(usuarioDTO.getSenha()));
+	}
+	
+	private String senhaCripto(String senha) {
+		senha = new BCryptPasswordEncoder().encode(senha);
+		return senha;		
 	}
 
 	private Role buscaRole(String roleString) {
@@ -111,7 +119,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Override
 	protected void verificaSalvar(UsuarioDTO dto) {
-		System.out.println("-----------ID:"+dto.getId());
+		System.out.println("-----------ID:" + dto.getId());
 		verificaCpf(dto.getCpf());
 		validaRole(dto);
 	}

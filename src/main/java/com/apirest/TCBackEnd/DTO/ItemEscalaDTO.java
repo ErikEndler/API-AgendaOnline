@@ -3,7 +3,6 @@ package com.apirest.TCBackEnd.DTO;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ItemEscala;
 
 import lombok.AllArgsConstructor;

@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.apirest.TCBackEnd.Models.Usuario;
 
-public interface UsuarioRespository extends CrudRepository<Usuario, Long> {
+public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 	Optional<Usuario> findByCpf(String cpf);
 
 }
