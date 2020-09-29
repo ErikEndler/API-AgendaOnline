@@ -2,6 +2,8 @@ package com.apirest.TCBackEnd.Config;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
+
 import static com.apirest.TCBackEnd.Config.JwtConfig.*;
 
 import javax.servlet.FilterChain;
@@ -51,15 +53,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		
+
 		String token = null;
+		Optional<Usuario> usuario = usuarioRepository.findByCpf(authResult.getName());
 
 		token = Jwts.builder() // -
 				.setSubject(authResult.getName())// -
-				//.claim("authorities", authResult.getAuthorities()) // --
+				// .claim("authorities", authResult.getAuthorities()) // --
 				.setIssuedAt(new Date())// ---
 				.setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
+				response.getWriter()
+				.append("{" + "\"authorization\": \"" + token + "\"," + "\n\"role\": \""
+						+usuario.get().getRole().getNameRole() + "\"," + "\n\"id\": \"" + usuario.get().getId() + "\","
+						+ "\n\"nome\": \"" + usuario.get().getNome() + "\"}");
 
 		response.addHeader("Authorization", "Bearer " + token);
 	}

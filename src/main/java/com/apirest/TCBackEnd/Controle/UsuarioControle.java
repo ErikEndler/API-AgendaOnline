@@ -37,7 +37,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	private void cadastrarUsuarios() {
 		Usuario usuario = new Usuario();
-		usuario.setCpf("123");
+		usuario.setCpf("99999999999");
 		usuario.setNome("admin");
 		usuario.setSenha(new BCryptPasswordEncoder().encode("123"));
 		usuario.setRole(rolereposiRespository.findByNameRole("ROLE_ADMIN").get());
