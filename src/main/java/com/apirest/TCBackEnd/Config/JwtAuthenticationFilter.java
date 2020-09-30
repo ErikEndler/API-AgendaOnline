@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
 				response.getWriter()
-				.append("{" + "\"authorization\": \"" + token + "\"," + "\n\"role\": \""
+				.append("{" + "\"authorization\": \"Bearer " + token + "\"," + "\n\"role\": \""
 						+usuario.get().getRole().getNameRole() + "\"," + "\n\"id\": \"" + usuario.get().getId() + "\","
 						+ "\n\"nome\": \"" + usuario.get().getNome() + "\"}");
 
