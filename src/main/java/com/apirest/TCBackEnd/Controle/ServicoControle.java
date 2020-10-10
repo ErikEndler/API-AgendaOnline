@@ -58,7 +58,7 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 		return msg;
 	}
 
-	// -----------------------------
+	// ----------------------------- METODOS AUXILIARES ------------------
 	private void verifiaExiste(long id) {
 		Optional<Servico> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));

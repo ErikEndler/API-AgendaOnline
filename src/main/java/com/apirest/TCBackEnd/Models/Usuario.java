@@ -36,6 +36,11 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String sexo;
 	private String senha;
+	private Boolean notificacao;
+	private Boolean notificacaoSms;
+	private Boolean notificacaoEmail;
+	private Boolean notificacaoWhats;
+
 	@OneToMany(mappedBy = "cliente")
 	private List<Agendamento> agendamentosCliente;
 	@OneToMany(mappedBy = "funcionario")
@@ -50,7 +55,8 @@ public class Usuario implements UserDetails {
 	// private List<Servico> servicos;
 
 	public Usuario(long id, Role role, String nome, String cpf, String telefone, String whatsapp, String email,
-			String sexo, String senha) {
+			String sexo, String senha, boolean notificacao, boolean notificacaoSms, boolean notificacaoEmail,
+			boolean notificacaoWhats) {
 		super();
 		this.id = id;
 		this.role = role;
@@ -61,10 +67,15 @@ public class Usuario implements UserDetails {
 		this.email = email;
 		this.sexo = sexo;
 		this.senha = senha;
+		this.notificacao = notificacao;
+		this.notificacaoSms = notificacaoSms;
+		this.notificacaoEmail = notificacaoEmail;
+		this.notificacaoWhats = notificacaoWhats;
 	}
 
 	public Usuario(Role role, String nome, String cpf, String string, String string2, String email, String sexo,
-			String senha) {
+			String senha, boolean notificacao, boolean notificacaoSms, boolean notificacaoEmail,
+			boolean notificacaoWhats) {
 		super();
 		this.role = role;
 		this.nome = nome;
@@ -74,13 +85,17 @@ public class Usuario implements UserDetails {
 		this.email = email;
 		this.sexo = sexo;
 		this.senha = senha;
+		this.notificacao = notificacao;
+		this.notificacaoSms = notificacaoSms;
+		this.notificacaoEmail = notificacaoEmail;
+		this.notificacaoWhats = notificacaoWhats;
 	}
 
 	@Override
 	public Collection<Role> getAuthorities() {
 		Collection<Role> RRoles = new ArrayList<Role>();
 		RRoles.add(role);
-		return  RRoles;
+		return RRoles;
 	}
 
 	@Override

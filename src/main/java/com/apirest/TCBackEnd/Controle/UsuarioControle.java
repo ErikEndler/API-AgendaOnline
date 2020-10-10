@@ -1,5 +1,7 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,18 +72,20 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	protected Usuario transformaSalvar(UsuarioDTO usuarioDTO) {
 		return new Usuario(buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(), usuarioDTO.getCpf(),
 				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSexo(),
-				senhaCripto(usuarioDTO.getSenha()));
+				senhaCripto(usuarioDTO.getSenha()), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
+				usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhats());
 	}
 
 	protected Usuario transformaEditar(UsuarioDTO usuarioDTO) {
 		return new Usuario(usuarioDTO.getId(), buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(),
 				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getSexo(),
-				usuarioDTO.getEmail(), senhaCripto(usuarioDTO.getSenha()));
+				usuarioDTO.getEmail(), senhaCripto(usuarioDTO.getSenha()), usuarioDTO.getNotificacao(),
+				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhats());
 	}
-	
+
 	private String senhaCripto(String senha) {
 		senha = new BCryptPasswordEncoder().encode(senha);
-		return senha;		
+		return senha;
 	}
 
 	private Role buscaRole(String roleString) {
@@ -119,14 +123,22 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Override
 	protected void verificaSalvar(UsuarioDTO dto) {
-		System.out.println("-----------ID:" + dto.getId());
+		verificaNotificacoes(dto);
 		verificaCpf(dto.getCpf());
 		validaRole(dto);
+	}
+
+	private void verificaNotificacoes(UsuarioDTO dto) {
+		dto.setNotificacao(Optional.ofNullable(dto.getNotificacao()).orElse(false));
+		dto.setNotificacaoEmail(Optional.ofNullable(dto.getNotificacaoEmail()).orElse(false));
+		dto.setNotificacaoSms(Optional.ofNullable(dto.getNotificacaoSms()).orElse(false));
+		dto.setNotificacaoWhats(Optional.ofNullable(dto.getNotificacaoWhats()).orElse(false));
 	}
 
 	@Override
 	protected void verificUpdate(UsuarioDTO dto) {
 		verificaExiste(dto.getId());
+		verificaNotificacoes(dto);
 		validaRole(dto);
 	}
 
