@@ -2,15 +2,21 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.ServicoDTO;
+import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
 import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
+import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
+@Service
 public class ServicoControle extends GenericControl<Servico, ServicoDTO, ServicoRepository> {
 
 	@Autowired
@@ -69,8 +75,13 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 			new ResourceNotFoundException("Campo categoria não informado corretamente !!");
 		}
 		Optional<Categoria> retorno = categoriaRepository.findById(dto.getCategoria());
-		return retorno.orElseThrow(() -> new ResourceNotFoundException(
-				MenssagemErro() + " nao encontrado para o ID: " + dto.getCategoria()));
+		return retorno.orElseThrow(
+				() -> new ResourceNotFoundException("Categoria nao encontrado para o ID: " + dto.getCategoria()));
+	}
+
+	public ServicoFuncionario salvar2(@Valid ServicoFuncionarioDTO servicoFuncionarioDTO) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

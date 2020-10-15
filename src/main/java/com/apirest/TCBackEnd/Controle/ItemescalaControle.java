@@ -2,6 +2,8 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.apirest.TCBackEnd.DTO.ItemEscalaDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ItemEscala;
@@ -9,6 +11,7 @@ import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
+@Service
 public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO, ItemEscalaRepository>{
 	
 	EscalaRepository escalaRepository;
@@ -59,6 +62,10 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	
 	//verifica e retorna a escala
 	private Escala verificaEscala(ItemEscalaDTO dto) {
+		if(dto.getEscala() == 0 ) {
+			new ResourceNotFoundException("Campo Escala não informado corretamente !! \"NULO\"");
+
+		}
 		Optional<Escala> escala = escalaRepository.findById(dto.getEscala());
 		return escala.orElseThrow(() -> new ResourceNotFoundException(
 				MenssagemErro() + " nao encontrado para o ID: " + dto.getEscala()));

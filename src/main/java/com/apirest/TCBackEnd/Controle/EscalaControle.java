@@ -3,6 +3,7 @@ package com.apirest.TCBackEnd.Controle;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
 import com.apirest.TCBackEnd.Models.Escala;
@@ -11,6 +12,7 @@ import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
+@Service
 public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepository> {
 
 	@Autowired
@@ -61,6 +63,9 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	// verifica e retorna o serviço
 	private Servico verificaServico(EscalaDTO dto) {
+		if(dto.getServico() == 0) {
+			new ResourceNotFoundException("Campo Serviço não informado corretamente !! \"NULO\"");
+		}
 		Optional<Servico> retorno = servicoRepository.findById(dto.getServico());
 		return retorno.orElseThrow(() -> new ResourceNotFoundException(
 				MenssagemErro() + " nao encontrado para o ID: " + dto.getServico()));
