@@ -54,6 +54,7 @@ public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, C
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
+	@Override
 	protected String MenssagemErro() {
 		String msg = "Categoria";
 		return msg;

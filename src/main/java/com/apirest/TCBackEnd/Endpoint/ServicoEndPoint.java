@@ -73,9 +73,14 @@ public class ServicoEndPoint {
 	}
 
 	// ----------------------------------------TRATA RELAÇAO FUNCIONARIO-SERVIÇO
+	@ApiOperation(value = "Retorna uma lista de Serviços")
+	@GetMapping("funcionario")
+	public ResponseEntity<?> listarTodos2() {
+		return new ResponseEntity<>(ServicoFuncionarioDTO.listarResposta(servicoFuncionarioControle.listarTodos()), HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "Retorna um Serviço unico pelo ID")
-	@GetMapping("servicoFuncionario/{id}")
+	@GetMapping("funcionario/{id}")
 	public ResponseEntity<?> listar2(@PathVariable(value = "id") long id) {
 		Optional<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listar(id);
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),

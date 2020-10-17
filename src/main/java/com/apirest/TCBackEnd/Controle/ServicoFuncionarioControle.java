@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
-import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Models.Usuario;
@@ -26,15 +25,15 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void verificaSalvar(ServicoFuncionarioDTO dto) {
-		verificaFuncionario(dto.getFuncionarioId());
-		verificaServico(dto.getServicoId());
+		verificaFuncionario(dto);
+		verificaServico(dto);
 	}
 
 	@Override
 	protected void verificUpdate(ServicoFuncionarioDTO dto) {
 		verifiaExiste(dto.getId());
-		verificaFuncionario(dto.getFuncionarioId());
-		verificaServico(dto.getServicoId());
+		verificaFuncionario(dto);
+		verificaServico(dto);
 	}
 
 	@Override
@@ -72,17 +71,6 @@ public class ServicoFuncionarioControle
 	protected String MenssagemErro() {
 		String msg = "Serviço-Funcionario";
 		return msg;
-	}
-
-	private void verificaFuncionario(long funcionarioId) {
-		Optional<Usuario> funcionario = usuarioRepository.findById(funcionarioId);
-		funcionario.orElseThrow(
-				() -> new ResourceNotFoundException("Funcionario nao encontrado para o ID: " + funcionarioId));
-	}
-
-	private void verificaServico(long id) {
-		Optional<Servico> funcionario = servicoRepository.findById(id);
-		funcionario.orElseThrow(() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + id));
 	}
 
 	private Servico verificaServico(ServicoFuncionarioDTO dto) {

@@ -79,9 +79,4 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 				() -> new ResourceNotFoundException("Categoria nao encontrado para o ID: " + dto.getCategoria()));
 	}
 
-	public ServicoFuncionario salvar2(@Valid ServicoFuncionarioDTO servicoFuncionarioDTO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
