@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apirest.TCBackEnd.Models.Agendamento;
-import com.apirest.TCBackEnd.Models.Categoria;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,13 +21,13 @@ public class AgendamentoDTO {
 
 	private long clienteId;
 	private long servicoId;
-	private LocalDateTime horario;
+	private String horario;
 	private Boolean notificacao;
 	private String obs;
 
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
 		return new AgendamentoDTO(agendamento.getId(), agendamento.getCliente().getId(),
-				agendamento.getServico().getId(), agendamento.getHorario(), agendamento.getNotificacao(),
+				agendamento.getServico().getId(), agendamento.getHorario().toString(), agendamento.getNotificacao(),
 				agendamento.getObs());
 	}
 

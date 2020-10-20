@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemEscalaDTO {
+
 	private long id;
 
 	private long escala;
@@ -23,11 +24,12 @@ public class ItemEscalaDTO {
 	private int qtd;
 
 	public static ItemEscalaDTO ItemEscalaResposta(ItemEscala itemEscala) {
-		return new ItemEscalaDTO(itemEscala.getId(), itemEscala.getEscala().getId(), itemEscala.getHrInicial().toString(),
-				itemEscala.getHrFinal().toString(), itemEscala.getQtd());
+		return new ItemEscalaDTO(itemEscala.getId(), itemEscala.getEscala().getId(),
+				itemEscala.getHrInicial().toString(), itemEscala.getHrFinal().toString(), itemEscala.getQtd());
 	}
 
-	// Recebe uma lista de ItemEscala e transforma a lista para o formato de resposta
+	// Recebe uma lista de ItemEscala e transforma a lista para o formato de
+	// resposta
 	public static Iterable<ItemEscalaDTO> listarResposta(Iterable<ItemEscala> listaItemEscala) {
 		// Cria a lista que sera retornada
 		List<ItemEscalaDTO> listaDTO = new ArrayList<ItemEscalaDTO>();

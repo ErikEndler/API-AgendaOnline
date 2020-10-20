@@ -18,6 +18,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	@Autowired
 	EscalaRepository escalaRepository;
+	@Autowired
 	DataHora datahora;
 
 	@Override

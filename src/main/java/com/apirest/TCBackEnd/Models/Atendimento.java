@@ -13,7 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Atendimento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,22 @@ public class Atendimento {
 	private LocalDateTime fim;
 	@OneToOne(mappedBy = "atendimento")
 	private Avaliacao avaliacao;
-	
+
+	public Atendimento(long id, Agendamento agendamento, Usuario funcionario, LocalDateTime inicio, LocalDateTime fim) {
+		super();
+		this.id = id;
+		this.agendamento = agendamento;
+		this.funcionario = funcionario;
+		this.inicio = inicio;
+		this.fim = fim;
+	}
+
+	public Atendimento(Agendamento agendamento, Usuario funcionario, LocalDateTime inicio, LocalDateTime fim) {
+		super();
+		this.agendamento = agendamento;
+		this.funcionario = funcionario;
+		this.inicio = inicio;
+		this.fim = fim;
+	}
 
 }

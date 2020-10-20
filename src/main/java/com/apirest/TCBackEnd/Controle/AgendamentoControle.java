@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
 import com.apirest.TCBackEnd.Models.Agendamento;
-import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
+import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
 @Service
@@ -22,6 +22,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	ServicoRepository servicoRepository;
+	@Autowired
+	DataHora datahora;
 
 	@Override
 	protected void verificaSalvar(AgendamentoDTO dto) {
@@ -53,14 +55,14 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected Agendamento transformaSalvar(AgendamentoDTO dto) {
-		return new Agendamento(verificaCliente(dto), verificaServico(dto), dto.getHorario(), dto.getNotificacao(),
-				dto.getObs());
+		return new Agendamento(verificaCliente(dto), verificaServico(dto), datahora.stringemDateTime(dto.getHorario()),
+				dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
 	protected Agendamento transformaEditar(AgendamentoDTO dto) {
-		return new Agendamento(dto.getId(), verificaCliente(dto), verificaServico(dto), dto.getHorario(),
-				dto.getNotificacao(), dto.getObs());
+		return new Agendamento(dto.getId(), verificaCliente(dto), verificaServico(dto),
+				datahora.stringemDateTime(dto.getHorario()), dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override

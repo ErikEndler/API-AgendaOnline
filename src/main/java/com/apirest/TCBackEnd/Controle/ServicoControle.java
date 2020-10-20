@@ -2,16 +2,12 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.ServicoDTO;
-import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
 import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
-import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
