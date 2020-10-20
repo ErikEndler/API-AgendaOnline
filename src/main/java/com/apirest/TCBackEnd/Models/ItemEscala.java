@@ -1,5 +1,7 @@
 package com.apirest.TCBackEnd.Models;
 
+import java.time.LocalTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,11 +20,11 @@ public class ItemEscala {
 	private long id;
 	@ManyToOne
 	private Escala escala;
-	private String hrInicial;
-	private String hrFinal;
+	private LocalTime hrInicial;
+	private LocalTime hrFinal;
 	private int qtd;
 
-	public ItemEscala(long id, Escala escala, String hrInicial, String hrFinal, int qtd) {
+	public ItemEscala(long id, Escala escala, LocalTime hrInicial, LocalTime hrFinal, int qtd) {
 		super();
 		this.id = id;
 		this.escala = escala;
@@ -31,7 +33,7 @@ public class ItemEscala {
 		this.qtd = qtd;
 	}
 
-	public ItemEscala(Escala escala, String hrInicial, String hrFinal, int qtd) {
+	public ItemEscala(Escala escala, LocalTime hrInicial, LocalTime hrFinal, int qtd) {
 		super();
 		this.escala = escala;
 		this.hrInicial = hrInicial;
