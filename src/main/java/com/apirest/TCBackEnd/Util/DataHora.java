@@ -16,24 +16,15 @@ public class DataHora {
 
 	// private DateTimeFormatter formataHora =
 	// DateTimeFormatter.ofLocalizedTime(FormatStyle.FULL);
-	//Day of week and month in French
-    LocalDate localDate=LocalDate.of(2016,01,01);
+	// Day of week and month in French
 
-    String dateInFrench=localDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",Locale.FRENCH));
-    
- 
-    //Day of week and month in Spanish
-    Locale spanishLocale=new Locale("es", "ES");
-    String dateInSpanish=localDate.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",spanishLocale));
+	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH-mm-ss");
 
+	private DateTimeFormatter formataData = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH-mm-ss",Locale.FRANCE);
+	private DateTimeFormatter formataDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss", Locale.FRANCE);
 
-	private DateTimeFormatter formataData = DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.FRANCE);
-
-	private DateTimeFormatter formataDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss",Locale.FRANCE);
-
-	// tranbsforma uma string em LocalDateTime
+	// transforma uma string em LocalDateTime
 	public LocalDateTime stringemDateTime(String string) {
 		return LocalDateTime.from(formataDataHora.parse(string));
 	}
@@ -63,9 +54,17 @@ public class DataHora {
 		return formataData.format(localDate);
 	}
 
+	// Retorna dia da semana
+	public String pegaDiaSemana(LocalDate data) {
+		String dia = data.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt"));
+		return dia;
+	}
+
+	// ---------------METDOD TESTE---------------
 	@EventListener(ContextRefreshedEvent.class)
 	private void teste() {
 		System.out.println("INICIANDO TESTE DE HORA DATA");
+
 		// teste String em hora 11-30-33
 		System.out.println("String Hora '11-30-33' : " + stringEmHora("11-30-33"));
 
@@ -81,9 +80,8 @@ public class DataHora {
 
 		// testa data.now() em string
 		System.out.println("LocalDate.now() : " + LocalDate.now());
-		System.out.println("LocalDate.now() dia da SEMANA : " + LocalDate.now().getDayOfWeek());
-
-		
+		System.out.println("LocalDate.now() dia da SEMANA : "
+				+ LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt")));
 
 		System.out.println("Data .now() em string : " + dataEmString(LocalDate.now()));
 
