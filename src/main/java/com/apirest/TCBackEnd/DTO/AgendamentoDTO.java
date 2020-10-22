@@ -1,6 +1,5 @@
 package com.apirest.TCBackEnd.DTO;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class AgendamentoDTO {
 
 	private long clienteId;
 	private long servicoId;
-	private String horario;
+	private String horario; // LocalDateTime
 	private Boolean notificacao;
 	private String obs;
 

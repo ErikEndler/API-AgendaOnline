@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataHora {
 
-	// private DateTimeFormatter formataHora =
-	// DateTimeFormatter.ofLocalizedTime(FormatStyle.FULL);
-	// Day of week and month in French
-
 	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH-mm-ss");
 
 	private DateTimeFormatter formataData = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -26,7 +22,14 @@ public class DataHora {
 
 	// transforma uma string em LocalDateTime
 	public LocalDateTime stringemDateTime(String string) {
-		return LocalDateTime.from(formataDataHora.parse(string));
+		try {
+			return LocalDateTime.from(formataDataHora.parse(string));
+
+		} catch (Exception e) {
+			System.out.println("ENTRANDO CATCH----");
+			throw new ResourceNotFoundException(" Erro converção, DateTime formato invalido. Detalhe : " + e);
+		}
+
 	}
 
 	// transforma um LocalDateTime em string
@@ -36,7 +39,12 @@ public class DataHora {
 
 	// tranbsforma uma string em LocalTime
 	public LocalTime stringEmHora(String string) {
-		return LocalTime.from(formataHora1.parse(string));
+		try {
+			return LocalTime.from(formataHora1.parse(string));
+		} catch (Exception e) {
+			System.out.println("ENTRANDO CATCH----");
+			throw new ResourceNotFoundException(" Erro converção Hora, formato invalido. Detalhe : " + e.getMessage());
+		}
 	}
 
 	// transforma um LocalTime em string
@@ -46,12 +54,21 @@ public class DataHora {
 
 	// tranbsforma uma string em LocalDate
 	public LocalDate stringEmData(String string) {
-		return LocalDate.from(formataData.parse(string));
+		try {
+			return LocalDate.from(formataData.parse(string));
+		} catch (Exception e) {
+			throw new ResourceNotFoundException(" Erro converção Data, formato invalido. Detalhe : " + e.getMessage());
+		}
 	}
 
 	// transforma um LocalDate em string
 	public String dataEmString(LocalDate localDate) {
-		return formataData.format(localDate);
+		try {
+			return formataData.format(localDate);
+
+		} catch (Exception e) {
+			throw new ResourceNotFoundException(" Erro converção Data:" + e);
+		}
 	}
 
 	// Retorna dia da semana
