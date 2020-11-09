@@ -18,15 +18,20 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Autowired
 	ServicoRepository servicoRepository;
 
+	public Iterable<Escala> listarPorservico(long id) {
+		verificaServico(id);
+		return repositorio.findAllByServico(id);
+	}
+
 	@Override
 	protected void verificaSalvar(EscalaDTO dto) {
-		verificaServico(dto);
+		verificaServico(dto.getServico());
 	}
 
 	@Override
 	protected void verificUpdate(EscalaDTO dto) {
 		verificaESxiste(dto.getId());
-		verificaServico(dto);
+		verificaServico(dto.getServico());
 	}
 
 	@Override
@@ -47,12 +52,12 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected Escala transformaSalvar(EscalaDTO dto) {
-		return new Escala(verificaServico(dto), dto.getDiaSemana());
+		return new Escala(verificaServico(dto.getServico()), dto.getDiaSemana());
 	}
 
 	@Override
 	protected Escala transformaEditar(EscalaDTO dto) {
-		return new Escala(dto.getId(), verificaServico(dto), dto.getDiaSemana());
+		return new Escala(dto.getId(), verificaServico(dto.getServico()), dto.getDiaSemana());
 	}
 
 	// ------------------------------------------
@@ -62,13 +67,13 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	}
 
 	// verifica e retorna o serviço
-	private Servico verificaServico(EscalaDTO dto) {
-		if(dto.getServico() == 0) {
+	private Servico verificaServico(long servico) {
+		if (servico == 0) {
 			new ResourceNotFoundException("Campo Serviço não informado corretamente !! \"NULO\"");
 		}
-		Optional<Servico> retorno = servicoRepository.findById(dto.getServico());
-		return retorno.orElseThrow(() -> new ResourceNotFoundException(
-				MenssagemErro() + " nao encontrado para o ID: " + dto.getServico()));
+		Optional<Servico> retorno = servicoRepository.findById(servico);
+		return retorno.orElseThrow(
+				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + servico));
 	}
 
 }

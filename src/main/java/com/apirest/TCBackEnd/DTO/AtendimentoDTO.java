@@ -3,7 +3,6 @@ package com.apirest.TCBackEnd.DTO;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.Atendimento;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class AtendimentoDTO {
 	private String inicio;
 	private String fim;
 
-	public static AtendimentoDTO agendamentoResposta(Atendimento atendimento) {
+	public static AtendimentoDTO atendimentoResposta(Atendimento atendimento) {
 		return new AtendimentoDTO(atendimento.getId(), atendimento.getAgendamento().getId(),
 				atendimento.getFuncionario().getId(), atendimento.getInicio().toString(),
 				atendimento.getFim().toString());
@@ -37,7 +36,7 @@ public class AtendimentoDTO {
 		List<AtendimentoDTO> listaDTO = new ArrayList<AtendimentoDTO>();
 		// Faz um for na lista recebida no metodo
 		for (Atendimento categoria : listaAtendimento) {
-			listaDTO.add(agendamentoResposta(categoria));
+			listaDTO.add(atendimentoResposta(categoria));
 		}
 		return listaDTO;
 	}

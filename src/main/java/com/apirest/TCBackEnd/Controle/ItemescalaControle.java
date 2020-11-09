@@ -21,15 +21,20 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	@Autowired
 	DataHora datahora;
 
+	public Iterable<ItemEscala> listarPorservico(long id) {
+		verificaEscala(id);
+		return repositorio.findAllByEscala(id);
+	}
+
 	@Override
 	protected void verificaSalvar(ItemEscalaDTO dto) {
-		verificaEscala(dto);
+		verificaEscala(dto.getEscala());
 	}
 
 	@Override
 	protected void verificUpdate(ItemEscalaDTO dto) {
 		verificaExiste(dto.getId());
-		verificaEscala(dto);
+		verificaEscala(dto.getEscala());
 	}
 
 	@Override
@@ -50,13 +55,13 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	@Override
 	protected ItemEscala transformaSalvar(ItemEscalaDTO dto) {
-		return new ItemEscala(verificaEscala(dto), datahora.stringEmHora(dto.getHrInicial()),
+		return new ItemEscala(verificaEscala(dto.getEscala()), datahora.stringEmHora(dto.getHrInicial()),
 				datahora.stringEmHora(dto.getHrFinal()), dto.getQtd());
 	}
 
 	@Override
 	protected ItemEscala transformaEditar(ItemEscalaDTO dto) {
-		return new ItemEscala(dto.getId(), verificaEscala(dto), datahora.stringEmHora(dto.getHrInicial()),
+		return new ItemEscala(dto.getId(), verificaEscala(dto.getEscala()), datahora.stringEmHora(dto.getHrInicial()),
 				datahora.stringEmHora(dto.getHrFinal()), dto.getQtd());
 	}
 
@@ -68,14 +73,14 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	}
 
 	// verifica e retorna a escala
-	private Escala verificaEscala(ItemEscalaDTO dto) {
-		if (dto.getEscala() == 0) {
+	private Escala verificaEscala(long id) {
+		if (id == 0) {
 			new ResourceNotFoundException("Campo Escala não informado corretamente !! \"NULO\"");
 
 		}
-		Optional<Escala> escala = escalaRepository.findById(dto.getEscala());
-		return escala.orElseThrow(
-				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + dto.getEscala()));
+		Optional<Escala> escala = escalaRepository.findById(id);
+		return escala
+				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
 }

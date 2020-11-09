@@ -32,34 +32,39 @@ public class ItemEscalaEndPoint {
 	@Autowired
 	ItemescalaControle itemEscalaControle;
 
-	@ApiOperation(value = "Retorna uma lista de Escalas")
+	@ApiOperation(value = "Retorna uma lista de Item-Esacala")
 	@GetMapping("")
 	public ResponseEntity<?> listarTodos() {
 		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarTodos()), HttpStatus.OK);
 	}
+	@ApiOperation(value = "Retorna uma lista de Itens-Escala por escala")
+	@GetMapping("/escala/{id}")
+	public ResponseEntity<?> listarPorEscala() {
+		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarTodos()), HttpStatus.OK);
+	}
 
-	@ApiOperation(value = "Retorna uma Escala unico pelo ID")
+	@ApiOperation(value = "Retorna um Item-Escala unico pelo ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listar(@PathVariable(value = "id") long id) {
 		Optional<ItemEscala> itemEscala = itemEscalaControle.listar(id);
 		return new ResponseEntity<>(ItemEscalaDTO.ItemEscalaResposta(itemEscala.get()), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Salva uma Escala")
+	@ApiOperation(value = "Salva um Item-Escala")
 	@PostMapping("")
 	public ResponseEntity<?> salvar(@RequestBody @Valid ItemEscalaDTO itemEscalaDTO) {
 		ItemEscala itemEscala = itemEscalaControle.salvar(itemEscalaDTO);
 		return new ResponseEntity<>(ItemEscalaDTO.ItemEscalaResposta(itemEscala), HttpStatus.CREATED);
 	}
 
-	@ApiOperation(value = "Edita uma Escala")
+	@ApiOperation(value = "Edita um Item-Escala")
 	@PutMapping("")
 	public ResponseEntity<?> editar(@RequestBody @Valid ItemEscalaDTO itemEscalaDTO) {
 		ItemEscala itemEscala = itemEscalaControle.editar(itemEscalaDTO);
 		return new ResponseEntity<>(ItemEscalaDTO.ItemEscalaResposta(itemEscala), HttpStatus.ACCEPTED);
 	}
 
-	@ApiOperation(value = "Deleta uma Escala por Id")
+	@ApiOperation(value = "Deleta um Item-Escala por Id")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
 		itemEscalaControle.deletarById(id);

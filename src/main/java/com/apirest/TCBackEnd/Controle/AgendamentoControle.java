@@ -24,18 +24,27 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	ServicoRepository servicoRepository;
 	@Autowired
 	DataHora datahora;
+	
+	public Iterable<Agendamento> listarPorClinete(long idCliente) {
+		verificaCliente(idCliente);
+		return repositorio.findAllByCliente(idCliente);
+	}
+	public Iterable<Agendamento> listarPorServico(long idServico) {
+		verificaServico(idServico);
+		return repositorio.findAllByServico(idServico);
+	}
 
 	@Override
 	protected void verificaSalvar(AgendamentoDTO dto) {
-		verificaCliente(dto);
-		verificaServico(dto);
+		verificaCliente(dto.getClienteId());
+		verificaServico(dto.getServicoId());
 	}
 
 	@Override
 	protected void verificUpdate(AgendamentoDTO dto) {
 		verificaExixte(dto.getId());
-		verificaCliente(dto);
-		verificaServico(dto);
+		verificaCliente(dto.getClienteId());
+		verificaServico(dto.getServicoId());
 	}
 
 	@Override
@@ -55,13 +64,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected Agendamento transformaSalvar(AgendamentoDTO dto) {
-		return new Agendamento(verificaCliente(dto), verificaServico(dto), datahora.stringemDateTime(dto.getHorario()),
+		return new Agendamento(verificaCliente(dto.getClienteId()), verificaServico(dto.getServicoId()), datahora.stringemDateTime(dto.getHorario()),
 				dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
 	protected Agendamento transformaEditar(AgendamentoDTO dto) {
-		return new Agendamento(dto.getId(), verificaCliente(dto), verificaServico(dto),
+		return new Agendamento(dto.getId(), verificaCliente(dto.getClienteId()), verificaServico(dto.getServicoId()),
 				datahora.stringemDateTime(dto.getHorario()), dto.getNotificacao(), dto.getObs());
 	}
 
@@ -79,22 +88,24 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
-	private Servico verificaServico(AgendamentoDTO dto) {
-		if (dto.getServicoId() == 0) {
+	private Servico verificaServico(long id) {
+		if (id == 0) {
 			new ResourceNotFoundException("Campo Serviço não informado corretamente !!");
 		}
-		Optional<Servico> retorno = servicoRepository.findById(dto.getServicoId());
+		Optional<Servico> retorno = servicoRepository.findById(id);
 		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + dto.getServicoId()));
+				() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + id));
 	}
 
-	private Usuario verificaCliente(AgendamentoDTO dto) {
-		if (dto.getClienteId() == 0) {
+	private Usuario verificaCliente(long id) {
+		if (id == 0) {
 			new ResourceNotFoundException("Campo Cliente não informado corretamente !!");
 		}
-		Optional<Usuario> retorno = usuarioRepository.findById(dto.getServicoId());
+		Optional<Usuario> retorno = usuarioRepository.findById(id);
 		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException("CLiente nao encontrado para o ID: " + dto.getServicoId()));
+				() -> new ResourceNotFoundException("CLiente nao encontrado para o ID: " + id));
 	}
+
+	
 
 }
