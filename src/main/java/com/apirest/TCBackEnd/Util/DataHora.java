@@ -1,15 +1,23 @@
 package com.apirest.TCBackEnd.Util;
 
+import static java.time.temporal.ChronoField.DAY_OF_WEEK;
+
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
 
 @Service
 public class DataHora {
@@ -76,10 +84,21 @@ public class DataHora {
 		String dia = data.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt"));
 		return dia;
 	}
+	
+	public Iterable<String> listarDayWeek() {
+		List<String> lista = new ArrayList<String>();
+		for (DayOfWeek c : DayOfWeek.values()) {
+		    System.out.println(c.getDisplayName(TextStyle.FULL, new Locale("pt")));
+		    lista.add(c.getDisplayName(TextStyle.FULL, new Locale("pt")));
+		}
+		return lista;
+		
+	}
 
 	// ---------------METDOD TESTE---------------
 	@EventListener(ContextRefreshedEvent.class)
 	private void teste() {
+		//DayOfWeek dayOfWeek[] = null  ;
 		System.out.println("INICIANDO TESTE DE HORA DATA");
 
 		// teste String em hora 11-30-33
@@ -95,10 +114,11 @@ public class DataHora {
 		System.out.println("String Data '2020-02-22' : " + stringEmData("2020-02-22"));
 		System.out.println("String Data '2020-10-20' dia semana : " + stringEmData("2020-10-20").getDayOfWeek());
 
-		// testa data.now() em string
+		// testa data.now() em strin
 		System.out.println("LocalDate.now() : " + LocalDate.now());
 		System.out.println("LocalDate.now() dia da SEMANA : "
 				+ LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt")));
+		
 
 		System.out.println("Data .now() em string : " + dataEmString(LocalDate.now()));
 

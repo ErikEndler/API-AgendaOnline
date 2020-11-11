@@ -37,6 +37,13 @@ public class EscalaEndPoint {
 	public ResponseEntity<?> listarTodos() {
 		return new ResponseEntity<>(EscalaDTO.listarResposta(escalaControle.listarTodos()), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Retorna uma lista dias semana")
+	@GetMapping("/dayweek")
+	public ResponseEntity<?> listarDayWeek() {
+		return new ResponseEntity<>(escalaControle.listaDayWeek(), HttpStatus.OK);
+	}
+	
 
 	@ApiOperation(value = "Retorna uma Escala unico pelo ID")
 	@GetMapping("/{id}")

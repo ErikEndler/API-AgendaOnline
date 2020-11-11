@@ -10,6 +10,7 @@ import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
+import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
 @Service
@@ -17,6 +18,12 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Autowired
 	ServicoRepository servicoRepository;
+	@Autowired
+	DataHora dataHora;
+
+	public Iterable<String> listaDayWeek() {
+		return dataHora.listarDayWeek();
+	}
 
 	public Iterable<Escala> listarPorservico(long id) {
 		verificaServico(id);
