@@ -27,7 +27,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	public Iterable<Escala> listarPorservico(long id) {
 		verificaServico(id);
-		return repositorio.findAllByServico(id);
+		return repositorio.findAllByServicoId(id);
 	}
 
 	@Override
