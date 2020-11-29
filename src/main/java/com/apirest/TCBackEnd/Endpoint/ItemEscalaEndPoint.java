@@ -39,8 +39,8 @@ public class ItemEscalaEndPoint {
 	}
 	@ApiOperation(value = "Retorna uma lista de Itens-Escala por escala")
 	@GetMapping("/escala/{id}")
-	public ResponseEntity<?> listarPorEscala() {
-		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarTodos()), HttpStatus.OK);
+	public ResponseEntity<?> listarPorEscala(@PathVariable(value = "id") long id) {
+		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarPorservico(id)), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um Item-Escala unico pelo ID")

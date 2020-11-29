@@ -16,6 +16,7 @@ public class RoleControle {
 	//realiza verificação sempre q aplicaçao inicia
 	//@EventListener(ContextRefreshedEvent.class)
 	public void verificaRoles() {
+		System.out.println("---função inicial, verifica se há ROLES no sistema");
 		if (roelRespository.count() == 0) {
 			System.out.println("Sistema não possui Roles cadastradas !!!");
 			System.out.println("Iniciando Incersao de roles default....");

@@ -2,6 +2,8 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.CategoriaDTO;
@@ -48,6 +50,17 @@ public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, C
 	}
 
 	// -------------------------METODOS AUXILIARES ----------------------------
+	@EventListener(ContextRefreshedEvent.class)
+	private void adicionaDefault() {
+		System.out.println("---função inicial, verifica se há categorias no sistema");
+		if (repositorio.count() == 0) {
+			Categoria categoria = new Categoria();
+			categoria.setNome("default");
+			categoria.setDescricao("categoria geral");
+			repositorio.save(categoria);
+		}
+	}
+
 	private void verificaExixte(long id) {
 		Optional<Categoria> categoria = repositorio.findById(id);
 		categoria
@@ -58,6 +71,12 @@ public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, C
 	protected String MenssagemErro() {
 		String msg = "Categoria";
 		return msg;
+	}
+
+	@Override
+	protected void posSalvar(Categoria categoria) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -17,6 +17,8 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	@Autowired
 	CategoriaRepository categoriaRepository;
+	@Autowired
+	EscalaControle escalaControle;
 
 	@Override
 	protected void verificaSalvar(ServicoDTO dto) {
@@ -68,11 +70,16 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	private Categoria verificaCategoria(ServicoDTO dto) {
 		if (dto.getCategoria() == 0) {
-			new ResourceNotFoundException("Campo categoria não informado corretamente !!");
+			throw new ResourceNotFoundException("Campo categoria não informado corretamente !!");
 		}
 		Optional<Categoria> retorno = categoriaRepository.findById(dto.getCategoria());
 		return retorno.orElseThrow(
 				() -> new ResourceNotFoundException("Categoria nao encontrado para o ID: " + dto.getCategoria()));
+	}
+
+	@Override
+	protected void posSalvar(Servico servico) {
+		//escalaControle.cadastraEscalasServico(servico.getId());
 	}
 
 }

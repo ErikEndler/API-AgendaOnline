@@ -3,6 +3,9 @@ package com.apirest.TCBackEnd.DTO;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import com.apirest.TCBackEnd.Models.Servico;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +21,9 @@ public class ServicoDTO {
 
 	private long id;
 	private long categoria;
+	@NotEmpty
 	private String nome;
+	@NotBlank
 	private String descricao;
 
 	public static ServicoDTO servicoResposta(Servico servico) {
@@ -27,7 +32,7 @@ public class ServicoDTO {
 	}
 
 	// Recebe uma lista de servicos e transforma a lista para o formato de resposta
-	public static Iterable<ServicoDTO> listarResposta(Iterable<Servico> listaServicos) {
+	public static List<ServicoDTO> listarResposta(List<Servico> listaServicos) {
 		// Cria a lista que sera retornada
 		List<ServicoDTO> listaDTO = new ArrayList<ServicoDTO>();
 		// Faz um for na lista recebida no metodo

@@ -1,13 +1,11 @@
 package com.apirest.TCBackEnd.Util;
 
-import static java.time.temporal.ChronoField.DAY_OF_WEEK;
-
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +15,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
-
 @Service
 public class DataHora {
 
-	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH-mm-ss");
+	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	private DateTimeFormatter formataData = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	private DateTimeFormatter formataDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss", Locale.FRANCE);
+	private DateTimeFormatter formataDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 
 	// transforma uma string em LocalDateTime
 	public LocalDateTime stringemDateTime(String string) {
@@ -34,10 +30,9 @@ public class DataHora {
 			return LocalDateTime.from(formataDataHora.parse(string));
 
 		} catch (Exception e) {
-			System.out.println("ENTRANDO CATCH----");
+			//System.out.println("ENTRANDO CATCH----");
 			throw new ResourceNotFoundException(" Erro converção, DateTime formato invalido. Detalhe : " + e);
 		}
-
 	}
 
 	// transforma um LocalDateTime em string
@@ -48,10 +43,11 @@ public class DataHora {
 	// tranbsforma uma string em LocalTime
 	public LocalTime stringEmHora(String string) {
 		try {
+			//System.out.println("string : "+string);
 			return LocalTime.from(formataHora1.parse(string));
 		} catch (Exception e) {
-			System.out.println("ENTRANDO CATCH----");
-			throw new ResourceNotFoundException(" Erro converção Hora, formato invalido. Detalhe : " + e.getMessage());
+			//System.out.println("ENTRANDO CATCH----");
+			throw new ResourceNotFoundException(" Erro converção Hora, formato invalido. Detalhe : " + string);
 		}
 	}
 
@@ -75,7 +71,7 @@ public class DataHora {
 			return formataData.format(localDate);
 
 		} catch (Exception e) {
-			throw new ResourceNotFoundException(" Erro converção Data:" + e);
+			throw new ResourceNotFoundException(" Erro converção Data:" + e.getMessage());
 		}
 	}
 
@@ -88,7 +84,7 @@ public class DataHora {
 	public Iterable<String> listarDayWeek() {
 		List<String> lista = new ArrayList<String>();
 		for (DayOfWeek c : DayOfWeek.values()) {
-		    System.out.println(c.getDisplayName(TextStyle.FULL, new Locale("pt")));
+		    //System.out.println(c.getDisplayName(TextStyle.FULL, new Locale("pt")));
 		    lista.add(c.getDisplayName(TextStyle.FULL, new Locale("pt")));
 		}
 		return lista;
@@ -96,31 +92,38 @@ public class DataHora {
 	}
 
 	// ---------------METDOD TESTE---------------
-	@EventListener(ContextRefreshedEvent.class)
+//	@EventListener(ContextRefreshedEvent.class)
 	private void teste() {
 		//DayOfWeek dayOfWeek[] = null  ;
 		System.out.println("INICIANDO TESTE DE HORA DATA");
 
 		// teste String em hora 11-30-33
-		System.out.println("String Hora '11-30-33' : " + stringEmHora("11-30-33"));
+		System.out.println("String Hora '11:30:33' : " + stringEmHora("11:30:33"));
 
+		//teste string hora simulada em localtime
+		System.out.println("String de hora '14:32:00' em Local time"+stringEmHora("14:32:00"));
+		
 		// testa HR.now() em string
 		System.out.println("LocalTime.now() : " + LocalTime.now());
 
 		System.out.println("Hora de agora .now() em string : " + horaEmString(LocalTime.now()));
 
-		System.out.println("TESTE DE DATA");
-		// teste String em data 2020-02-22
-		System.out.println("String Data '2020-02-22' : " + stringEmData("2020-02-22"));
-		System.out.println("String Data '2020-10-20' dia semana : " + stringEmData("2020-10-20").getDayOfWeek());
+		//string em hora 8:00:00
+		System.out.println("String de hora '08:00:00' em Local time "+stringEmHora("08:00:00"));
+		System.out.println("String de hora '08:30:00' em Local time "+stringEmHora("08:30:00"));
 
-		// testa data.now() em strin
-		System.out.println("LocalDate.now() : " + LocalDate.now());
-		System.out.println("LocalDate.now() dia da SEMANA : "
-				+ LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt")));
-		
+		System.out.println("String de hora '08:00:00' em MINUTOS "+stringEmHora("08:00:00").getHour()*60);
 
-		System.out.println("Data .now() em string : " + dataEmString(LocalDate.now()));
+		Duration duracao = Duration.ofDays(1);
+		System.out.println("Duration.ofDays(1) "+duracao.toMinutes());
+
+		Duration between = Duration.between(stringEmHora("08:00:00"), stringEmHora("10:30:00"));
+		System.out.println("DURATION "+between.toHoursPart());
+		System.out.println("DURATION "+between.toMinutesPart());
+
+		System.out.println("-------now() em localtime ---------"+LocalDateTime.now().toLocalTime());
+
+
 
 	}
 

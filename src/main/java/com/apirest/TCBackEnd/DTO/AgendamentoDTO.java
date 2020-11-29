@@ -19,14 +19,15 @@ public class AgendamentoDTO {
 	private long id;
 
 	private long clienteId;
-	private long servicoId;
+	private long servicoFuncionarioId;
 	private String horario; // LocalDateTime
+	private String horarioFim; // LocalDateTime
 	private Boolean notificacao;
 	private String obs;
 
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
 		return new AgendamentoDTO(agendamento.getId(), agendamento.getCliente().getId(),
-				agendamento.getServico().getId(), agendamento.getHorario().toString(), agendamento.getNotificacao(),
+				agendamento.getServicoFuncionario().getId(), agendamento.getHorario().toString(), agendamento.getHorarioFim().toString(), agendamento.getNotificacao(),
 				agendamento.getObs());
 	}
 

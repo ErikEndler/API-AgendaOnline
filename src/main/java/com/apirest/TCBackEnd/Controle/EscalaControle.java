@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
 import com.apirest.TCBackEnd.Models.Escala;
-import com.apirest.TCBackEnd.Models.Servico;
+import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
-import com.apirest.TCBackEnd.Repository.ServicoRepository;
+import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 
@@ -17,7 +17,7 @@ import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
 public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepository> {
 
 	@Autowired
-	ServicoRepository servicoRepository;
+	ServicoFuncionarioRepository servicoFuncionarioRepository;
 	@Autowired
 	DataHora dataHora;
 
@@ -26,19 +26,19 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	}
 
 	public Iterable<Escala> listarPorservico(long id) {
-		verificaServico(id);
-		return repositorio.findAllByServicoId(id);
+		verificaServicoFuncionario(id);
+		return repositorio.findAllByServicoFuncionarioId(id);
 	}
 
 	@Override
 	protected void verificaSalvar(EscalaDTO dto) {
-		verificaServico(dto.getServico());
+		verificaServicoFuncionario(dto.getServicoFuncionario());
 	}
 
 	@Override
 	protected void verificUpdate(EscalaDTO dto) {
 		verificaESxiste(dto.getId());
-		verificaServico(dto.getServico());
+		verificaServicoFuncionario(dto.getServicoFuncionario());
 	}
 
 	@Override
@@ -59,12 +59,12 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected Escala transformaSalvar(EscalaDTO dto) {
-		return new Escala(verificaServico(dto.getServico()), dto.getDiaSemana());
+		return new Escala(verificaServicoFuncionario(dto.getServicoFuncionario()), dto.getDiaSemana());
 	}
 
 	@Override
 	protected Escala transformaEditar(EscalaDTO dto) {
-		return new Escala(dto.getId(), verificaServico(dto.getServico()), dto.getDiaSemana());
+		return new Escala(dto.getId(), verificaServicoFuncionario(dto.getServicoFuncionario()), dto.getDiaSemana());
 	}
 
 	// ------------------------------------------
@@ -73,14 +73,26 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 	}
 
+	public void cadastraEscalasServico(long servicoID) {
+		Iterable<String> listaDias = dataHora.listarDayWeek();
+		listaDias.forEach(n -> {
+			salvar(new EscalaDTO(n, servicoID));
+		});
+	}
+
 	// verifica e retorna o serviço
-	private Servico verificaServico(long servico) {
-		if (servico == 0) {
-			new ResourceNotFoundException("Campo Serviço não informado corretamente !! \"NULO\"");
+	private ServicoFuncionario verificaServicoFuncionario(long servicoFuncionario) {
+		if (servicoFuncionario == 0) {
+			throw new ResourceNotFoundException("Campo Serviço não informado corretamente !! \"NULO\"");
 		}
-		Optional<Servico> retorno = servicoRepository.findById(servico);
-		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + servico));
+		Optional<ServicoFuncionario> retorno = servicoFuncionarioRepository.findById(servicoFuncionario);
+		return retorno.orElseThrow(() -> new ResourceNotFoundException(
+				MenssagemErro() + " nao encontrado para o ID: " + servicoFuncionario));
+	}
+
+	@Override
+	protected void posSalvar(Escala escala) {
+
 	}
 
 }

@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServicoFuncionarioDTO {
-	private int id;
+	private long id;
 
 	private long funcionarioId;
 

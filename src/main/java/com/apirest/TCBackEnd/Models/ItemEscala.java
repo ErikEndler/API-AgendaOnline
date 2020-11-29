@@ -42,6 +42,5 @@ public class ItemEscala {
 		this.hrFinal = hrFinal;
 		this.qtd = qtd;
 	}
-	
 
 }

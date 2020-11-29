@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,11 +42,11 @@ public class Usuario implements UserDetails {
 	private Boolean notificacaoEmail;
 	private Boolean notificacaoWhats;
 
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
 	private List<Agendamento> agendamentosCliente;
-	@OneToMany(mappedBy = "funcionario")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
 	private List<Atendimento> atendimentosFuncionario;
-	@OneToMany(mappedBy = "funcionario")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
 	private List<ServicoFuncionario> servico_funcionario;
 
 	// @ManyToMany

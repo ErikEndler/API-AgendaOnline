@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Models;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class Atendimento {
 	private Usuario funcionario;
 	private LocalDateTime inicio;
 	private LocalDateTime fim;
-	@OneToOne(mappedBy = "atendimento")
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "atendimento")
 	private Avaliacao avaliacao;
 
 	public Atendimento(long id, Agendamento agendamento, Usuario funcionario, LocalDateTime inicio, LocalDateTime fim) {

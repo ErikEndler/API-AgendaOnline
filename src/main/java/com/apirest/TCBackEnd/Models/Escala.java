@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,21 +23,21 @@ public class Escala {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@ManyToOne
-	private Servico servico;
+	private ServicoFuncionario servicoFuncionario;
 	private String diaSemana;
-	@OneToMany(mappedBy = "escala")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "escala")
 	private List<ItemEscala> itensEscala;
 
-	public Escala(long id, Servico servico, String diaSemana) {
+	public Escala(long id, ServicoFuncionario servicoFuncionario, String diaSemana) {
 		super();
 		this.id = id;
-		this.servico = servico;
+		this.servicoFuncionario = servicoFuncionario;
 		this.diaSemana = diaSemana;
 	}
 
-	public Escala(Servico servico, String diaSemana) {
+	public Escala(ServicoFuncionario servicoFuncionario, String diaSemana) {
 		super();
-		this.servico = servico;
+		this.servicoFuncionario = servicoFuncionario;
 		this.diaSemana = diaSemana;
 	}
 

@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Models;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,30 +23,32 @@ public class Agendamento {
 	@ManyToOne
 	private Usuario cliente;
 	@ManyToOne
-	private Servico servico;
+	private ServicoFuncionario servicoFuncionario;
 	private LocalDateTime horario;
+	private LocalDateTime horarioFim;
+
 	private Boolean notificacao;
 	private String obs;
-	@OneToOne(mappedBy = "agendamento")
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "agendamento")
 	private Atendimento atendimento;
 
 	// usado para salvar
-	public Agendamento(Usuario cliente, Servico servico, LocalDateTime horario, Boolean notificacao, String obs) {
+	public Agendamento(Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario, Boolean notificacao, String obs) {
 		super();
 		this.cliente = cliente;
-		this.servico = servico;
+		this.servicoFuncionario = servicoFuncionario;
 		this.horario = horario;
 		this.notificacao = notificacao;
 		this.obs = obs;
 	}
 
 	// usado para o update
-	public Agendamento(long id, Usuario cliente, Servico servico, LocalDateTime horario, Boolean notificacao,
+	public Agendamento(long id, Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario, Boolean notificacao,
 			String obs) {
 		super();
 		this.id = id;
 		this.cliente = cliente;
-		this.servico = servico;
+		this.servicoFuncionario = servicoFuncionario;
 		this.horario = horario;
 		this.notificacao = notificacao;
 		this.obs = obs;

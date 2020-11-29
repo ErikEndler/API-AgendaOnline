@@ -23,7 +23,9 @@ public abstract class GenericControl<MODELO, DTO, REPOSITORIO extends CrudReposi
 	public MODELO salvar(DTO dto) {
 		verificaSalvar(dto);
 		MODELO modelo = transformaSalvar(dto);
-		return repositorio.save(modelo);
+		MODELO retorno = repositorio.save(modelo);
+		posSalvar(retorno);
+		return retorno;
 	}
 
 	// Metodo Principal ATUALIZAR (UPDATE) ---------------
@@ -60,6 +62,7 @@ public abstract class GenericControl<MODELO, DTO, REPOSITORIO extends CrudReposi
 
 	protected abstract MODELO transformaEditar(DTO dto);
 
+	protected abstract void posSalvar(MODELO obj);
 
 	protected String MenssagemErro() {
 		String msg = "Objeto";

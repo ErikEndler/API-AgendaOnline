@@ -140,4 +140,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		validaRole(dto);
 	}
 
+	@Override
+	protected void posSalvar(Usuario usuario) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

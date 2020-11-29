@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -41,7 +42,7 @@ public class ServicoEndPoint {
 	@ApiOperation(value = "Retorna uma lista de Serviços")
 	@GetMapping("")
 	public ResponseEntity<?> listarTodos() {
-		return new ResponseEntity<>(ServicoDTO.listarResposta(servicoControle.listarTodos()), HttpStatus.OK);
+		return new ResponseEntity<>(ServicoDTO.listarResposta((List<Servico>) servicoControle.listarTodos()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um Serviço unico pelo ID")
@@ -72,7 +73,7 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// ----------------------------------------TRATA RELAÇAO FUNCIONARIO-SERVIÇO-------------------
+	// -------------------------------------TRATA RELAÇAO FUNCIONARIO-SERVIÇO-------------------
 	@ApiOperation(value = "Retorna uma lista de Serviços-Funcionario")
 	@GetMapping("funcionario")
 	public ResponseEntity<?> listarTodos2() {
@@ -84,6 +85,14 @@ public class ServicoEndPoint {
 	public ResponseEntity<?> listar2(@PathVariable(value = "id") long id) {
 		Optional<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listar(id);
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
+				HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Retorna lista Serviços de um funcionario")
+	@GetMapping("funcionario/funcionario/{id}")
+	public ResponseEntity<?> listaServicoFunncionario(@PathVariable(value = "id") long id) {
+		
+		return new ResponseEntity<>(ServicoDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)),
 				HttpStatus.OK);
 	}
 
@@ -103,9 +112,9 @@ public class ServicoEndPoint {
 				HttpStatus.ACCEPTED);
 	}
 	@ApiOperation(value = "Deleta um Serviço-Funcionario por Id")
-	@DeleteMapping("funcionario/{id}")
-	public ResponseEntity<?> deleteById2(@PathVariable(value = "id") long id) {
-		servicoFuncionarioControle.deletarById(id);
+	@PostMapping("funcionario/delete")
+	public ResponseEntity<?> deleteById2(@RequestBody ServicoFuncionarioDTO dto) {
+		servicoFuncionarioControle.deletar(dto.getFuncionarioId(), dto.getServicoId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

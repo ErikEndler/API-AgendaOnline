@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,13 +28,7 @@ public class Servico {
 	private String nome;
 	private String descricao;
 
-	@OneToMany(mappedBy = "servico")
-	private List<Escala> escalas;
-
-	@OneToMany(mappedBy = "servico")
-	private List<Agendamento> agendamento;
-
-	@OneToMany(mappedBy = "servico")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "servico")
 	private List<ServicoFuncionario> servico_funcionario;
 
 	public Servico(long id, Categoria categoria, String nome, String descricao) {

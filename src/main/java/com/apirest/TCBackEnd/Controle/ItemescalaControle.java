@@ -23,7 +23,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	public Iterable<ItemEscala> listarPorservico(long id) {
 		verificaEscala(id);
-		return repositorio.findAllByEscala(id);
+		return repositorio.findAllByEscalaId(id);
 	}
 
 	@Override
@@ -75,12 +75,18 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	// verifica e retorna a escala
 	private Escala verificaEscala(long id) {
 		if (id == 0) {
-			new ResourceNotFoundException("Campo Escala não informado corretamente !! \"NULO\"");
+			throw new ResourceNotFoundException("Campo Escala não informado corretamente !! \"NULO\"");
 
 		}
 		Optional<Escala> escala = escalaRepository.findById(id);
 		return escala
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+	}
+
+	@Override
+	protected void posSalvar(ItemEscala itemEscala) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

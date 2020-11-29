@@ -81,7 +81,7 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 
 	private Agendamento verificaAgendamento(long id) {
 		if (id == 0)
-			new ResourceNotFoundException("Campo Agendamento não informado corretamente !!");
+			throw new ResourceNotFoundException("Campo Agendamento não informado corretamente !!");
 		Optional<Agendamento> agendamento = agendamentoRepository.findById(id);
 		return agendamento
 				.orElseThrow(() -> new ResourceNotFoundException("Agendamento nao encontrado para o ID: " + id));
@@ -89,9 +89,15 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 
 	private Usuario verificaFuncionario(long id) {
 		if (id == 0)
-			new ResourceNotFoundException("Campo Funcionário não informado corretamente !!");
+			throw new ResourceNotFoundException("Campo Funcionário não informado corretamente !!");
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		return usuario.orElseThrow(() -> new ResourceNotFoundException("Funcionário nao encontrado para o ID: " + id));
+	}
+
+	@Override
+	protected void posSalvar(Atendimento modelo) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Controle.AgendamentoControle;
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
-import com.apirest.TCBackEnd.DTO.EscalaDTO;
 import com.apirest.TCBackEnd.Models.Agendamento;
 
 import io.swagger.annotations.Api;

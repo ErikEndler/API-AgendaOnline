@@ -18,10 +18,10 @@ public class EscalaDTO {
 	
 	private long id;
 	private String diaSemana;
-	private long servico;
+	private long servicoFuncionario;
 	
 	public static EscalaDTO escalaResposta(Escala escala) {
-		return new EscalaDTO(escala.getId(), escala.getDiaSemana(), escala.getServico().getId());
+		return new EscalaDTO(escala.getId(), escala.getDiaSemana(), escala.getServicoFuncionario().getId());
 	}
 
 	// Recebe uma lista de escalas e transforma a lista para o formato de resposta
@@ -35,4 +35,11 @@ public class EscalaDTO {
 		return listaDTO;
 	}
 
+	public EscalaDTO(String diaSemana, long servicoFuncionario) {
+		super();
+		this.diaSemana = diaSemana;
+		this.servicoFuncionario = servicoFuncionario;
+	}
+
+	
 }

@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,7 @@ public class Role implements GrantedAuthority {
 	private long id;
 	private String nameRole;
 	@JsonIgnore
-	@OneToMany(mappedBy = "role")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
 	private List<Usuario> usuarios;
 
 	@Override

@@ -1,6 +1,8 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,31 @@ public class ServicoFuncionarioControle
 	@Autowired
 	ServicoRepository servicoRepository;
 
+	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
+		List<Servico> listServico = repositorio.findByFuncionarioId(idFuncionario).stream()
+				.map(ServicoFuncionario::getServico).collect(Collectors.toList());
+		return listServico;
+	}
+
+	public void deletar(long funcionarioId, long servicoId) {
+		verificaFuncionario(funcionarioId);
+		verificaServico(servicoId);
+		long id = repositorio.findByFuncionarioIdAndServicoId(funcionarioId, servicoId).get().getId();
+		repositorio.deleteById(id);
+	}
+
 	@Override
 	protected void verificaSalvar(ServicoFuncionarioDTO dto) {
-		verificaFuncionario(dto);
-		verificaServico(dto);
+		verificaFuncionario(dto.getFuncionarioId());
+		verificaServico(dto.getServicoId());
+		verificaAtribuicao(dto);
 	}
 
 	@Override
 	protected void verificUpdate(ServicoFuncionarioDTO dto) {
 		verifiaExiste(dto.getId());
-		verificaFuncionario(dto);
-		verificaServico(dto);
+		verificaFuncionario(dto.getFuncionarioId());
+		verificaServico(dto.getServicoId());
 	}
 
 	@Override
@@ -53,15 +69,24 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected ServicoFuncionario transformaSalvar(ServicoFuncionarioDTO dto) {
-		return new ServicoFuncionario(verificaFuncionario(dto), verificaServico(dto));
+		return new ServicoFuncionario(verificaFuncionario(dto.getFuncionarioId()), verificaServico(dto.getServicoId()));
 	}
 
 	@Override
 	protected ServicoFuncionario transformaEditar(ServicoFuncionarioDTO dto) {
-		return new ServicoFuncionario(dto.getId(), verificaFuncionario(dto), verificaServico(dto));
+		return new ServicoFuncionario(dto.getId(), verificaFuncionario(dto.getFuncionarioId()),
+				verificaServico(dto.getServicoId()));
 	}
 
-	// -------------------------
+	// -------------------------//---------------------
+	// verifica se funcionario ja possui aquele serviço atribuido ha ele
+	private void verificaAtribuicao(ServicoFuncionarioDTO dto) {
+		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionarioId(), dto.getServicoId()).isPresent()) {
+			throw new ResourceNotFoundException("Funcionario ja possui essa atribuição");
+		}
+		// return true;
+	}
+
 	private void verifiaExiste(long id) {
 		Optional<ServicoFuncionario> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
@@ -73,22 +98,28 @@ public class ServicoFuncionarioControle
 		return msg;
 	}
 
-	private Servico verificaServico(ServicoFuncionarioDTO dto) {
-		if (dto.getServicoId() == 0) {
-			new ResourceNotFoundException("Campo Serviço não informado corretamente !!");
+	private Servico verificaServico(long servicoId) {
+		if (servicoId == 0) {
+			throw new ResourceNotFoundException("Campo Serviço não informado corretamente !!");
 		}
-		Optional<Servico> retorno = servicoRepository.findById(dto.getServicoId());
-		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + dto.getServicoId()));
+		Optional<Servico> retorno = servicoRepository.findById(servicoId);
+		return retorno
+				.orElseThrow(() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + servicoId));
 	}
 
-	private Usuario verificaFuncionario(ServicoFuncionarioDTO dto) {
-		if (dto.getFuncionarioId() == 0) {
-			new ResourceNotFoundException("Campo Funcionario não informado corretamente !!");
+	private Usuario verificaFuncionario(long idFuncionario) {
+		if (idFuncionario == 0) {
+			throw new ResourceNotFoundException("Campo Funcionario não informado corretamente !!");
 		}
-		Optional<Usuario> retorno = usuarioRepository.findById(dto.getServicoId());
+		Optional<Usuario> retorno = usuarioRepository.findById(idFuncionario);
 		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException("Funcionario nao encontrado para o ID: " + dto.getServicoId()));
+				() -> new ResourceNotFoundException("Funcionario nao encontrado para o ID: " + idFuncionario));
+	}
+
+	@Override
+	protected void posSalvar(ServicoFuncionario servicoFuncionario) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
