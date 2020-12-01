@@ -32,9 +32,10 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	}
 
 	@Override
-	protected void verificUpdate(ItemEscalaDTO dto) {
-		verificaExiste(dto.getId());
+	protected ItemEscala verificUpdate(ItemEscalaDTO dto) {
+		ItemEscala retorno = verificaExiste(dto.getId()).get();
 		verificaEscala(dto.getEscala());
+		return retorno;
 	}
 
 	@Override
@@ -67,9 +68,10 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	// ----------------------------------------------------------------
 
-	private void verificaExiste(long id) {
+	private Optional<ItemEscala> verificaExiste(long id) {
 		Optional<ItemEscala> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return retorno;
 	}
 
 	// verifica e retorna a escala
@@ -88,5 +90,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 		// TODO Auto-generated method stub
 
 	}
+
+	
 
 }

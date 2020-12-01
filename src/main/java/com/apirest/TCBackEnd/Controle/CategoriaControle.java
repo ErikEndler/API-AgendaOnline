@@ -20,8 +20,9 @@ public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, C
 	}
 
 	@Override
-	protected void verificUpdate(CategoriaDTO dto) {
-		verificaExixte(dto.getId());
+	protected Categoria verificUpdate(CategoriaDTO dto) {
+		Categoria retorno = verificaExixte(dto.getId()).get();
+		return retorno;
 	}
 
 	@Override
@@ -61,10 +62,11 @@ public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, C
 		}
 	}
 
-	private void verificaExixte(long id) {
+	private Optional<Categoria> verificaExixte(long id) {
 		Optional<Categoria> categoria = repositorio.findById(id);
 		categoria
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return categoria;
 	}
 
 	@Override

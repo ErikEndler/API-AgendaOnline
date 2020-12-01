@@ -20,14 +20,14 @@ import lombok.Setter;
 public class ServicoDTO {
 
 	private long id;
-	private long categoria;
+	private CategoriaDTO categoria;
 	@NotEmpty
 	private String nome;
 	@NotBlank
 	private String descricao;
 
 	public static ServicoDTO servicoResposta(Servico servico) {
-		return new ServicoDTO(servico.getId(), servico.getCategoria().getId(), servico.getNome(),
+		return new ServicoDTO(servico.getId(), CategoriaDTO.categoriaResposta(servico.getCategoria()) , servico.getNome(),
 				servico.getDescricao());
 	}
 

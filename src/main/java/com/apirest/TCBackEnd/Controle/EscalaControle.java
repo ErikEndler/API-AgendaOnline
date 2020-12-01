@@ -36,9 +36,10 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	}
 
 	@Override
-	protected void verificUpdate(EscalaDTO dto) {
-		verificaESxiste(dto.getId());
+	protected Escala verificUpdate(EscalaDTO dto) {
+		Escala retorno =verificaESxiste(dto.getId()).get();
 		verificaServicoFuncionario(dto.getServicoFuncionario());
+		return retorno;
 	}
 
 	@Override
@@ -68,15 +69,16 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	}
 
 	// ------------------------------------------
-	private void verificaESxiste(long id) {
+	private Optional<Escala> verificaESxiste(long id) {
 		Optional<Escala> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return retorno;
 	}
 
-	public void cadastraEscalasServico(long servicoID) {
+	public void cadastraEscalasServicoFuncionario(long idServicoFuncionario) {
 		Iterable<String> listaDias = dataHora.listarDayWeek();
-		listaDias.forEach(n -> {
-			salvar(new EscalaDTO(n, servicoID));
+		listaDias.forEach(day -> {
+			salvar(new EscalaDTO(day, idServicoFuncionario));
 		});
 	}
 

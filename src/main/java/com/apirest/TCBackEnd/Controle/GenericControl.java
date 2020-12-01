@@ -50,7 +50,7 @@ public abstract class GenericControl<MODELO, DTO, REPOSITORIO extends CrudReposi
 	// --------------------------------------------------------------------
 	protected abstract void verificaSalvar(DTO dto);
 
-	protected abstract void verificUpdate(DTO dto);
+	protected abstract MODELO verificUpdate(DTO dto);
 
 	protected abstract void verificaListAll();
 

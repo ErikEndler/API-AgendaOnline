@@ -24,6 +24,8 @@ public class ServicoFuncionarioControle
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	ServicoRepository servicoRepository;
+	@Autowired
+	EscalaControle escalaControle;
 
 	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
 		List<Servico> listServico = repositorio.findByFuncionarioId(idFuncionario).stream()
@@ -46,10 +48,11 @@ public class ServicoFuncionarioControle
 	}
 
 	@Override
-	protected void verificUpdate(ServicoFuncionarioDTO dto) {
-		verifiaExiste(dto.getId());
+	protected ServicoFuncionario verificUpdate(ServicoFuncionarioDTO dto) {
+		ServicoFuncionario retorno =verifiaExiste(dto.getId()).get();
 		verificaFuncionario(dto.getFuncionarioId());
 		verificaServico(dto.getServicoId());
+		return retorno;
 	}
 
 	@Override
@@ -87,9 +90,10 @@ public class ServicoFuncionarioControle
 		// return true;
 	}
 
-	private void verifiaExiste(long id) {
+	private Optional<ServicoFuncionario> verifiaExiste(long id) {
 		Optional<ServicoFuncionario> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return retorno;
 	}
 
 	@Override
@@ -118,8 +122,7 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void posSalvar(ServicoFuncionario servicoFuncionario) {
-		// TODO Auto-generated method stub
-
+		escalaControle.cadastraEscalasServicoFuncionario(servicoFuncionario.getId());
 	}
 
 }

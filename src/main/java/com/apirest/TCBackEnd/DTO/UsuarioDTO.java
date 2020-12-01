@@ -31,7 +31,7 @@ public class UsuarioDTO {
 	private Boolean notificacao;
 	private Boolean notificacaoSms;
 	private Boolean notificacaoEmail;
-	private Boolean notificacaoWhats;
+	private Boolean notificacaoWhatsapp;
 
 	public static UsuarioDTO usuarioResposta(Usuario usuario) {
 		return new UsuarioDTO(usuario.getId(), usuario.getRole().getNameRole(), usuario.getNome(), usuario.getCpf(),

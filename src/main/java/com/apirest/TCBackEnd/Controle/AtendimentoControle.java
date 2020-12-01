@@ -30,10 +30,11 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	}
 
 	@Override
-	protected void verificUpdate(AtendimentoDTO dto) {
-		verificaExixte(dto.getId());
+	protected Atendimento verificUpdate(AtendimentoDTO dto) {
+		Atendimento retorno = verificaExixte(dto.getId()).get();
 		verificaAgendamento(dto.getAgendamento());
 		verificaFuncionario(dto.getFuncionario());
+		return retorno;
 	}
 
 	@Override
@@ -73,10 +74,11 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	}
 
 	// --------------------------------
-	private void verificaExixte(long id) {
+	private Optional<Atendimento> verificaExixte(long id) {
 		Optional<Atendimento> atendimento = repositorio.findById(id);
 		atendimento
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return atendimento;
 	}
 
 	private Agendamento verificaAgendamento(long id) {

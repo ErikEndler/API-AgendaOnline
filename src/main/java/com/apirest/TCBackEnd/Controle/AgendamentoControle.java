@@ -64,10 +64,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	@Override
-	protected void verificUpdate(AgendamentoDTO dto) {
-		verificaExixte(dto.getId());
+	protected Agendamento verificUpdate(AgendamentoDTO dto) {
+		Agendamento agendamento = verificaExixte(dto.getId()).get();
 		verificaCliente(dto.getClienteId());
 		verificaServicoFuncionario(dto.getServicoFuncionarioId());
+		return agendamento;
 	}
 
 	@Override
@@ -107,10 +108,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	// --------------------- METODOS AUXILIARES------------
 
-	private void verificaExixte(long id) {
+	private Optional<Agendamento> verificaExixte(long id) {
 		Optional<Agendamento> agendamento = repositorio.findById(id);
 		agendamento
 				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return agendamento;
 	}
 
 	private ServicoFuncionario verificaServicoFuncionario(long id) {

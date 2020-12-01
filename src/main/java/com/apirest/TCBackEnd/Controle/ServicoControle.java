@@ -26,9 +26,10 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	}
 
 	@Override
-	protected void verificUpdate(ServicoDTO dto) {
-		verifiaExiste(dto.getId());
+	protected Servico verificUpdate(ServicoDTO dto) {
+		Servico servico =verifiaExiste(dto.getId()).get();
 		verificaCategoria(dto);
+		return servico;
 	}
 
 	@Override
@@ -63,16 +64,17 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	}
 
 	// ----------------------------- METODOS AUXILIARES ------------------
-	private void verifiaExiste(long id) {
+	private Optional<Servico> verifiaExiste(long id) {
 		Optional<Servico> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return retorno;
 	}
 
 	private Categoria verificaCategoria(ServicoDTO dto) {
-		if (dto.getCategoria() == 0) {
+		if (dto.getCategoria().getId() == 0) {
 			throw new ResourceNotFoundException("Campo categoria não informado corretamente !!");
 		}
-		Optional<Categoria> retorno = categoriaRepository.findById(dto.getCategoria());
+		Optional<Categoria> retorno = categoriaRepository.findById(dto.getCategoria().getId());
 		return retorno.orElseThrow(
 				() -> new ResourceNotFoundException("Categoria nao encontrado para o ID: " + dto.getCategoria()));
 	}

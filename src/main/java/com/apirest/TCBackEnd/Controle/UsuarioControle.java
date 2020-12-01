@@ -52,9 +52,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	}
 
 //---------------------METODOS AUXILIARES-----------------------------------------
-	private void verificaExiste(long id) {
+	private Optional<Usuario> verificaExiste(long id) {
 		Optional<Usuario> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		return retorno;
 	}
 
 	private void verificaCpf(String cpf) {
@@ -70,19 +71,25 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	protected Usuario transformaSalvar(UsuarioDTO usuarioDTO) {
 		return new Usuario(buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(), usuarioDTO.getCpf(),
 				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSexo(),
-				senhaCripto(usuarioDTO.getSenha()), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
-				usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhats());
+				senhaCripto(usuarioDTO), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
+				usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
 	}
 
 	protected Usuario transformaEditar(UsuarioDTO usuarioDTO) {
 		return new Usuario(usuarioDTO.getId(), buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(),
 				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getSexo(),
-				usuarioDTO.getEmail(), senhaCripto(usuarioDTO.getSenha()), usuarioDTO.getNotificacao(),
-				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhats());
+				usuarioDTO.getEmail(), senhaCripto(usuarioDTO,"edite"), usuarioDTO.getNotificacao(),
+				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
 	}
 
-	private String senhaCripto(String senha) {
-		senha = new BCryptPasswordEncoder().encode(senha);
+	private String senhaCripto(UsuarioDTO usuarioDTO, String... strings) {
+		if (strings.equals("edite")) {
+			Usuario old = verificaExiste(usuarioDTO.getId()).get();
+			if (old.getSenha() == usuarioDTO.getSenha() || usuarioDTO.getSenha().isEmpty()) {
+				return old.getSenha();
+			}
+		}
+		String senha = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
 		return senha;
 	}
 
@@ -130,20 +137,21 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		dto.setNotificacao(Optional.ofNullable(dto.getNotificacao()).orElse(false));
 		dto.setNotificacaoEmail(Optional.ofNullable(dto.getNotificacaoEmail()).orElse(false));
 		dto.setNotificacaoSms(Optional.ofNullable(dto.getNotificacaoSms()).orElse(false));
-		dto.setNotificacaoWhats(Optional.ofNullable(dto.getNotificacaoWhats()).orElse(false));
+		dto.setNotificacaoWhatsapp(Optional.ofNullable(dto.getNotificacaoWhatsapp()).orElse(false));
 	}
 
 	@Override
-	protected void verificUpdate(UsuarioDTO dto) {
-		verificaExiste(dto.getId());
+	protected Usuario verificUpdate(UsuarioDTO dto) {
+		Usuario retorno = verificaExiste(dto.getId()).get();
 		verificaNotificacoes(dto);
 		validaRole(dto);
+		return retorno;
 	}
 
 	@Override
 	protected void posSalvar(Usuario usuario) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
