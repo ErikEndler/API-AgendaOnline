@@ -71,7 +71,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	protected Usuario transformaSalvar(UsuarioDTO usuarioDTO) {
 		return new Usuario(buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(), usuarioDTO.getCpf(),
 				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSexo(),
-				senhaCripto(usuarioDTO), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
+				senhaCripto(usuarioDTO,"save"), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
 				usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
 	}
 
@@ -82,10 +82,11 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
 	}
 
-	private String senhaCripto(UsuarioDTO usuarioDTO, String... strings) {
+	private String senhaCripto(UsuarioDTO usuarioDTO, String strings) {
 		if (strings.equals("edite")) {
 			Usuario old = verificaExiste(usuarioDTO.getId()).get();
-			if (old.getSenha() == usuarioDTO.getSenha() || usuarioDTO.getSenha().isEmpty()) {
+			if (old.getSenha().equals(usuarioDTO.getSenha())  || usuarioDTO.getSenha().isEmpty()) {	
+				System.out.println("entrou no sdegundo if");
 				return old.getSenha();
 			}
 		}
