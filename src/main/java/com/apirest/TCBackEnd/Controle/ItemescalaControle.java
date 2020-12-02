@@ -29,6 +29,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	@Override
 	protected void verificaSalvar(ItemEscalaDTO dto) {
 		verificaEscala(dto.getEscala());
+		verificaSobreposiçao(dto);
 	}
 
 	@Override
@@ -91,6 +92,11 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	}
 
-	
+	private void verificaSobreposiçao(ItemEscalaDTO dto) {
+		if (repositorio.escalaByHrInicialAndHrfinal(datahora.stringEmHora(dto.getHrInicial()),
+				datahora.stringEmHora(dto.getHrFinal())) > 0) {
+			throw new ResourceNotFoundException("Escala com horario conflitante");
+		}
+	}
 
 }
