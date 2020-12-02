@@ -71,21 +71,21 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	protected Usuario transformaSalvar(UsuarioDTO usuarioDTO) {
 		return new Usuario(buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(), usuarioDTO.getCpf(),
 				usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(), usuarioDTO.getSexo(),
-				senhaCripto(usuarioDTO,"save"), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
-				usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
+				senhaCripto(usuarioDTO, "save"), usuarioDTO.getNotificacao(), usuarioDTO.getNotificacaoEmail(),
+				usuarioDTO.getNotificacaoWhatsapp());
 	}
 
 	protected Usuario transformaEditar(UsuarioDTO usuarioDTO) {
 		return new Usuario(usuarioDTO.getId(), buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(),
 				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getSexo(),
-				usuarioDTO.getEmail(), senhaCripto(usuarioDTO,"edite"), usuarioDTO.getNotificacao(),
-				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoSms(), usuarioDTO.getNotificacaoWhatsapp());
+				usuarioDTO.getEmail(), senhaCripto(usuarioDTO, "edite"), usuarioDTO.getNotificacao(),
+				usuarioDTO.getNotificacaoEmail(), usuarioDTO.getNotificacaoWhatsapp());
 	}
 
 	private String senhaCripto(UsuarioDTO usuarioDTO, String strings) {
 		if (strings.equals("edite")) {
 			Usuario old = verificaExiste(usuarioDTO.getId()).get();
-			if (old.getSenha().equals(usuarioDTO.getSenha())  || usuarioDTO.getSenha().isEmpty()) {	
+			if (old.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha().isEmpty()) {
 				System.out.println("entrou no sdegundo if");
 				return old.getSenha();
 			}
@@ -137,7 +137,6 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	private void verificaNotificacoes(UsuarioDTO dto) {
 		dto.setNotificacao(Optional.ofNullable(dto.getNotificacao()).orElse(false));
 		dto.setNotificacaoEmail(Optional.ofNullable(dto.getNotificacaoEmail()).orElse(false));
-		dto.setNotificacaoSms(Optional.ofNullable(dto.getNotificacaoSms()).orElse(false));
 		dto.setNotificacaoWhatsapp(Optional.ofNullable(dto.getNotificacaoWhatsapp()).orElse(false));
 	}
 
