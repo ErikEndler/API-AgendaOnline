@@ -37,7 +37,6 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String sexo;
 	private String senha;
-	private Boolean notificacao;
 	private Boolean notificacaoEmail;
 	private Boolean notificacaoWhats;
 
@@ -55,8 +54,7 @@ public class Usuario implements UserDetails {
 	// private List<Servico> servicos;
 
 	public Usuario(long id, Role role, String nome, String cpf, String telefone, String whatsapp, String email,
-			String sexo, String senha, boolean notificacao, boolean notificacaoEmail,
-			boolean notificacaoWhats) {
+			String sexo, String senha, boolean notificacaoEmail, boolean notificacaoWhats) {
 		super();
 		this.id = id;
 		this.role = role;
@@ -67,14 +65,12 @@ public class Usuario implements UserDetails {
 		this.email = email;
 		this.sexo = sexo;
 		this.senha = senha;
-		this.notificacao = notificacao;
 		this.notificacaoEmail = notificacaoEmail;
 		this.notificacaoWhats = notificacaoWhats;
 	}
 
 	public Usuario(Role role, String nome, String cpf, String string, String string2, String email, String sexo,
-			String senha, boolean notificacao, boolean notificacaoEmail,
-			boolean notificacaoWhats) {
+			String senha, boolean notificacaoEmail, boolean notificacaoWhats) {
 		super();
 		this.role = role;
 		this.nome = nome;
@@ -84,7 +80,6 @@ public class Usuario implements UserDetails {
 		this.email = email;
 		this.sexo = sexo;
 		this.senha = senha;
-		this.notificacao = notificacao;
 		this.notificacaoEmail = notificacaoEmail;
 		this.notificacaoWhats = notificacaoWhats;
 	}
