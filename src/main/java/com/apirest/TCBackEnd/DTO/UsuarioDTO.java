@@ -33,7 +33,7 @@ public class UsuarioDTO {
 
 	public static UsuarioDTO usuarioResposta(Usuario usuario) {
 		return new UsuarioDTO(usuario.getId(), usuario.getRole().getNameRole(), usuario.getNome(), usuario.getCpf(),
-				usuario.getTelefone(), usuario.getWhatsapp(), usuario.getEmail(), usuario.getSexo(), usuario.getSenha(),
+				usuario.getTelefone(), usuario.getWhatsapp(), usuario.getSexo(), usuario.getEmail(), usuario.getSenha(),
 				usuario.getNotificacaoEmail(), usuario.getNotificacaoWhats());
 	}
 
