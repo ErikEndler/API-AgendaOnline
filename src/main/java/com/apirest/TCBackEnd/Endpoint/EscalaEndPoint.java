@@ -52,10 +52,10 @@ public class EscalaEndPoint {
 		return new ResponseEntity<>(EscalaDTO.escalaResposta(escala.get()), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Retorna uma Escala unico pelo Serviço")
-	@GetMapping("/servico/{id}")
+	@ApiOperation(value = "Retorna lista de Escalas pelo Serviço-Funcionario")
+	@GetMapping("/servicofuncionario/{id}")
 	public ResponseEntity<?> listarPorServico(@PathVariable(value = "id") long id) {
-		return new ResponseEntity<>(EscalaDTO.listarResposta(escalaControle.listarPorservico(id)), HttpStatus.OK);
+		return new ResponseEntity<>(EscalaDTO.listarResposta(escalaControle.listarPorservicoFuncionario(id)), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "Salva uma Escala")

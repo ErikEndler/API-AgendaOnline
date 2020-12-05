@@ -25,7 +25,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 		return dataHora.listarDayWeek();
 	}
 
-	public Iterable<Escala> listarPorservico(long id) {
+	public Iterable<Escala> listarPorservicoFuncionario(long id) {
 		verificaServicoFuncionario(id);
 		return repositorio.findAllByServicoFuncionarioId(id);
 	}

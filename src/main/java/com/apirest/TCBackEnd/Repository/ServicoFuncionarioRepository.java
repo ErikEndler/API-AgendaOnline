@@ -15,5 +15,7 @@ public interface ServicoFuncionarioRepository extends CrudRepository<ServicoFunc
 	
 	
 	List<ServicoFuncionario> findByFuncionarioId(long idFuncionario);
+	
+	Optional<ServicoFuncionario> findByServicoId(long idServico);
 
 }

@@ -27,6 +27,13 @@ public class ServicoFuncionarioControle
 	@Autowired
 	EscalaControle escalaControle;
 
+	public Optional<ServicoFuncionario> listarPorServico(long idServico) {
+		Optional<ServicoFuncionario> servicoFuncionario = repositorio.findByServicoId(idServico);
+		servicoFuncionario
+				.orElseThrow(() -> new ResourceNotFoundException("erro ao buscar Servico-Funcionario pelo serviço"));
+		return servicoFuncionario;
+	}
+
 	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
 		List<Servico> listServico = repositorio.findByFuncionarioId(idFuncionario).stream()
 				.map(ServicoFuncionario::getServico).collect(Collectors.toList());
@@ -49,7 +56,7 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected ServicoFuncionario verificUpdate(ServicoFuncionarioDTO dto) {
-		ServicoFuncionario retorno =verifiaExiste(dto.getId()).get();
+		ServicoFuncionario retorno = verifiaExiste(dto.getId()).get();
 		verificaFuncionario(dto.getFuncionarioId());
 		verificaServico(dto.getServicoId());
 		return retorno;
