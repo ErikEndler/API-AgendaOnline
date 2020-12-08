@@ -49,16 +49,16 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void verificaSalvar(ServicoFuncionarioDTO dto) {
-		verificaFuncionario(dto.getFuncionarioId());
-		verificaServico(dto.getServicoId());
+		verificaFuncionario(dto.getFuncionario().getId());
+		verificaServico(dto.getServico().getId());
 		verificaAtribuicao(dto);
 	}
 
 	@Override
 	protected ServicoFuncionario verificUpdate(ServicoFuncionarioDTO dto) {
 		ServicoFuncionario retorno = verifiaExiste(dto.getId()).get();
-		verificaFuncionario(dto.getFuncionarioId());
-		verificaServico(dto.getServicoId());
+		verificaFuncionario(dto.getFuncionario().getId());
+		verificaServico(dto.getServico().getId());
 		return retorno;
 	}
 
@@ -79,19 +79,19 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected ServicoFuncionario transformaSalvar(ServicoFuncionarioDTO dto) {
-		return new ServicoFuncionario(verificaFuncionario(dto.getFuncionarioId()), verificaServico(dto.getServicoId()));
+		return new ServicoFuncionario(verificaFuncionario(dto.getFuncionario().getId()), verificaServico(dto.getServico().getId()));
 	}
 
 	@Override
 	protected ServicoFuncionario transformaEditar(ServicoFuncionarioDTO dto) {
-		return new ServicoFuncionario(dto.getId(), verificaFuncionario(dto.getFuncionarioId()),
-				verificaServico(dto.getServicoId()));
+		return new ServicoFuncionario(dto.getId(), verificaFuncionario(dto.getFuncionario().getId()),
+				verificaServico(dto.getServico().getId()));
 	}
 
 	// -------------------------//---------------------
 	// verifica se funcionario ja possui aquele serviço atribuido ha ele
 	private void verificaAtribuicao(ServicoFuncionarioDTO dto) {
-		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionarioId(), dto.getServicoId()).isPresent()) {
+		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionario().getId(), dto.getServico().getId()).isPresent()) {
 			throw new ResourceNotFoundException("Funcionario ja possui essa atribuição");
 		}
 		// return true;

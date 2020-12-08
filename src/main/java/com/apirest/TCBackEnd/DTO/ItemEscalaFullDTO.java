@@ -14,24 +14,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemEscalaDTO {
-
-	private long id;
-
-	private long escala;
+public class ItemEscalaFullDTO {
+	
+	private long id;	
+	private EscalaDTO escala;
 	private String hrInicial;
 	private String hrFinal;
-
-	public static ItemEscalaDTO ItemEscalaResposta(ItemEscala itemEscala) {
-		return new ItemEscalaDTO(itemEscala.getId(), itemEscala.getEscala().getId(),
+	
+	public static ItemEscalaFullDTO ItemEscalaResposta(ItemEscala itemEscala) {
+		return new ItemEscalaFullDTO(itemEscala.getId(), EscalaDTO.escalaResposta(itemEscala.getEscala()),
 				itemEscala.getHrInicial().toString(), itemEscala.getHrFinal().toString());
 	}
 
 	// Recebe uma lista de ItemEscala e transforma a lista para o formato de
 	// resposta
-	public static Iterable<ItemEscalaDTO> listarResposta(Iterable<ItemEscala> listaItemEscala) {
+	public static Iterable<ItemEscalaFullDTO> listarResposta(Iterable<ItemEscala> listaItemEscala) {
 		// Cria a lista que sera retornada
-		List<ItemEscalaDTO> listaDTO = new ArrayList<ItemEscalaDTO>();
+		List<ItemEscalaFullDTO> listaDTO = new ArrayList<ItemEscalaFullDTO>();
 		// Faz um for na lista recebida no metodo
 		for (ItemEscala escala : listaItemEscala) {
 			listaDTO.add(ItemEscalaResposta(escala));

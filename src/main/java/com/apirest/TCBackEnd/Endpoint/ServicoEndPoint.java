@@ -121,7 +121,7 @@ public class ServicoEndPoint {
 	@ApiOperation(value = "Deleta um Serviço-Funcionario por Id")
 	@PostMapping("funcionario/delete")
 	public ResponseEntity<?> deleteById2(@RequestBody ServicoFuncionarioDTO dto) {
-		servicoFuncionarioControle.deletar(dto.getFuncionarioId(), dto.getServicoId());
+		servicoFuncionarioControle.deletar(dto.getFuncionario().getId(), dto.getServico().getId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

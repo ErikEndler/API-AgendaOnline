@@ -24,23 +24,20 @@ public class ItemEscala {
 	private Escala escala;
 	private LocalTime hrInicial;
 	private LocalTime hrFinal;
-	private int qtd;
 
-	public ItemEscala(long id, Escala escala, LocalTime hrInicial, LocalTime hrFinal, int qtd) {
+	public ItemEscala(long id, Escala escala, LocalTime hrInicial, LocalTime hrFinal) {
 		super();
 		this.id = id;
 		this.escala = escala;
 		this.hrInicial = hrInicial;
 		this.hrFinal = hrFinal;
-		this.qtd = qtd;
 	}
 
-	public ItemEscala(Escala escala, LocalTime hrInicial, LocalTime hrFinal, int qtd) {
+	public ItemEscala(Escala escala, LocalTime hrInicial, LocalTime hrFinal) {
 		super();
 		this.escala = escala;
 		this.hrInicial = hrInicial;
 		this.hrFinal = hrFinal;
-		this.qtd = qtd;
 	}
 
 }

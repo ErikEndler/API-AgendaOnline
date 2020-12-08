@@ -25,6 +25,9 @@ public class ServicoDTO {
 	private String nome;
 	@NotBlank
 	private String descricao;
+	
+	
+	
 
 	public static ServicoDTO servicoResposta(Servico servico) {
 		return new ServicoDTO(servico.getId(), CategoriaDTO.categoriaResposta(servico.getCategoria()) , servico.getNome(),

@@ -17,14 +17,24 @@ import lombok.Setter;
 public class ServicoFuncionarioDTO {
 	private long id;
 
-	private long funcionarioId;
+	//private long funcionarioId;
 
-	private long servicoId;
+	//private long servicoId;
+
+	private UsuarioDTO funcionario;
+
+	private ServicoDTO servico;
 
 	public static ServicoFuncionarioDTO ServicoFuncionarioResposta(ServicoFuncionario servicoFuncionario) {
-		return new ServicoFuncionarioDTO(servicoFuncionario.getId(), servicoFuncionario.getFuncionario().getId(),
-				servicoFuncionario.getServico().getId());
+		return new ServicoFuncionarioDTO(servicoFuncionario.getId(),
+				UsuarioDTO.usuarioResposta(servicoFuncionario.getFuncionario()),
+				ServicoDTO.servicoResposta(servicoFuncionario.getServico()));
 	}
+
+//	public static ServicoFuncionarioDTO ServicoFuncionarioResposta(ServicoFuncionario servicoFuncionario) {
+//		return new ServicoFuncionarioDTO(servicoFuncionario.getId(), servicoFuncionario.getFuncionario().getId(),
+//				servicoFuncionario.getServico().getId());
+//	}
 
 	// Recebe uma lista de servicos e transforma a lista para o formato de resposta
 	public static Iterable<ServicoFuncionarioDTO> listarResposta(Iterable<ServicoFuncionario> listaServicoFuncionario) {
@@ -36,5 +46,19 @@ public class ServicoFuncionarioDTO {
 		}
 		return listaDTO;
 	}
+
+//	public ServicoFuncionarioDTO(long id, long funcionarioId, long servicoId) {
+//		super();
+//		this.id = id;
+//		this.funcionarioId = funcionarioId;
+//		this.servicoId = servicoId;
+//	}
+
+//	public ServicoFuncionarioDTO(long id, UsuarioDTO funcionario, ServicoDTO servico) {
+//		super();
+//		this.id = id;
+//		this.funcionario = funcionario;
+//		this.servico = servico;
+//	}
 
 }

@@ -58,13 +58,13 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	@Override
 	protected ItemEscala transformaSalvar(ItemEscalaDTO dto) {
 		return new ItemEscala(verificaEscala(dto.getEscala()), datahora.stringEmHora(dto.getHrInicial()),
-				datahora.stringEmHora(dto.getHrFinal()), dto.getQtd());
+				datahora.stringEmHora(dto.getHrFinal()));
 	}
 
 	@Override
 	protected ItemEscala transformaEditar(ItemEscalaDTO dto) {
 		return new ItemEscala(dto.getId(), verificaEscala(dto.getEscala()), datahora.stringEmHora(dto.getHrInicial()),
-				datahora.stringEmHora(dto.getHrFinal()), dto.getQtd());
+				datahora.stringEmHora(dto.getHrFinal()));
 	}
 
 	// ----------------------------------------------------------------
