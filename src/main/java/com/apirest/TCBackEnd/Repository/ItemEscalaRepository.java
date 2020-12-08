@@ -1,6 +1,7 @@
 package com.apirest.TCBackEnd.Repository;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface ItemEscalaRepository extends CrudRepository<ItemEscala, Long> {
 	@Query(value = "select count(*) from item_escala "
 			+ "where (hrInicial between ?1 and ?2  and hrFinal between ?1 and ?2 limit 1)", nativeQuery = true)
 	int escalaByHrInicialAndHrfinal(LocalTime HrInicial, LocalTime HrFinal);
+	
+	ItemEscala findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(long idFuncionario, long idServico);
 }

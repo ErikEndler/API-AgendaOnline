@@ -5,12 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Models.Usuario;
+import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
@@ -26,12 +29,18 @@ public class ServicoFuncionarioControle
 	ServicoRepository servicoRepository;
 	@Autowired
 	EscalaControle escalaControle;
+	@Autowired
+	ItemEscalaRepository item;
 
 	public Optional<ServicoFuncionario> listarPorServico(long idServico) {
 		Optional<ServicoFuncionario> servicoFuncionario = repositorio.findByServicoId(idServico);
 		servicoFuncionario
 				.orElseThrow(() -> new ResourceNotFoundException("erro ao buscar Servico-Funcionario pelo serviço"));
 		return servicoFuncionario;
+	}
+	@EventListener(ContextRefreshedEvent.class)
+	public void listarEscalaFull() {
+		System.out.println("------------------"+item.findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(1, 2));
 	}
 
 	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
