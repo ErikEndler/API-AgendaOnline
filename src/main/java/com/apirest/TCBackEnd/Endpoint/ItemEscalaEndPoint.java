@@ -1,5 +1,7 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Controle.ItemescalaControle;
@@ -69,6 +72,29 @@ public class ItemEscalaEndPoint {
 	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
 		itemEscalaControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	@ApiOperation(value = "Retorna uma lista completa da Escala de um funcionario")
+	@GetMapping("servicofuncionario")
+	public ResponseEntity<?> teste(@RequestParam long funcionario, @RequestParam List<Long> servico) {
+		System.out.println("----TESTANDOOOOO----");
+		System.out.println("----servico----" + servico);
+		System.out.println("----funcionario----" + funcionario);
+		
+		
+
+		List<Long> servicoIds = new ArrayList<>();
+		// map.forEach(map.entrySet()->);
+		// servicoIds.add(Long.parseLong(map.get("servico")));
+		// long funcionarioId = Long.parseLong(map.get("funcionario"));
+		
+
+		// System.out.println("----funcionarioId----"+funcionarioId);
+		// System.out.println("----servicoIds----"+servicoIds.toString());
+		return null;
+		// Optional<ServicoFuncionario> servicoFuncionario =
+		// servicoFuncionarioControle.listarPorServico(id);
+		// return new
+		// ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),HttpStatus.OK);
 	}
 
 }

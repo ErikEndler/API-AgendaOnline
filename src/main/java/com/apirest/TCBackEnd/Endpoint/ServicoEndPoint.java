@@ -1,6 +1,8 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Controle.ServicoControle;
@@ -42,7 +45,8 @@ public class ServicoEndPoint {
 	@ApiOperation(value = "Retorna uma lista de Serviços")
 	@GetMapping("")
 	public ResponseEntity<?> listarTodos() {
-		return new ResponseEntity<>(ServicoDTO.listarResposta((List<Servico>) servicoControle.listarTodos()), HttpStatus.OK);
+		return new ResponseEntity<>(ServicoDTO.listarResposta((List<Servico>) servicoControle.listarTodos()),
+				HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um Serviço unico pelo ID")
@@ -73,11 +77,13 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// -------------------------------------TRATA RELAÇAO FUNCIONARIO-SERVIÇO-------------------
+	// -------------------------------------TRATA RELAÇAO
+	// FUNCIONARIO-SERVIÇO-------------------
 	@ApiOperation(value = "Retorna uma lista de Serviços-Funcionario")
 	@GetMapping("funcionario")
 	public ResponseEntity<?> listarTodos2() {
-		return new ResponseEntity<>(ServicoFuncionarioDTO.listarResposta(servicoFuncionarioControle.listarTodos()), HttpStatus.OK);
+		return new ResponseEntity<>(ServicoFuncionarioDTO.listarResposta(servicoFuncionarioControle.listarTodos()),
+				HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um Serviço-Funcionario unico pelo ID")
@@ -87,6 +93,7 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
 				HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna um Serviço-Funcionario unico pelo serviço")
 	@GetMapping("funcionario/servico/{id}")
 	public ResponseEntity<?> listarPorServico(@PathVariable(value = "id") long id) {
@@ -94,21 +101,24 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
 				HttpStatus.OK);
 	}
-	@ApiOperation(value = "Retorna um Serviço-Funcionario unico pelo serviço")
+
+	@ApiOperation(value = "Retorna uma lista completa da Escala de um funcionario")
 	@GetMapping("funcionario/servico/{servico}/{funcionario}")
-	public ResponseEntity<?> listarPorServicoAndFuncionario(@PathVariable(value = "servico") long id, @PathVariable("funcionario") String funcionario) {
+	public ResponseEntity<?> listarPorServicoAndFuncionario(@PathVariable(value = "servico") long id,
+			@PathVariable("funcionario") String funcionario) {
 		Optional<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listarPorServico(id);
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
 				HttpStatus.OK);
 	}
+
 	
-	
+
 	@ApiOperation(value = "Retorna lista Serviços de um funcionario")
 	@GetMapping("funcionario/funcionario/{id}")
 	public ResponseEntity<?> listaServicoFunncionario(@PathVariable(value = "id") long id) {
-		
-		return new ResponseEntity<>(ServicoDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)),
-				HttpStatus.OK);
+
+		return new ResponseEntity<>(
+				ServicoDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Salva um Serviço-Funcionario")
@@ -126,6 +136,7 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario),
 				HttpStatus.ACCEPTED);
 	}
+
 	@ApiOperation(value = "Deleta um Serviço-Funcionario por Id")
 	@PostMapping("funcionario/delete")
 	public ResponseEntity<?> deleteById2(@RequestBody ServicoFuncionarioDTO dto) {
