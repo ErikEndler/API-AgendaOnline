@@ -1,6 +1,5 @@
 package com.apirest.TCBackEnd.Endpoint;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +39,12 @@ public class ItemEscalaEndPoint {
 	public ResponseEntity<?> listarTodos() {
 		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarTodos()), HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna uma lista de Itens-Escala por escala")
 	@GetMapping("/escala/{id}")
 	public ResponseEntity<?> listarPorEscala(@PathVariable(value = "id") long id) {
-		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarPorservico(id)), HttpStatus.OK);
+		return new ResponseEntity<>(ItemEscalaDTO.listarResposta(itemEscalaControle.listarPorservico(id)),
+				HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um Item-Escala unico pelo ID")
@@ -73,28 +74,14 @@ public class ItemEscalaEndPoint {
 		itemEscalaControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna uma lista completa da Escala de um funcionario")
 	@GetMapping("servicofuncionario")
 	public ResponseEntity<?> teste(@RequestParam long funcionario, @RequestParam List<Long> servico) {
-		System.out.println("----TESTANDOOOOO----");
-		System.out.println("----servico----" + servico);
-		System.out.println("----funcionario----" + funcionario);
-		
-		
-
-		List<Long> servicoIds = new ArrayList<>();
-		// map.forEach(map.entrySet()->);
-		// servicoIds.add(Long.parseLong(map.get("servico")));
-		// long funcionarioId = Long.parseLong(map.get("funcionario"));
-		
-
-		// System.out.println("----funcionarioId----"+funcionarioId);
-		// System.out.println("----servicoIds----"+servicoIds.toString());
-		return null;
-		// Optional<ServicoFuncionario> servicoFuncionario =
-		// servicoFuncionarioControle.listarPorServico(id);
-		// return new
-		// ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),HttpStatus.OK);
+		//itemEscalaControle.itensEscalaCompletas(funcionario, servico);
+		return new ResponseEntity<>(
+				ItemEscalaDTO.listarResposta(itemEscalaControle.itensEscalaCompletas(funcionario, servico)),
+				HttpStatus.OK);
 	}
 
 }

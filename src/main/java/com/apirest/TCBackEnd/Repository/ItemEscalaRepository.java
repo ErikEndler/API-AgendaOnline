@@ -22,5 +22,5 @@ public interface ItemEscalaRepository extends CrudRepository<ItemEscala, Long> {
 			+ "where (hrInicial between ?1 and ?2  and hrFinal between ?1 and ?2 limit 1)", nativeQuery = true)
 	int escalaByHrInicialAndHrfinal(LocalTime HrInicial, LocalTime HrFinal);
 	
-	ItemEscala findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(long idFuncionario, long idServico);
+	List<ItemEscala> findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(long idFuncionario, long idServico);
 }

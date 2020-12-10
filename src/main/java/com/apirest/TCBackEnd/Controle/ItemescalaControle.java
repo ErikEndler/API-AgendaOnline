@@ -1,5 +1,7 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,30 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	EscalaRepository escalaRepository;
 	@Autowired
 	DataHora datahora;
+	@Autowired
+	ServicoControle servicoControle;
+
+	public List<ItemEscala> itensEscalaCompletas(long funcionarioId, List<Long> servicosId) {
+		List<ItemEscala> listaEscalas = new ArrayList<>();
+
+		for (long servico : servicosId) {
+			listaEscalas = verificaERetorna(funcionarioId, servico, listaEscalas);
+		}
+		return listaEscalas;
+	}
+
+	private List<ItemEscala> verificaERetorna(long funcionarioId, long servicoId, List<ItemEscala> listaEscalas) {
+		servicoControle.verifiaExiste(servicoId);
+		List<ItemEscala> itensEscala = repositorio
+				.findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(funcionarioId,
+						servicoId);
+		if (itensEscala.size() == 0) {
+			return listaEscalas;
+		} else {
+			itensEscala.forEach(item -> listaEscalas.add(item));
+			return listaEscalas;
+		}
+	}
 
 	public Iterable<ItemEscala> listarPorservico(long id) {
 		verificaEscala(id);
