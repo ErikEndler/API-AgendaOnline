@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
+import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
 import com.apirest.TCBackEnd.DTO.ServicoFuncionarioReduzidoDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
@@ -52,13 +53,13 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected void verificaSalvar(EscalaDTO dto) {
-		verificaServicoFuncionario(dto.getServicoFuncionario().getFuncionarioId());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getFuncionario().getId());
 	}
 
 	@Override
 	protected Escala verificUpdate(EscalaDTO dto) {
 		Escala retorno = verificaESxiste(dto.getId()).get();
-		verificaServicoFuncionario(dto.getServicoFuncionario().getServicoId());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getServico().getId());
 		return retorno;
 	}
 
@@ -99,7 +100,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	public void cadastraEscalasServicoFuncionario(ServicoFuncionario servicoFuncionario) {
 		Iterable<String> listaDias = dataHora.listarDayWeek();
 		listaDias.forEach(day -> {
-			salvar(new EscalaDTO(day, ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(servicoFuncionario)));
+			salvar(new EscalaDTO(day, ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario)));
 		});
 	}
 

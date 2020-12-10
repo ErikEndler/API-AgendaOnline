@@ -82,7 +82,7 @@ public class EscalaEndPoint {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "Retorna uma lista completa da Escalas de um funcionario")
+	@ApiOperation(value = "Retorna uma lista completa da Escalas de um servico-funcionario")
 	@GetMapping("servicofuncionario")
 	public ResponseEntity<?> teste(@RequestParam long funcionario, @RequestParam List<Long> servico) {
 		//itemEscalaControle.itensEscalaCompletas(funcionario, servico);

@@ -18,17 +18,17 @@ public class EscalaDTO {
 
 	private long id;
 	private String diaSemana;
-	private ServicoFuncionarioReduzidoDTO servicoFuncionario;
+	private ServicoFuncionarioDTO servicoFuncionario;
 	private List<ItemEscalaDTO> itensEscala;
 
 	public static EscalaDTO escalaResposta(Escala escala) {
 		return new EscalaDTO(escala.getId(), escala.getDiaSemana(),
-				ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()));
+				ServicoFuncionarioDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()));
 	}
 
 	public static EscalaDTO escalaRespostaItemEscala(Escala escala) {
 		return new EscalaDTO(escala.getId(), escala.getDiaSemana(),
-				ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()),
+				ServicoFuncionarioDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()),
 				ItemEscalaDTO.listarResposta(escala.getItensEscala()));
 	}
 
@@ -43,13 +43,13 @@ public class EscalaDTO {
 		return listaDTO;
 	}
 
-	public EscalaDTO(String diaSemana, ServicoFuncionarioReduzidoDTO servicoFuncionario) {
+	public EscalaDTO(String diaSemana, ServicoFuncionarioDTO servicoFuncionario) {
 		super();
 		this.diaSemana = diaSemana;
 		this.servicoFuncionario = servicoFuncionario;
 	}
 
-	public EscalaDTO(long id, String diaSemana, ServicoFuncionarioReduzidoDTO servicoFuncionario) {
+	public EscalaDTO(long id, String diaSemana, ServicoFuncionarioDTO servicoFuncionario) {
 		super();
 		this.id = id;
 		this.diaSemana = diaSemana;
