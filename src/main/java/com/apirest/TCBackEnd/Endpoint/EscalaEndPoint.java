@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,8 +87,10 @@ public class EscalaEndPoint {
 	@GetMapping("servicofuncionario")
 	public ResponseEntity<?> teste(@RequestParam long funcionario, @RequestParam List<Long> servico) {
 		//itemEscalaControle.itensEscalaCompletas(funcionario, servico);
+		List<List<EscalaDTO>> lista = new ArrayList<>();
+		escalaControle.escalasFuncionarioServico(funcionario, servico).forEach(e->lista.add(EscalaDTO.listarResposta(e)));
 		return new ResponseEntity<>(
-				EscalaDTO.listarResposta(escalaControle.escalasFuncionarioServico(funcionario, servico)),
+				lista,
 				HttpStatus.OK);
 	}
 

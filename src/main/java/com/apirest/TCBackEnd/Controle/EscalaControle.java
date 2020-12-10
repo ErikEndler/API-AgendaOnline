@@ -25,13 +25,15 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Autowired
 	DataHora dataHora;
 
-	public List<Escala> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
+	public List<List<Escala>> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
+		
 		List<Escala> listaEscalas = new ArrayList<>();
+		List<List<Escala>> listas =new ArrayList<>();
 
 		for (long servico : servicosId) {
-			listaEscalas = verificaERetorna(funcionarioId, servico, listaEscalas);
+			listas.add(verificaERetorna(funcionarioId, servico, listaEscalas)) ;
 		}
-		return listaEscalas;
+		return listas;
 	}
 
 	private List<Escala> verificaERetorna(long funcionarioId, long servico, List<Escala> listaEscalas) {

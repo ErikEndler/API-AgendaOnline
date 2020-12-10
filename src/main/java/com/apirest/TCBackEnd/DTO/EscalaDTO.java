@@ -33,7 +33,7 @@ public class EscalaDTO {
 	}
 
 	// Recebe uma lista de escalas e transforma a lista para o formato de resposta
-	public static Iterable<EscalaDTO> listarResposta(Iterable<Escala> listaEscala) {
+	public static List<EscalaDTO> listarResposta(Iterable<Escala> listaEscala) {
 		// Cria a lista que sera retornada
 		List<EscalaDTO> listaDTO = new ArrayList<EscalaDTO>();
 		// Faz um for na lista recebida no metodo
