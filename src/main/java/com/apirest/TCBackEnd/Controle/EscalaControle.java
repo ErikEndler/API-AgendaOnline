@@ -27,10 +27,11 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	public List<List<Escala>> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
 		
-		List<Escala> listaEscalas = new ArrayList<>();
+		
 		List<List<Escala>> listas =new ArrayList<>();
 
 		for (long servico : servicosId) {
+			List<Escala> listaEscalas = new ArrayList<>();
 			listas.add(verificaERetorna(funcionarioId, servico, listaEscalas)) ;
 		}
 		return listas;
