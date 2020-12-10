@@ -15,13 +15,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EscalaDTO {
-	
+
 	private long id;
 	private String diaSemana;
-	private long servicoFuncionario;
-	
+	private ServicoFuncionarioReduzidoDTO servicoFuncionario;
+	private List<ItemEscalaDTO> itensEscala;
+
 	public static EscalaDTO escalaResposta(Escala escala) {
-		return new EscalaDTO(escala.getId(), escala.getDiaSemana(), escala.getServicoFuncionario().getId());
+		return new EscalaDTO(escala.getId(), escala.getDiaSemana(),
+				ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()));
+	}
+
+	public static EscalaDTO escalaRespostaItemEscala(Escala escala) {
+		return new EscalaDTO(escala.getId(), escala.getDiaSemana(),
+				ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(escala.getServicoFuncionario()),
+				ItemEscalaDTO.listarResposta(escala.getItensEscala()));
 	}
 
 	// Recebe uma lista de escalas e transforma a lista para o formato de resposta
@@ -35,11 +43,17 @@ public class EscalaDTO {
 		return listaDTO;
 	}
 
-	public EscalaDTO(String diaSemana, long servicoFuncionario) {
+	public EscalaDTO(String diaSemana, ServicoFuncionarioReduzidoDTO servicoFuncionario) {
 		super();
 		this.diaSemana = diaSemana;
 		this.servicoFuncionario = servicoFuncionario;
 	}
 
-	
+	public EscalaDTO(long id, String diaSemana, ServicoFuncionarioReduzidoDTO servicoFuncionario) {
+		super();
+		this.id = id;
+		this.diaSemana = diaSemana;
+		this.servicoFuncionario = servicoFuncionario;
+	}
+
 }

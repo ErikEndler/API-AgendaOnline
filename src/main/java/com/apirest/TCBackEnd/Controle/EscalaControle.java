@@ -1,11 +1,14 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
+import com.apirest.TCBackEnd.DTO.ServicoFuncionarioReduzidoDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
@@ -21,6 +24,23 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Autowired
 	DataHora dataHora;
 
+	public List<Escala> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
+		List<Escala> listaEscalas = new ArrayList<>();
+
+		for (long servico : servicosId) {
+			listaEscalas = verificaERetorna(funcionarioId, servico, listaEscalas);
+		}
+		return listaEscalas;
+	}
+
+	private List<Escala> verificaERetorna(long funcionarioId, long servico, List<Escala> listaEscalas) {
+		List<Escala> escalas = repositorio
+				.findByServicoFuncionarioFuncionarioIdAndServicoFuncionarioServicoId(funcionarioId, servico);
+		escalas.forEach(e -> listaEscalas.add(e));
+
+		return listaEscalas;
+	}
+
 	public Iterable<String> listaDayWeek() {
 		return dataHora.listarDayWeek();
 	}
@@ -32,13 +52,13 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected void verificaSalvar(EscalaDTO dto) {
-		verificaServicoFuncionario(dto.getServicoFuncionario());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getFuncionarioId());
 	}
 
 	@Override
 	protected Escala verificUpdate(EscalaDTO dto) {
-		Escala retorno =verificaESxiste(dto.getId()).get();
-		verificaServicoFuncionario(dto.getServicoFuncionario());
+		Escala retorno = verificaESxiste(dto.getId()).get();
+		verificaServicoFuncionario(dto.getServicoFuncionario().getServicoId());
 		return retorno;
 	}
 
@@ -60,12 +80,13 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected Escala transformaSalvar(EscalaDTO dto) {
-		return new Escala(verificaServicoFuncionario(dto.getServicoFuncionario()), dto.getDiaSemana());
+		return new Escala(verificaServicoFuncionario(dto.getServicoFuncionario().getId()), dto.getDiaSemana());
 	}
 
 	@Override
 	protected Escala transformaEditar(EscalaDTO dto) {
-		return new Escala(dto.getId(), verificaServicoFuncionario(dto.getServicoFuncionario()), dto.getDiaSemana());
+		return new Escala(dto.getId(), verificaServicoFuncionario(dto.getServicoFuncionario().getId()),
+				dto.getDiaSemana());
 	}
 
 	// ------------------------------------------
@@ -75,10 +96,10 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 		return retorno;
 	}
 
-	public void cadastraEscalasServicoFuncionario(long idServicoFuncionario) {
+	public void cadastraEscalasServicoFuncionario(ServicoFuncionario servicoFuncionario) {
 		Iterable<String> listaDias = dataHora.listarDayWeek();
 		listaDias.forEach(day -> {
-			salvar(new EscalaDTO(day, idServicoFuncionario));
+			salvar(new EscalaDTO(day, ServicoFuncionarioReduzidoDTO.ServicoFuncionarioResposta(servicoFuncionario)));
 		});
 	}
 

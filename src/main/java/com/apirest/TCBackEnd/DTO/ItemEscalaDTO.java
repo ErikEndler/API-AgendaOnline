@@ -29,7 +29,7 @@ public class ItemEscalaDTO {
 
 	// Recebe uma lista de ItemEscala e transforma a lista para o formato de
 	// resposta
-	public static Iterable<ItemEscalaDTO> listarResposta(Iterable<ItemEscala> listaItemEscala) {
+	public static List<ItemEscalaDTO> listarResposta(Iterable<ItemEscala> listaItemEscala) {
 		// Cria a lista que sera retornada
 		List<ItemEscalaDTO> listaDTO = new ArrayList<ItemEscalaDTO>();
 		// Faz um for na lista recebida no metodo

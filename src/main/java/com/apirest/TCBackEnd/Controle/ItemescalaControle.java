@@ -26,6 +26,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	ServicoControle servicoControle;
 
 	public List<ItemEscala> itensEscalaCompletas(long funcionarioId, List<Long> servicosId) {
+
 		List<ItemEscala> listaEscalas = new ArrayList<>();
 
 		for (long servico : servicosId) {

@@ -24,9 +24,7 @@ public class ServicoDTO {
 	@NotEmpty
 	private String nome;
 	@NotBlank
-	private String descricao;
-	
-	
+	private String descricao;	
 	
 
 	public static ServicoDTO servicoResposta(Servico servico) {

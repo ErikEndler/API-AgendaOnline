@@ -14,24 +14,21 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServicoFuncionarioDTO {
+public class ServicoFuncionarioReduzidoDTO {
 	private long id;
+	private long funcionarioId;
+	private long servicoId;
 
-	private UsuarioDTO funcionario;
-
-	private ServicoDTO servico;
-
-	public static ServicoFuncionarioDTO ServicoFuncionarioResposta(ServicoFuncionario servicoFuncionario) {
-		return new ServicoFuncionarioDTO(servicoFuncionario.getId(),
-				UsuarioDTO.usuarioResposta(servicoFuncionario.getFuncionario()),
-				ServicoDTO.servicoResposta(servicoFuncionario.getServico()));
+	public static ServicoFuncionarioReduzidoDTO ServicoFuncionarioResposta(ServicoFuncionario servicoFuncionario) {
+		return new ServicoFuncionarioReduzidoDTO(servicoFuncionario.getId(),
+				servicoFuncionario.getFuncionario().getId(), servicoFuncionario.getServico().getId());
 	}
 
-
 	// Recebe uma lista de servicos e transforma a lista para o formato de resposta
-	public static Iterable<ServicoFuncionarioDTO> listarResposta(Iterable<ServicoFuncionario> listaServicoFuncionario) {
+	public static Iterable<ServicoFuncionarioReduzidoDTO> listarResposta(
+			Iterable<ServicoFuncionario> listaServicoFuncionario) {
 		// Cria a lista que sera retornada
-		List<ServicoFuncionarioDTO> listaDTO = new ArrayList<ServicoFuncionarioDTO>();
+		List<ServicoFuncionarioReduzidoDTO> listaDTO = new ArrayList<ServicoFuncionarioReduzidoDTO>();
 		// Faz um for na lista recebida no metodo
 		for (ServicoFuncionario servicoFuncionario : listaServicoFuncionario) {
 			listaDTO.add(ServicoFuncionarioResposta(servicoFuncionario));
