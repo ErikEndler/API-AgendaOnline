@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Controle.EscalaControle;
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
-import com.apirest.TCBackEnd.DTO.ItemEscalaDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 
 import io.swagger.annotations.Api;

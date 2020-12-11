@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.EscalaDTO;
 import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
-import com.apirest.TCBackEnd.DTO.ServicoFuncionarioReduzidoDTO;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
@@ -25,9 +24,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Autowired
 	DataHora dataHora;
 
-	public List<List<Escala>> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
-		
-		
+	public List<List<Escala>> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {		
 		List<List<Escala>> listas =new ArrayList<>();
 
 		for (long servico : servicosId) {

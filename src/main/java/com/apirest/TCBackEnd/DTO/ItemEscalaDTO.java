@@ -17,7 +17,6 @@ import lombok.Setter;
 public class ItemEscalaDTO {
 
 	private long id;
-
 	private long escala;
 	private String hrInicial;
 	private String hrFinal;
