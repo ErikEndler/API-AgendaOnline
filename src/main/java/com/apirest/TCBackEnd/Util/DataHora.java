@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class DataHora {
 
 	private DateTimeFormatter formataHora1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+	
+	private DateTimeFormatter formataHora = DateTimeFormatter.ofPattern("HH:mm");
+
 
 	private DateTimeFormatter formataData = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -42,7 +45,7 @@ public class DataHora {
 	public LocalTime stringEmHora(String string) {
 		try {
 			//System.out.println("string : "+string);
-			return LocalTime.from(formataHora1.parse(string));
+			return LocalTime.from(formataHora.parse(string));
 		} catch (Exception e) {
 			//System.out.println("ENTRANDO CATCH----");
 			throw new ResourceNotFoundException(" Erro converção Hora, formato invalido. Detalhe : " + string);
@@ -51,7 +54,7 @@ public class DataHora {
 
 	// transforma um LocalTime em string
 	public String horaEmString(LocalTime localtime) {
-		return formataHora1.format(localtime);
+		return formataHora.format(localtime);
 	}
 
 	// tranbsforma uma string em LocalDate

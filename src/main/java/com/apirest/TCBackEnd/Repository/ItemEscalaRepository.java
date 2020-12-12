@@ -22,5 +22,10 @@ public interface ItemEscalaRepository extends CrudRepository<ItemEscala, Long> {
 			+ "where (hr_inicial between ?1 and ?2  and hr_final between ?1 and ?2) and escala_id=?3", nativeQuery = true)
 	int escalaByHrInicialAndHrfinal(LocalTime HrInicial, LocalTime HrFinal, long idEscala);
 	
+	@Query(value = "select count(*) from item_escala "
+			+ "where (hr_inicial between ?1 and ?2  and hr_final between ?1 and ?2) and escala_id=?3 "
+			+ "and item_escala.id not in(?4)", nativeQuery = true)
+	int verificaConflitoUpdate(LocalTime HrInicial, LocalTime HrFinal, long idEscala, long idItemEscala);
+	
 	List<ItemEscala> findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(long idFuncionario, long idServico);
 }
