@@ -38,7 +38,7 @@ public class EscalaDTO {
 		List<EscalaDTO> listaDTO = new ArrayList<EscalaDTO>();
 		// Faz um for na lista recebida no metodo
 		for (Escala escala : listaEscala) {
-			listaDTO.add(escalaResposta(escala));
+			listaDTO.add(escalaRespostaItemEscala(escala));
 		}
 		return listaDTO;
 	}
