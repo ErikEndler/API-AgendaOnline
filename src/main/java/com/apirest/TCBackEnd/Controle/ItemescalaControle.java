@@ -122,7 +122,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	private void verificaSobreposiçao(ItemEscalaDTO dto) {
 		int qtd = repositorio.escalaByHrInicialAndHrfinal(datahora.stringEmHora(dto.getHrInicial()),
 				datahora.stringEmHora(dto.getHrFinal()), dto.getEscala());
-		System.out.println("QTD da busca de comflito"+qtd);
+		System.out.println("QTD da busca de comflito : "+qtd);
 		if (qtd > 0) {
 			System.out.println("----Disparada exceção de conflito de escalas");
 			throw new ResourceNotFoundException("Escala com horario conflitante");
