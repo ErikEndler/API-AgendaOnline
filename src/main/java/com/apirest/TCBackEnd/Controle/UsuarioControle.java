@@ -13,7 +13,7 @@ import com.apirest.TCBackEnd.Models.Role;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.RoleRespository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, UsuarioRepository> {

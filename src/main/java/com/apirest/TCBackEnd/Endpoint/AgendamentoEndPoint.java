@@ -42,7 +42,7 @@ public class AgendamentoEndPoint {
 	@ApiOperation(value = "Retorna uma lista de Agendamentos por cliente")
 	@GetMapping("/cliente/{id}")
 	public ResponseEntity<?> listarPorCliente(@PathVariable(value = "id") long id) {
-		return new ResponseEntity<>(AgendamentoDTO.listarResposta(agendamentoControle.listarPorClinete(id)),
+		return new ResponseEntity<>(AgendamentoDTO.listarResposta(agendamentoControle.listarPorCliente(id)),
 				HttpStatus.OK);
 	}
 	@ApiOperation(value = "Retorna uma lista de Agendamentos por Servico")

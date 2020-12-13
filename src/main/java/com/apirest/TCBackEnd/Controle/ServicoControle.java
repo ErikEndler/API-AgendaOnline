@@ -10,7 +10,7 @@ import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class ServicoControle extends GenericControl<Servico, ServicoDTO, ServicoRepository> {

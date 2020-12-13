@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import com.apirest.TCBackEnd.Models.ItemEscala;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO, ItemEscalaRepository> {
@@ -125,7 +127,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 		System.out.println("QTD da busca de comflito : " + qtd);
 		if (qtd > 0) {
 			System.out.println("----Disparada exceção de conflito de escalas");
-			throw new ResourceNotFoundException("Escala com horario conflitante");
+			throw new EntityNotFoundException("Escala com horario conflitante");
 		}
 	}
 

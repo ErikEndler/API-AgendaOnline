@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.apirest.TCBackEnd.DTO.CategoriaDTO;
 import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class CategoriaControle extends GenericControl<Categoria, CategoriaDTO, CategoriaRepository> {

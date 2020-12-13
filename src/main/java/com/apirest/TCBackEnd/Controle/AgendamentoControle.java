@@ -27,7 +27,7 @@ import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class AgendamentoControle extends GenericControl<Agendamento, AgendamentoDTO, AgendamentoRepository> {
@@ -46,7 +46,24 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Autowired
 	DataHora datahora;
 
-	public Iterable<Agendamento> listarPorClinete(long idCliente) {
+	// @EventListener(ContextRefreshedEvent.class)
+	public List<Agendamento> listaAgendamentosDia(String stringData) {
+		List<Agendamento> agendamentos;
+		if (stringData.equals("hoje")) {
+			agendamentos = this.repositorio.horariosDia(LocalDate.now());
+			System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
+		} else {
+			LocalDate data = datahora.stringEmData(stringData);
+			agendamentos = this.repositorio.horariosDia(data);
+			System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
+		}
+
+		this.repositorio.horariosDia(LocalDate.now());
+		System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
+		return null;
+	}
+
+	public Iterable<Agendamento> listarPorCliente(long idCliente) {
 		verificaCliente(idCliente);
 		return repositorio.findAllByCliente(idCliente);
 	}
@@ -89,15 +106,15 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Override
 	protected Agendamento transformaSalvar(AgendamentoDTO dto) {
 		return new Agendamento(verificaCliente(dto.getClienteId()),
-				verificaServicoFuncionario(dto.getServicoFuncionarioId()), datahora.stringemDateTime(dto.getHorario()),
-				dto.getNotificacao(), dto.getObs());
+				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
+				datahora.stringemDateTime(dto.getHorarioInicio()), dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
 	protected Agendamento transformaEditar(AgendamentoDTO dto) {
 		return new Agendamento(dto.getId(), verificaCliente(dto.getClienteId()),
-				verificaServicoFuncionario(dto.getServicoFuncionarioId()), datahora.stringemDateTime(dto.getHorario()),
-				dto.getNotificacao(), dto.getObs());
+				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
+				datahora.stringemDateTime(dto.getHorarioInicio()), dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
@@ -139,7 +156,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	// lista todos horarios do dia
 	private void listar(AgendamentoDTO dto) {
-		LocalDate data = datahora.stringemDateTime(dto.getHorario()).toLocalDate();
+		LocalDate data = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalDate();
 
 		List<Agendamento> agendamentos = repositorio.horariosDia(data);
 	}
@@ -153,9 +170,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
-		DayOfWeek day = datahora.stringemDateTime(dto.getHorario()).getDayOfWeek();
-		LocalTime hrInicial = datahora.stringemDateTime(dto.getHorario()).toLocalTime();
-		LocalTime hrFinal = datahora.stringemDateTime(dto.getHorario()).toLocalTime();
+		DayOfWeek day = datahora.stringemDateTime(dto.getHorarioInicio()).getDayOfWeek();
+		LocalTime hrInicial = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
+		LocalTime hrFinal = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionarioId(),
 				day.getDisplayName(TextStyle.FULL, new Locale("pt"))).get();
 		ItemEscala itemEscala = itemEscalaRepository.escala(escala.getId(), hrInicial, hrFinal)
@@ -164,7 +181,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void verificaHorario(AgendamentoDTO dto) {
-		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorario()),
+		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionarioId());
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
@@ -173,38 +190,12 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private boolean verificaDisponibilidadeGeral(AgendamentoDTO dto) {
 		int qtdGeral = disponibilidadeControle.listGeral().getQtd();
-		int qtd = repositorio.qtdSimultaneos(datahora.stringemDateTime(dto.getHorario()),
+		int qtd = repositorio.qtdSimultaneos(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()));
 		if (qtdGeral >= qtd) {
 			throw new ResourceNotFoundException("Horario esta cheio");
 		}
 		return true;
-	}
-
-	@EventListener(ContextRefreshedEvent.class)
-	private void construirListaHorariosGeralDia() {
-		System.out.println("INICIANDO TESTE DO METODO 'construirListaHorariosGeralDia()'");
-
-		LocalDateTime horatempo = datahora.stringemDateTime("2020-10-11 08:00:00");
-		System.out.println("------- LOCALDATE------ " + horatempo.toLocalDate());
-		int simultaneos = 3; // numero simultaneos
-
-		List<Agendamento> agendamentos = repositorio.horariosDia(horatempo.toLocalDate());
-		List<List<Agendamento>> listas = null;
-		for (int i = 0; i < simultaneos; i++) {
-			List<Agendamento> novalista = new ArrayList<>();
-			for (Agendamento agendamento : agendamentos) {
-				boolean auxIgual = false;
-				while (auxIgual = false) {
-					for (Agendamento itemNovalista : novalista) {
-						if (agendamento == itemNovalista) {
-							auxIgual = true;
-						}
-					}
-				}
-			}
-		}
-
 	}
 
 }

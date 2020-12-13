@@ -14,7 +14,7 @@ import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepository> {

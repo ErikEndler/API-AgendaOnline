@@ -12,7 +12,7 @@ import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.AtendimentoRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
-import com.apirest.TCBackEnd.Util.ResourceNotFoundException;
+import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 public class AtendimentoControle extends GenericControl<Atendimento, AtendimentoDTO, AtendimentoRepository> {
 

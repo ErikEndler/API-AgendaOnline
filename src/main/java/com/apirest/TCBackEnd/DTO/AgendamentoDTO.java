@@ -20,7 +20,7 @@ public class AgendamentoDTO {
 
 	private long clienteId;
 	private long servicoFuncionarioId;
-	private String horario; // LocalDateTime
+	private String horarioInicio; // LocalDateTime
 	private String horarioFim; // LocalDateTime
 	private Boolean notificacao;
 	private String obs;
