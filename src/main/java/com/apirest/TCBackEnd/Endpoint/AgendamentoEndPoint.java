@@ -51,6 +51,13 @@ public class AgendamentoEndPoint {
 		return new ResponseEntity<>(AgendamentoDTO.listarResposta(agendamentoControle.listarPorServico(id)),
 				HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Retorna uma lista de Agendamentos por uma data")
+	@GetMapping("/data/{data}")
+	public ResponseEntity<?> listarAgendamentosDoDia(@PathVariable(value = "data") String data) {
+		return new ResponseEntity<>(AgendamentoDTO.listarResposta(agendamentoControle.listaAgendamentosDia(data)),
+				HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "Retorna um Agendamento unico pelo ID")
 	@GetMapping("/{id}")

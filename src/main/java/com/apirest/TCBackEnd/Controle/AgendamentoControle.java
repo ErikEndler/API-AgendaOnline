@@ -51,16 +51,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		List<Agendamento> agendamentos;
 		if (stringData.equals("hoje")) {
 			agendamentos = this.repositorio.horariosDia(LocalDate.now());
-			System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
+			// System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
 		} else {
 			LocalDate data = datahora.stringEmData(stringData);
 			agendamentos = this.repositorio.horariosDia(data);
-			System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
+			// System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
 		}
-
-		this.repositorio.horariosDia(LocalDate.now());
-		System.out.println("TESTE LISTAGEM AGENDAMENTOS DIA - " + agendamentos);
-		return null;
+		return agendamentos;
 	}
 
 	public Iterable<Agendamento> listarPorCliente(long idCliente) {
