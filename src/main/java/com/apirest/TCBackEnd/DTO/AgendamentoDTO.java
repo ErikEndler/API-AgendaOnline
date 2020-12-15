@@ -33,7 +33,7 @@ public class AgendamentoDTO {
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de
 	// resposta
-	public static Iterable<AgendamentoDTO> listarResposta(Iterable<Agendamento> listaAgendamentos) {
+	public static List<AgendamentoDTO> listarResposta(Iterable<Agendamento> listaAgendamentos) {
 		// Cria a lista que sera retornada
 		List<AgendamentoDTO> listaDTO = new ArrayList<AgendamentoDTO>();
 		// Faz um for na lista recebida no metodo
