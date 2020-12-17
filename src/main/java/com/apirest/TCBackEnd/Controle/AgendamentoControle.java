@@ -47,16 +47,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	DataHora datahora;
 
 	// @EventListener(ContextRefreshedEvent.class)
-	public List<List<Agendamento>> listaAgendamentosDia(List<String> listDatas, long idFuncionario) {
+	public List<List<Agendamento>> listaAgendamentosDiaFuncionario(List<String> listDatas, long idFuncionario) {
 		List<List<Agendamento>> listaAgendamentos= new ArrayList<>();
 
 		for (String data : listDatas) {
 			List<Agendamento> agendamentos = null;
 			if (data.equals("hoje")) {
-				agendamentos = this.repositorio.horariosDia(LocalDate.now());
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(LocalDate.now(),idFuncionario);
 			} else {
 				LocalDate localdate = datahora.stringEmData(data);
-				agendamentos = this.repositorio.horariosDia(localdate);
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(localdate,idFuncionario);
 			}
 			listaAgendamentos.add(agendamentos);
 		}
@@ -159,7 +159,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	private void listar(AgendamentoDTO dto) {
 		LocalDate data = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalDate();
 
-		List<Agendamento> agendamentos = repositorio.horariosDia(data);
+		List<Agendamento> agendamentos = repositorio.agendamentosDia(data);
 	}
 
 	private void verificaPreSave(AgendamentoDTO dto) {

@@ -60,7 +60,7 @@ public class AgendamentoEndPoint {
 	@GetMapping("/data")
 	public ResponseEntity<?> listarAgendamentosDoDia(@RequestParam long funcionario, @RequestParam List<String> data) {
 		List<List<AgendamentoDTO>> listaResposta = new ArrayList<>();
-		agendamentoControle.listaAgendamentosDia(data, funcionario)
+		agendamentoControle.listaAgendamentosDiaFuncionario(data, funcionario)
 				.forEach(elemento -> listaResposta.add(AgendamentoDTO.listarResposta(elemento)));
 		;
 		return new ResponseEntity<>(listaResposta, HttpStatus.OK);
