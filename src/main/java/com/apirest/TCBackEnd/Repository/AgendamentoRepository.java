@@ -29,10 +29,14 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	List<ItemEscala> servicoEscalaDia(String dia_semana, long servico_id);
 
 	// lista agendamentos geral do dia
-	@Query(value = "select * from agendamento where horario = ?1 order by horario order by horario", nativeQuery = true)
+	@Query(value = "select * from agendamento where horario = ?1 order by horario ", nativeQuery = true)
 	List<Agendamento> agendamentosDia(LocalDate data);
 
 	// lista de agendamentos por dia e por funcionrio
+	@Query(value = "select * from agendamento "
+			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
+			+ " where horario = ?1 and servico_funcionario.funcionario_id=?2 order by horario", nativeQuery = true)
+
 	List<Agendamento> findByHorarioAndServicoFuncionarioFuncionarioId(LocalDate data, long idFuncionario);
 
 }
