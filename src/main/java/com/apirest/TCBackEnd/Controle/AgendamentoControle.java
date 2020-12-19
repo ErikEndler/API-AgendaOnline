@@ -48,15 +48,17 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	// @EventListener(ContextRefreshedEvent.class)
 	public List<List<Agendamento>> listaAgendamentosDiaFuncionario(List<String> listDatas, long idFuncionario) {
-		List<List<Agendamento>> listaAgendamentos= new ArrayList<>();
+		List<List<Agendamento>> listaAgendamentos = new ArrayList<>();
 
 		for (String data : listDatas) {
 			List<Agendamento> agendamentos = null;
 			if (data.equals("hoje")) {
-				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(LocalDate.now(),idFuncionario);
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(LocalDate.now(),
+						idFuncionario);
 			} else {
 				LocalDate localdate = datahora.stringEmData(data);
-				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(localdate,idFuncionario);
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(localdate,
+						idFuncionario);
 			}
 			listaAgendamentos.add(agendamentos);
 		}

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -35,12 +37,14 @@ public class ServicoFuncionarioControle
 	public Optional<ServicoFuncionario> listarPorServico(long idServico) {
 		Optional<ServicoFuncionario> servicoFuncionario = repositorio.findByServicoId(idServico);
 		servicoFuncionario
-				.orElseThrow(() -> new ResourceNotFoundException("erro ao buscar Servico-Funcionario pelo serviço"));
+				.orElseThrow(() -> new EntityNotFoundException("erro ao buscar Servico-Funcionario pelo serviço"));
 		return servicoFuncionario;
 	}
+
 	@EventListener(ContextRefreshedEvent.class)
 	public void listarEscalaFull() {
-		System.out.println("------------------"+item.findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(1, 2));
+		System.out.println("------------------"
+				+ item.findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(1, 2));
 	}
 
 	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
@@ -88,7 +92,8 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected ServicoFuncionario transformaSalvar(ServicoFuncionarioDTO dto) {
-		return new ServicoFuncionario(verificaFuncionario(dto.getFuncionario().getId()), verificaServico(dto.getServico().getId()));
+		return new ServicoFuncionario(verificaFuncionario(dto.getFuncionario().getId()),
+				verificaServico(dto.getServico().getId()));
 	}
 
 	@Override
@@ -100,15 +105,16 @@ public class ServicoFuncionarioControle
 	// -------------------------//---------------------
 	// verifica se funcionario ja possui aquele serviço atribuido ha ele
 	private void verificaAtribuicao(ServicoFuncionarioDTO dto) {
-		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionario().getId(), dto.getServico().getId()).isPresent()) {
-			throw new ResourceNotFoundException("Funcionario ja possui essa atribuição");
+		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionario().getId(), dto.getServico().getId())
+				.isPresent()) {
+			throw new EntityNotFoundException("Funcionario ja possui essa atribuição");
 		}
 		// return true;
 	}
 
 	private Optional<ServicoFuncionario> verifiaExiste(long id) {
 		Optional<ServicoFuncionario> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new EntityNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -120,20 +126,19 @@ public class ServicoFuncionarioControle
 
 	private Servico verificaServico(long servicoId) {
 		if (servicoId == 0) {
-			throw new ResourceNotFoundException("Campo Serviço não informado corretamente !!");
+			throw new EntityNotFoundException("Campo Serviço não informado corretamente !!");
 		}
 		Optional<Servico> retorno = servicoRepository.findById(servicoId);
-		return retorno
-				.orElseThrow(() -> new ResourceNotFoundException("Serviço nao encontrado para o ID: " + servicoId));
+		return retorno.orElseThrow(() -> new EntityNotFoundException("Serviço nao encontrado para o ID: " + servicoId));
 	}
 
 	private Usuario verificaFuncionario(long idFuncionario) {
 		if (idFuncionario == 0) {
-			throw new ResourceNotFoundException("Campo Funcionario não informado corretamente !!");
+			throw new EntityNotFoundException("Campo Funcionario não informado corretamente !!");
 		}
 		Optional<Usuario> retorno = usuarioRepository.findById(idFuncionario);
 		return retorno.orElseThrow(
-				() -> new ResourceNotFoundException("Funcionario nao encontrado para o ID: " + idFuncionario));
+				() -> new EntityNotFoundException("Funcionario nao encontrado para o ID: " + idFuncionario));
 	}
 
 	@Override
