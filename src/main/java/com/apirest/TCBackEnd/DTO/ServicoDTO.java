@@ -25,11 +25,12 @@ public class ServicoDTO {
 	private String nome;
 	@NotBlank
 	private String descricao;	
+	private String tempo;
 	
 
 	public static ServicoDTO servicoResposta(Servico servico) {
 		return new ServicoDTO(servico.getId(), CategoriaDTO.categoriaResposta(servico.getCategoria()) , servico.getNome(),
-				servico.getDescricao());
+				servico.getDescricao(),servico.getTempo().toString());
 	}
 
 	// Recebe uma lista de servicos e transforma a lista para o formato de resposta

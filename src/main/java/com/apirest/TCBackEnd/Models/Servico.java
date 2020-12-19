@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Models;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,7 @@ public class Servico {
 	private Categoria categoria;
 	private String nome;
 	private String descricao;
+	private LocalTime tempo;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "servico")
 	private List<ServicoFuncionario> servico_funcionario;
