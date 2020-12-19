@@ -15,15 +15,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemEscalaFullDTO {
-	
-	private long id;	
+
+	private long id;
 	private EscalaDTO escala;
 	private String hrInicial;
 	private String hrFinal;
-	
+
 	public static ItemEscalaFullDTO ItemEscalaResposta(ItemEscala itemEscala) {
 		return new ItemEscalaFullDTO(itemEscala.getId(), EscalaDTO.escalaResposta(itemEscala.getEscala()),
-				itemEscala.getHrInicial().toString(), itemEscala.getHrFinal().toString());
+				String.valueOf(itemEscala.getHrInicial()), String.valueOf(itemEscala.getHrFinal()));
 	}
 
 	// Recebe uma lista de ItemEscala e transforma a lista para o formato de

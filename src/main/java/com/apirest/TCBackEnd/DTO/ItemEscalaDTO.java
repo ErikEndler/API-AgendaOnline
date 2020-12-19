@@ -23,7 +23,7 @@ public class ItemEscalaDTO {
 
 	public static ItemEscalaDTO ItemEscalaResposta(ItemEscala itemEscala) {
 		return new ItemEscalaDTO(itemEscala.getId(), itemEscala.getEscala().getId(),
-				itemEscala.getHrInicial().toString(), itemEscala.getHrFinal().toString());
+				String.valueOf(itemEscala.getHrInicial()), String.valueOf(itemEscala.getHrFinal()));
 	}
 
 	// Recebe uma lista de ItemEscala e transforma a lista para o formato de

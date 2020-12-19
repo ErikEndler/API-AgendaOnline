@@ -25,8 +25,8 @@ public class AtendimentoDTO {
 
 	public static AtendimentoDTO atendimentoResposta(Atendimento atendimento) {
 		return new AtendimentoDTO(atendimento.getId(), atendimento.getAgendamento().getId(),
-				atendimento.getFuncionario().getId(), atendimento.getInicio().toString(),
-				atendimento.getFim().toString());
+				atendimento.getFuncionario().getId(), String.valueOf(atendimento.getInicio()),
+				String.valueOf(atendimento.getFim()));
 	}
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de

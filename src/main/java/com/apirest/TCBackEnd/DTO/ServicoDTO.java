@@ -30,7 +30,7 @@ public class ServicoDTO {
 
 	public static ServicoDTO servicoResposta(Servico servico) {
 		return new ServicoDTO(servico.getId(), CategoriaDTO.categoriaResposta(servico.getCategoria()) , servico.getNome(),
-				servico.getDescricao(),servico.getTempo().toString());
+				servico.getDescricao(), String.valueOf(servico.getTempo()));
 	}
 
 	// Recebe uma lista de servicos e transforma a lista para o formato de resposta

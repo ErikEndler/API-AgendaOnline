@@ -27,8 +27,8 @@ public class AgendamentoDTO {
 
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
 		return new AgendamentoDTO(agendamento.getId(), agendamento.getCliente().getId(),
-				agendamento.getServicoFuncionario().getId(), agendamento.getHorario().toString(),
-				agendamento.getHorarioFim().toString(), agendamento.getNotificacao(), agendamento.getObs());
+				agendamento.getServicoFuncionario().getId(), String.valueOf(agendamento.getHorario()),
+				String.valueOf(agendamento.getHorarioFim()), agendamento.getNotificacao(), agendamento.getObs());
 	}
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de
