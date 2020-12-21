@@ -53,7 +53,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 
 	@Override
 	protected void verificaSalvar(EscalaDTO dto) {
-		verificaServicoFuncionario(dto.getServicoFuncionario().getFuncionario().getId());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 	}
 
 	@Override
@@ -66,7 +66,6 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Override
 	protected void verificaListAll() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -93,7 +92,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	// ------------------------------------------
 	private Optional<Escala> verificaESxiste(long id) {
 		Optional<Escala> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new ResourceNotFoundException("escala nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -111,7 +110,7 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 		}
 		Optional<ServicoFuncionario> retorno = servicoFuncionarioRepository.findById(servicoFuncionario);
 		return retorno.orElseThrow(() -> new ResourceNotFoundException(
-				MenssagemErro() + " nao encontrado para o ID: " + servicoFuncionario));
+				"Servico-Funcionario nao encontrado para o ID: " + servicoFuncionario));
 	}
 
 	@Override

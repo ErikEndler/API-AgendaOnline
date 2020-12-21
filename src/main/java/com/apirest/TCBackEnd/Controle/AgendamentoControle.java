@@ -174,10 +174,14 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
 		DayOfWeek day = datahora.stringemDateTime(dto.getHorarioInicio()).getDayOfWeek();
+		System.out.println("--day " + day);
+
 		LocalTime hrInicial = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		LocalTime hrFinal = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
-		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionarioId(),
-				day.getDisplayName(TextStyle.FULL, new Locale("pt"))).get();
+		Escala escala = escalaRepository
+				.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionarioId(),
+						day.getDisplayName(TextStyle.FULL, new Locale("pt")))
+				.orElseThrow(() -> new ResourceNotFoundException("Não Há Escala"));
 		ItemEscala itemEscala = itemEscalaRepository.escala(escala.getId(), hrInicial, hrFinal)
 				.orElseThrow(() -> new ResourceNotFoundException("Horario fora de escala disponivel"));
 		return true;
@@ -195,7 +199,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		int qtdGeral = disponibilidadeControle.listGeral().getQtd();
 		int qtd = repositorio.qtdSimultaneos(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()));
-		if (qtdGeral >= qtd) {
+		if (qtdGeral <= qtd) {
 			throw new ResourceNotFoundException("Horario esta cheio");
 		}
 		return true;

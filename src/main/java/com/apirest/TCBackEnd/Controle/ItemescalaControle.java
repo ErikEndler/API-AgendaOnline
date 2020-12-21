@@ -100,7 +100,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 	private Optional<ItemEscala> verificaExiste(long id) {
 		Optional<ItemEscala> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new ResourceNotFoundException("ItemEscala nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -112,7 +112,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 		}
 		Optional<Escala> escala = escalaRepository.findById(id);
 		return escala
-				.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException( "ItemEscala nao encontrado para o ID: " + id));
 	}
 
 	@Override

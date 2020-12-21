@@ -10,6 +10,7 @@ import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
+import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
@@ -19,6 +20,8 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	CategoriaRepository categoriaRepository;
 	@Autowired
 	EscalaControle escalaControle;
+	@Autowired
+	DataHora dataHora;
 
 	@Override
 	protected void verificaSalvar(ServicoDTO dto) {
@@ -27,7 +30,7 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	@Override
 	protected Servico verificUpdate(ServicoDTO dto) {
-		Servico servico =verifiaExiste(dto.getId()).get();
+		Servico servico = verifiaExiste(dto.getId()).get();
 		verificaCategoria(dto);
 		return servico;
 	}
@@ -50,12 +53,14 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	@Override
 	protected Servico transformaSalvar(ServicoDTO dto) {
-		return new Servico(verificaCategoria(dto), dto.getNome(), dto.getDescricao());
+		return new Servico(verificaCategoria(dto), dto.getNome(), dto.getDescricao(),
+				dataHora.stringEmHora(dto.getTempo()));
 	}
 
 	@Override
 	protected Servico transformaEditar(ServicoDTO dto) {
-		return new Servico(dto.getId(), verificaCategoria(dto), dto.getNome(), dto.getDescricao());
+		return new Servico(dto.getId(), verificaCategoria(dto), dto.getNome(), dto.getDescricao(),
+				dataHora.stringEmHora(dto.getTempo()));
 	}
 
 	protected String MenssagemErro() {
@@ -66,7 +71,7 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	// ----------------------------- METODOS AUXILIARES ------------------
 	public Optional<Servico> verifiaExiste(long id) {
 		Optional<Servico> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new ResourceNotFoundException("Servico nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -81,7 +86,7 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	@Override
 	protected void posSalvar(Servico servico) {
-		//escalaControle.cadastraEscalasServico(servico.getId());
+		// escalaControle.cadastraEscalasServico(servico.getId());
 	}
 
 }

@@ -108,14 +108,13 @@ public class ServicoEndPoint {
 				HttpStatus.OK);
 	}
 
-	
-
 	@ApiOperation(value = "Retorna lista Serviços de um funcionario")
 	@GetMapping("funcionario/funcionario/{id}")
 	public ResponseEntity<?> listaServicoFunncionario(@PathVariable(value = "id") long id) {
 
 		return new ResponseEntity<>(
-				ServicoDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)), HttpStatus.OK);
+				ServicoFuncionarioDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)),
+				HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Salva um Serviço-Funcionario")

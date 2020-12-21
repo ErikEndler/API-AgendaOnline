@@ -47,14 +47,14 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	public Optional<Usuario> listarPorCpf(String cpf) {
 		Optional<Usuario> retorno = repositorio.findByCpf(cpf);
 		retorno.orElseThrow(
-				() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o CPF: " + cpf));
+				() -> new ResourceNotFoundException("Usuario nao encontrado para o CPF: " + cpf));
 		return retorno;
 	}
 
 //---------------------METODOS AUXILIARES-----------------------------------------
 	private Optional<Usuario> verificaExiste(long id) {
 		Optional<Usuario> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new ResourceNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -64,7 +64,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		// Verifica se variavel "user" esta vazia ou nao
 		if (user.isPresent()) {
 			// Se não estiver vazia retorna uma esceção conforme abaixo
-			throw new ResourceNotFoundException(" Usuartio ja existenta para CPF:" + cpf);
+			throw new ResourceNotFoundException(" Usuario ja existenta para CPF:" + cpf);
 		}
 	}
 
@@ -99,14 +99,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		return role.get();
 	}
 
-	protected String MenssagemErro() {
-		String msg = "Usuario";
-		return msg;
-	}
 
 	private void validaRole(UsuarioDTO dto) {
 		if (dto.getRole().isEmpty()) {
-			throw new ResourceNotFoundException(MenssagemErro() + " Campo role esta vazio! ");
+			throw new ResourceNotFoundException(" Campo role esta vazio! ");
 		}
 	}
 

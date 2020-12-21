@@ -41,16 +41,12 @@ public class ServicoFuncionarioControle
 		return servicoFuncionario;
 	}
 
-	@EventListener(ContextRefreshedEvent.class)
-	public void listarEscalaFull() {
-		System.out.println("------------------"
-				+ item.findByEscalaServicoFuncionarioFuncionarioIdAndEscalaServicoFuncionarioServicoId(1, 2));
-	}
-
-	public List<Servico> listarServicosDoFuncionario(long idFuncionario) {
+	public List<ServicoFuncionario> listarServicosDoFuncionario(long idFuncionario) {
+		List<ServicoFuncionario> listaSF = repositorio.findByFuncionarioId(idFuncionario);
+		// pega lista de senvico-funcionario etras somente o servico de cada item
 		List<Servico> listServico = repositorio.findByFuncionarioId(idFuncionario).stream()
 				.map(ServicoFuncionario::getServico).collect(Collectors.toList());
-		return listServico;
+		return listaSF;
 	}
 
 	public void deletar(long funcionarioId, long servicoId) {
@@ -114,7 +110,7 @@ public class ServicoFuncionarioControle
 
 	private Optional<ServicoFuncionario> verifiaExiste(long id) {
 		Optional<ServicoFuncionario> retorno = repositorio.findById(id);
-		retorno.orElseThrow(() -> new EntityNotFoundException(MenssagemErro() + " nao encontrado para o ID: " + id));
+		retorno.orElseThrow(() -> new EntityNotFoundException("Serviço-Funcionario nao encontrado para o ID: " + id));
 		return retorno;
 	}
 
@@ -143,6 +139,7 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void posSalvar(ServicoFuncionario servicoFuncionario) {
+		System.out.println("servicoFuncionario id :"+servicoFuncionario.getId());
 		escalaControle.cadastraEscalasServicoFuncionario(servicoFuncionario);
 	}
 

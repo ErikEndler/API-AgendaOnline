@@ -33,19 +33,21 @@ public class Servico {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "servico")
 	private List<ServicoFuncionario> servico_funcionario;
 
-	public Servico(long id, Categoria categoria, String nome, String descricao) {
+	public Servico(long id, Categoria categoria, String nome, String descricao, LocalTime tempo) {
 		super();
 		this.id = id;
 		this.categoria = categoria;
 		this.nome = nome;
 		this.descricao = descricao;
+		this.tempo = tempo;
 	}
 
-	public Servico(Categoria categoria, String nome, String descricao) {
+	public Servico(Categoria categoria, String nome, String descricao, LocalTime tempo) {
 		super();
 		this.categoria = categoria;
 		this.nome = nome;
 		this.descricao = descricao;
+		this.tempo = tempo;
 	}
 
 }
