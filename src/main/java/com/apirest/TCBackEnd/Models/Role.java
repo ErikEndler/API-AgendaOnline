@@ -13,8 +13,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -35,4 +37,10 @@ public class Role implements GrantedAuthority {
 		return this.nameRole;
 	}
 
+	@Override
+	public String toString() {
+		return "Role [nameRole=" + nameRole + "]";
+	}
+
+	
 }

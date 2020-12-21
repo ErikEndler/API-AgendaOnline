@@ -10,6 +10,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+@Transactional
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -58,15 +61,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Optional<Usuario> usuario = usuarioRepository.findByCpf(authResult.getName());
 
 		token = Jwts.builder() // -
-				.setSubject(authResult.getName())// -
+				// .setSubject(authResult.getName())// -
 				// .claim("authorities", authResult.getAuthorities()) // --
+				.claim("nome", usuario.get().getNome()) // --
+				.claim("role", usuario.get().getRole().getNameRole()) // --
+				.claim("cpf", usuario.get().getCpf()) // --
+				.claim("id", usuario.get().getId()) // --
+				// .setPayload(usuario.toString())//
 				.setIssuedAt(new Date())// ---
 				.setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
-				response.getWriter()
-				.append("{" + "\"authorization\": \"Bearer " + token + "\"," + "\n\"role\": \""
-						+usuario.get().getRole().getNameRole() + "\"," + "\n\"id\": \"" + usuario.get().getId() + "\","
-						+ "\n\"nome\": \"" + usuario.get().getNome() + "\"}");
+		response.getWriter().append("{" + "\"Authorization\": \"Bearer " + token + "\"}");
 
 		response.addHeader("Authorization", "Bearer " + token);
 	}

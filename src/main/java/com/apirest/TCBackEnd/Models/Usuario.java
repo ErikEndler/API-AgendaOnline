@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -84,6 +85,9 @@ public class Usuario implements UserDetails {
 		this.notificacaoWhats = notificacaoWhats;
 	}
 
+	
+	
+	
 	@Override
 	public Collection<Role> getAuthorities() {
 		Collection<Role> RRoles = new ArrayList<Role>();
@@ -125,6 +129,12 @@ public class Usuario implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "[id=" + id + ", role=" + role.getNameRole() + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone
+				+ ", whatsapp=" + whatsapp + ", email=" + email + ", sexo=" + sexo + "]";
 	}
 
 }
