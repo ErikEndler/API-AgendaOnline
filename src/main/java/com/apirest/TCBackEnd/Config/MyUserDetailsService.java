@@ -1,7 +1,5 @@
 package com.apirest.TCBackEnd.Config;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +11,7 @@ import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 
 @Component
-@Transactional
+
 public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired

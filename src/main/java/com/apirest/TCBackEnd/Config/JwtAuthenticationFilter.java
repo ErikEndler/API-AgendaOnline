@@ -26,8 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-@Transactional
-
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
@@ -71,7 +69,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.setIssuedAt(new Date())// ---
 				.setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
-		response.getWriter().append("{" + "\"Authorization\": \"Bearer " + token + "\"}");
+		response.getWriter().append("{" + "\"token\": \"Bearer " + token + "\"}");
+		// response.getWriter().append("{" + token + "}");
 
 		response.addHeader("Authorization", "Bearer " + token);
 	}
