@@ -53,12 +53,10 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		for (String data : listDatas) {
 			List<Agendamento> agendamentos = null;
 			if (data.equals("hoje")) {
-				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(LocalDate.now(),
-						idFuncionario);
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionario(LocalDate.now(), idFuncionario);
 			} else {
 				LocalDate localdate = datahora.stringEmData(data);
-				agendamentos = this.repositorio.findByHorarioAndServicoFuncionarioFuncionarioId(localdate,
-						idFuncionario);
+				agendamentos = this.repositorio.findByHorarioAndServicoFuncionario(localdate, idFuncionario);
 			}
 			listaAgendamentos.add(agendamentos);
 		}
@@ -110,14 +108,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	protected Agendamento transformaSalvar(AgendamentoDTO dto) {
 		return new Agendamento(verificaCliente(dto.getClienteId()),
 				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
-				datahora.stringemDateTime(dto.getHorarioInicio()), dto.getNotificacao(), dto.getObs());
+				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
+				dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
 	protected Agendamento transformaEditar(AgendamentoDTO dto) {
 		return new Agendamento(dto.getId(), verificaCliente(dto.getClienteId()),
 				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
-				datahora.stringemDateTime(dto.getHorarioInicio()), dto.getNotificacao(), dto.getObs());
+				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
+				dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override

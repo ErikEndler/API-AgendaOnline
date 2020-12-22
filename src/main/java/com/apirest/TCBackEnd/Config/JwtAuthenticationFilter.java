@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Optional<Usuario> usuario = usuarioRepository.findByCpf(authResult.getName());
 
 		token = Jwts.builder() // -
-				// .setSubject(authResult.getName())// -
+				 .setSubject(authResult.getName())// -
 				// .claim("authorities", authResult.getAuthorities()) // --
 				.claim("nome", usuario.get().getNome()) // --
 				.claim("role", usuario.get().getRole().getNameRole()) // --

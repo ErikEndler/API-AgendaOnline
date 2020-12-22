@@ -11,11 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Agendamento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,23 +35,26 @@ public class Agendamento {
 	private Atendimento atendimento;
 
 	// usado para salvar
-	public Agendamento(Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario, Boolean notificacao, String obs) {
+	public Agendamento(Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario,
+			LocalDateTime horarioFim, Boolean notificacao, String obs) {
 		super();
 		this.cliente = cliente;
 		this.servicoFuncionario = servicoFuncionario;
 		this.horario = horario;
+		this.horarioFim = horarioFim;
 		this.notificacao = notificacao;
 		this.obs = obs;
 	}
 
 	// usado para o update
-	public Agendamento(long id, Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario, Boolean notificacao,
-			String obs) {
+	public Agendamento(long id, Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario,
+			LocalDateTime horarioFim, Boolean notificacao, String obs) {
 		super();
 		this.id = id;
 		this.cliente = cliente;
 		this.servicoFuncionario = servicoFuncionario;
 		this.horario = horario;
+		this.horarioFim = horarioFim;
 		this.notificacao = notificacao;
 		this.obs = obs;
 	}
