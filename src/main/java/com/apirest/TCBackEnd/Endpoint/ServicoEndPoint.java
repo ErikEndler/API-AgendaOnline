@@ -74,8 +74,7 @@ public class ServicoEndPoint {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// -------------------------------------TRATA RELAÇAO
-	// FUNCIONARIO-SERVIÇO-------------------
+	// ----TRATA RELAÇAO FUNCIONARIO-SERVIÇO---------------
 	@ApiOperation(value = "Retorna uma lista de Serviços-Funcionario")
 	@GetMapping("funcionario")
 	public ResponseEntity<?> listarTodos2() {
@@ -91,27 +90,16 @@ public class ServicoEndPoint {
 				HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Retorna um Serviço-Funcionario unico pelo serviço")
+	@ApiOperation(value = "Retorna lista Serviço-Funcionario pelo serviço")
 	@GetMapping("funcionario/servico/{id}")
 	public ResponseEntity<?> listarPorServico(@PathVariable(value = "id") long id) {
-		Optional<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listarPorServico(id);
-		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
-				HttpStatus.OK);
-	}
-
-	@ApiOperation(value = "Retorna uma lista completa da Escala de um funcionario")
-	@GetMapping("funcionario/servico/{servico}/{funcionario}")
-	public ResponseEntity<?> listarPorServicoAndFuncionario(@PathVariable(value = "servico") long id,
-			@PathVariable("funcionario") String funcionario) {
-		Optional<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listarPorServico(id);
-		return new ResponseEntity<>(ServicoFuncionarioDTO.ServicoFuncionarioResposta(servicoFuncionario.get()),
-				HttpStatus.OK);
+		List<ServicoFuncionario> servicoFuncionario = servicoFuncionarioControle.listarPorServico(id);
+		return new ResponseEntity<>(ServicoFuncionarioDTO.listarResposta(servicoFuncionario), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna lista Serviços de um funcionario")
 	@GetMapping("funcionario/funcionario/{id}")
 	public ResponseEntity<?> listaServicoFunncionario(@PathVariable(value = "id") long id) {
-
 		return new ResponseEntity<>(
 				ServicoFuncionarioDTO.listarResposta(servicoFuncionarioControle.listarServicosDoFuncionario(id)),
 				HttpStatus.OK);

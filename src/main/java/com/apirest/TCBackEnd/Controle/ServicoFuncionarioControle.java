@@ -34,11 +34,9 @@ public class ServicoFuncionarioControle
 	@Autowired
 	ItemEscalaRepository item;
 
-	public Optional<ServicoFuncionario> listarPorServico(long idServico) {
-		Optional<ServicoFuncionario> servicoFuncionario = repositorio.findByServicoId(idServico);
-		servicoFuncionario
-				.orElseThrow(() -> new EntityNotFoundException("erro ao buscar Servico-Funcionario pelo serviço"));
-		return servicoFuncionario;
+	public List<ServicoFuncionario> listarPorServico(long idServico) {
+		List<ServicoFuncionario> listaSF = repositorio.findByServicoId(idServico);
+		return listaSF;
 	}
 
 	public List<ServicoFuncionario> listarServicosDoFuncionario(long idFuncionario) {
@@ -139,7 +137,7 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void posSalvar(ServicoFuncionario servicoFuncionario) {
-		System.out.println("servicoFuncionario id :"+servicoFuncionario.getId());
+		System.out.println("servicoFuncionario id :" + servicoFuncionario.getId());
 		escalaControle.cadastraEscalasServicoFuncionario(servicoFuncionario);
 	}
 
