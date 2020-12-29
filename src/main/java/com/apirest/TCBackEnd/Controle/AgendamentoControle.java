@@ -76,16 +76,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected void verificaSalvar(AgendamentoDTO dto) {
-		verificaCliente(dto.getClienteId());
-		verificaServicoFuncionario(dto.getServicoFuncionarioId());
+		verificaCliente(dto.getCliente().getId());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		verificaPreSave(dto);
 	}
 
 	@Override
 	protected Agendamento verificUpdate(AgendamentoDTO dto) {
 		Agendamento agendamento = verificaExixte(dto.getId()).get();
-		verificaCliente(dto.getClienteId());
-		verificaServicoFuncionario(dto.getServicoFuncionarioId());
+		verificaCliente(dto.getCliente().getId());
+		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		return agendamento;
 	}
 
@@ -106,16 +106,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected Agendamento transformaSalvar(AgendamentoDTO dto) {
-		return new Agendamento(verificaCliente(dto.getClienteId()),
-				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
+		return new Agendamento(verificaCliente(dto.getCliente().getId()),
+				verificaServicoFuncionario(dto.getServicoFuncionario().getId()),
 				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
 				dto.getNotificacao(), dto.getObs());
 	}
 
 	@Override
 	protected Agendamento transformaEditar(AgendamentoDTO dto) {
-		return new Agendamento(dto.getId(), verificaCliente(dto.getClienteId()),
-				verificaServicoFuncionario(dto.getServicoFuncionarioId()),
+		return new Agendamento(dto.getId(), verificaCliente(dto.getCliente().getId()),
+				verificaServicoFuncionario(dto.getServicoFuncionario().getId()),
 				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
 				dto.getNotificacao(), dto.getObs());
 	}
@@ -179,7 +179,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		LocalTime hrInicial = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		LocalTime hrFinal = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		Escala escala = escalaRepository
-				.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionarioId(),
+				.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionario().getId(),
 						day.getDisplayName(TextStyle.FULL, new Locale("pt")))
 				.orElseThrow(() -> new ResourceNotFoundException("Não Há Escala"));
 		ItemEscala itemEscala = itemEscalaRepository.escala(escala.getId(), hrInicial, hrFinal)
@@ -189,7 +189,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private void verificaHorario(AgendamentoDTO dto) {
 		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorarioInicio()),
-				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionarioId());
+				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getId());
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}

@@ -18,17 +18,18 @@ public class AgendamentoDTO {
 
 	private long id;
 
-	private long clienteId;
-	private long servicoFuncionarioId;
+	private UsuarioDTO cliente;
+	private ServicoFuncionarioDTO servicoFuncionario;
 	private String horarioInicio; // LocalDateTime
 	private String horarioFim; // LocalDateTime
 	private Boolean notificacao;
 	private String obs;
 
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
-		return new AgendamentoDTO(agendamento.getId(), agendamento.getCliente().getId(),
-				agendamento.getServicoFuncionario().getId(), String.valueOf(agendamento.getHorario()),
-				String.valueOf(agendamento.getHorarioFim()), agendamento.getNotificacao(), agendamento.getObs());
+		return new AgendamentoDTO(agendamento.getId(), UsuarioDTO.usuarioResposta(agendamento.getCliente()),
+				ServicoFuncionarioDTO.ServicoFuncionarioResposta(agendamento.getServicoFuncionario()),
+				String.valueOf(agendamento.getHorario()), String.valueOf(agendamento.getHorarioFim()),
+				agendamento.getNotificacao(), agendamento.getObs());
 	}
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de
