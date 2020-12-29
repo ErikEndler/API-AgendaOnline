@@ -78,7 +78,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	protected void verificaSalvar(AgendamentoDTO dto) {
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
-		//verificaPreSave(dto);
+		verificaPreSave(dto);
 	}
 
 	@Override
@@ -165,11 +165,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void verificaPreSave(AgendamentoDTO dto) {
-		if (verificaDisponibilidadeGeral(dto) == true) {
+		//if (verificaDisponibilidadeGeral(dto) == true) {
 			if (verificaEscala(dto) == true) {
 				verificaHorario(dto);
 			}
-		}
+		//}
 	}
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
