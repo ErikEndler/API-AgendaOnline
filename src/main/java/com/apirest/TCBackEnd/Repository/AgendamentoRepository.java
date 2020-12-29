@@ -15,12 +15,11 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 
 	Iterable<Agendamento> findAllByServicoFuncionario(long id);
 
-	@Query(value = "select count(*) from agendamento where (horario > ?1 and horario < ?2) "
-			+ "or (horario_fim > ?1 and horario_fim < ?2)", nativeQuery = true)
+	@Query(value = "select count(*) from agendamento where ?1 < horario_fim and ?2 > horario)", nativeQuery = true)
 	int qtdSimultaneos(LocalDateTime dataInicial, LocalDateTime datafinal);
 
-	@Query(value = "select count(*) from agendamento "
-			+ "where servico_funcionario_id = ?3 and (horario > ?1 and horario < ?2) or  (horario_fim > ?1 and horario_fim < ?2)", nativeQuery = true)
+	@Query(value = "select count(*) from agendamento"
+			+ " where servico_funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario)", nativeQuery = true)
 	int countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long servicoFuncionario_id);
 
 	@Query(value = "select item_escala.* from item_escala " + "join escala on escala.id = item_escala.escala_id "
