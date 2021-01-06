@@ -19,6 +19,7 @@ import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.Escala;
 import com.apirest.TCBackEnd.Models.ItemEscala;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
+import com.apirest.TCBackEnd.Models.TimeLine;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
@@ -45,70 +46,80 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Autowired
 	DataHora datahora;
 
+	private TimeLine adicionaLista(boolean situacao, String horaI, String horaF) {
+		TimeLine timeLine = new TimeLine();
+		timeLine.setHoraF(horaF);
+		timeLine.setHoraI(horaI);
+		timeLine.setSituacao(situacao);
+		return timeLine;
+	}
+
 	// mosta lista de horario livre/ocupado do funcionario
 	public List<?> timeLineFuncionario(String data, long IdServicoiFuncionario) {
-		class TimeLine {
-			boolean situacao;
-			String horaI;
-			String horaF;
-		}
 		String diaSemana = datahora.pegaDiaSemana(datahora.stringEmData(data));
 		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(IdServicoiFuncionario, diaSemana).get();
 		List<ItemEscala> listItemEscala = (List<ItemEscala>) itemEscalaRepository.findAllByEscalaId(escala.getId());
-		ItemEscala itemEscala = listItemEscala.get(0);
-		List<Agendamento> listAgendamentos = (List<Agendamento>) repositorio
-				.findAllByServicoFuncionarioOrderByHorario(IdServicoiFuncionario);
-
+		List<Agendamento> listAgendamentos = repositorio.findByHorarioAndServicoFuncionario(datahora.stringEmData(data),
+				IdServicoiFuncionario);
 		List<TimeLine> listaFinal = new ArrayList<>();
-		TimeLine disp = new TimeLine();
-		if (listAgendamentos.size() > 0) {
+		System.out.println("-------- size " + listAgendamentos.size());
+		if (listItemEscala.size() > 0) {
+			ItemEscala itemEscala = listItemEscala.get(0);
+			if (listAgendamentos.size() > 0) {
+				IntStream.range(0, listAgendamentos.size()).forEach(idx -> {
+					System.out.println("-------- index " + idx);
+					// para o primeiro indice
+					if (idx == 0) {
+						// if T1>T2
+						if (listAgendamentos.get(idx).getHorario().toLocalTime().isAfter(itemEscala.getHrInicial())) {
+							listaFinal.add(adicionaLista(true, datahora.horaEmString(itemEscala.getHrInicial()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime())));
+							// 09:00 as 10:00 ocupado A1I a A1F not free
+							listaFinal.add(adicionaLista(false,
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
+						} else {
+							TimeLine disp = new TimeLine();
+							// A1I a A1F not free
+							listaFinal.add(adicionaLista(false,
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
+						}
+					} else {
 
-			IntStream.range(0, listAgendamentos.size()).forEach(idx -> {
-				// para o primeiro indice
-				if (idx == 0) {
-					// if T1>T2
-					if (listAgendamentos.get(idx).getHorario().toLocalTime().isAfter(itemEscala.getHrFinal())) {
-						// 08:00 as 09:00 livre EI a A1I free
-						disp.situacao = true;
-						disp.horaI = datahora.horaEmString(itemEscala.getHrInicial());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						listaFinal.add(disp);
-						// 09:00 as 10:00 ocupado A1I a A1F not free
-						disp.situacao = false;
-						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
-						listaFinal.add(disp);
-					} else {
-						// A1I a A1F not free
-						disp.situacao = false;
-						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
-						listaFinal.add(disp);
+						// A2I=A1F
+						if (listAgendamentos.get(idx).getHorario()
+								.equals(listAgendamentos.get(idx - 1).getHorarioFim())) {
+							listaFinal.add(adicionaLista(false,
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
+							// EF>AF
+							if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
+									.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+								listaFinal.add(adicionaLista(true,
+										datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
+										datahora.horaEmString(itemEscala.getHrFinal())));
+							}
+						} else {
+							listaFinal.add(adicionaLista(true,
+									datahora.horaEmString(listAgendamentos.get(idx - 1).getHorarioFim().toLocalTime()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime())));
+							listaFinal.add(adicionaLista(false,
+									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
+									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
+							if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
+									.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+								listaFinal.add(adicionaLista(true,
+										datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
+										datahora.horaEmString(itemEscala.getHrFinal())));
+							}
+						}
 					}
-				} else {
-					// A2I=A1F
-					if (listAgendamentos.get(idx).getHorario().equals(listAgendamentos.get(idx - 1).getHorarioFim())) {
-						disp.situacao = false;
-						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
-						listaFinal.add(disp);
-					} else {
-						disp.situacao = true;
-						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx - 1).getHorarioFim().toLocalTime());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						listaFinal.add(disp);
-						disp.situacao = false;
-						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
-						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
-						listaFinal.add(disp);
-					}
-				}
-			});
-		} else {
-			disp.situacao = true;
-			disp.horaI = datahora.horaEmString(itemEscala.getHrInicial());
-			disp.horaF = datahora.horaEmString(itemEscala.getHrFinal());
-			listaFinal.add(disp);
+				});
+			} else {
+				listaFinal.add(adicionaLista(true, datahora.horaEmString(itemEscala.getHrInicial()),
+						datahora.horaEmString(itemEscala.getHrFinal())));
+			}
 		}
 		return listaFinal;
 
@@ -137,9 +148,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return repositorio.findAllByCliente(idCliente);
 	}
 
-	public Iterable<Agendamento> listarPorServico(long idServicoFuncionario) {
+	public List<Agendamento> listarPorServico(long idServicoFuncionario) {
 		verificaServicoFuncionario(idServicoFuncionario);
-		return repositorio.findAllByServicoFuncionarioOrderByHorario(idServicoFuncionario);
+		return repositorio.findByServicoFuncionarioIdOrderByHorarioAsc(idServicoFuncionario);
 	}
 
 	@Override
