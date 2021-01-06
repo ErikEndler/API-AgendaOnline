@@ -13,7 +13,7 @@ import com.apirest.TCBackEnd.Models.ItemEscala;
 public interface AgendamentoRepository extends CrudRepository<Agendamento, Long> {
 	Iterable<Agendamento> findAllByCliente(long id);
 
-	Iterable<Agendamento> findAllByServicoFuncionario(long id);
+	Iterable<Agendamento> findAllByServicoFuncionarioOrderByHorario(long id);
 
 	@Query(value = "select count(*) from agendamento where ?1 < horario_fim and ?2 > horario", nativeQuery = true)
 	int qtdSimultaneos(LocalDateTime dataInicial, LocalDateTime datafinal);

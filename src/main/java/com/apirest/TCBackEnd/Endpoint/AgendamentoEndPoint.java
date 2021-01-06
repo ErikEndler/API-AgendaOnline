@@ -66,6 +66,12 @@ public class AgendamentoEndPoint {
 		return new ResponseEntity<>(listaResposta, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorna lista de disponibilidade de uma data de um funcionario")
+	@GetMapping("/disponibilidade")
+	public ResponseEntity<?> timeLineFuncionario(@RequestParam long funcionario, @RequestParam String data) {
+		return new ResponseEntity<>(agendamentoControle.timeLineFuncionario(data, funcionario), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Retorna um Agendamento unico pelo ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listar(@PathVariable(value = "id") long id) {

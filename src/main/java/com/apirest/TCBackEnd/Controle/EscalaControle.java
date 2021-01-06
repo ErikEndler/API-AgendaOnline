@@ -24,6 +24,11 @@ public class EscalaControle extends GenericControl<Escala, EscalaDTO, EscalaRepo
 	@Autowired
 	DataHora dataHora;
 
+	public Escala escalaPorDia(long IdServicoFuncionario, String diaSemana) {
+		Escala escala = repositorio.findByServicoFuncionarioIdAndDiaSemana(IdServicoFuncionario, diaSemana).get();
+		return escala;
+	}
+
 	public List<List<Escala>> escalasFuncionarioServico(long funcionarioId, List<Long> servicosId) {
 		List<List<Escala>> listas = new ArrayList<>();
 

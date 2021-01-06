@@ -41,7 +41,7 @@ public class ServicoFuncionarioControle
 
 	public List<ServicoFuncionario> listarServicosDoFuncionario(long idFuncionario) {
 		List<ServicoFuncionario> listaSF = repositorio.findByFuncionarioId(idFuncionario);
-		// pega lista de senvico-funcionario etras somente o servico de cada item
+		// pega lista de senvico-funcionario e tras somente o servico de cada item
 		List<Servico> listServico = repositorio.findByFuncionarioId(idFuncionario).stream()
 				.map(ServicoFuncionario::getServico).collect(Collectors.toList());
 		return listaSF;

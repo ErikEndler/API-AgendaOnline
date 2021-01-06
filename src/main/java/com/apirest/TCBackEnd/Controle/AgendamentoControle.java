@@ -2,17 +2,16 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
@@ -46,6 +45,75 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Autowired
 	DataHora datahora;
 
+	// mosta lista de horario livre/ocupado do funcionario
+	public List<?> timeLineFuncionario(String data, long IdServicoiFuncionario) {
+		class TimeLine {
+			boolean situacao;
+			String horaI;
+			String horaF;
+		}
+		String diaSemana = datahora.pegaDiaSemana(datahora.stringEmData(data));
+		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(IdServicoiFuncionario, diaSemana).get();
+		List<ItemEscala> listItemEscala = (List<ItemEscala>) itemEscalaRepository.findAllByEscalaId(escala.getId());
+		ItemEscala itemEscala = listItemEscala.get(0);
+		List<Agendamento> listAgendamentos = (List<Agendamento>) repositorio
+				.findAllByServicoFuncionarioOrderByHorario(IdServicoiFuncionario);
+
+		List<TimeLine> listaFinal = new ArrayList<>();
+		TimeLine disp = new TimeLine();
+		if (listAgendamentos.size() > 0) {
+
+			IntStream.range(0, listAgendamentos.size()).forEach(idx -> {
+				// para o primeiro indice
+				if (idx == 0) {
+					// if T1>T2
+					if (listAgendamentos.get(idx).getHorario().toLocalTime().isAfter(itemEscala.getHrFinal())) {
+						// 08:00 as 09:00 livre EI a A1I free
+						disp.situacao = true;
+						disp.horaI = datahora.horaEmString(itemEscala.getHrInicial());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						listaFinal.add(disp);
+						// 09:00 as 10:00 ocupado A1I a A1F not free
+						disp.situacao = false;
+						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
+						listaFinal.add(disp);
+					} else {
+						// A1I a A1F not free
+						disp.situacao = false;
+						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
+						listaFinal.add(disp);
+					}
+				} else {
+					// A2I=A1F
+					if (listAgendamentos.get(idx).getHorario().equals(listAgendamentos.get(idx - 1).getHorarioFim())) {
+						disp.situacao = false;
+						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
+						listaFinal.add(disp);
+					} else {
+						disp.situacao = true;
+						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx - 1).getHorarioFim().toLocalTime());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						listaFinal.add(disp);
+						disp.situacao = false;
+						disp.horaI = datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime());
+						disp.horaF = datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime());
+						listaFinal.add(disp);
+					}
+				}
+			});
+		} else {
+			disp.situacao = true;
+			disp.horaI = datahora.horaEmString(itemEscala.getHrInicial());
+			disp.horaF = datahora.horaEmString(itemEscala.getHrFinal());
+			listaFinal.add(disp);
+		}
+		return listaFinal;
+
+	}
+
 	// @EventListener(ContextRefreshedEvent.class)
 	public List<List<Agendamento>> listaAgendamentosDiaFuncionario(List<String> listDatas, long idFuncionario) {
 		List<List<Agendamento>> listaAgendamentos = new ArrayList<>();
@@ -71,7 +139,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	public Iterable<Agendamento> listarPorServico(long idServicoFuncionario) {
 		verificaServicoFuncionario(idServicoFuncionario);
-		return repositorio.findAllByServicoFuncionario(idServicoFuncionario);
+		return repositorio.findAllByServicoFuncionarioOrderByHorario(idServicoFuncionario);
 	}
 
 	@Override
@@ -165,11 +233,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void verificaPreSave(AgendamentoDTO dto) {
-		//if (verificaDisponibilidadeGeral(dto) == true) {
-			if (verificaEscala(dto) == true) {
-				verificaHorario(dto);
-			}
-		//}
+		// if (verificaDisponibilidadeGeral(dto) == true) {
+		if (verificaEscala(dto) == true) {
+			verificaHorario(dto);
+		}
+		// }
 	}
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
