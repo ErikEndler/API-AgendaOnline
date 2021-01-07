@@ -107,13 +107,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 							listaFinal.add(adicionaLista(false,
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
-							if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
-									.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
-								listaFinal.add(adicionaLista(true,
-										datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
-										datahora.horaEmString(itemEscala.getHrFinal())));
-							}
 						}
+					}
+					if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
+							.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+						listaFinal.add(adicionaLista(true,
+								datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
+								datahora.horaEmString(itemEscala.getHrFinal())));
 					}
 				});
 			} else {
@@ -122,7 +122,6 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 			}
 		}
 		return listaFinal;
-
 	}
 
 	// @EventListener(ContextRefreshedEvent.class)
