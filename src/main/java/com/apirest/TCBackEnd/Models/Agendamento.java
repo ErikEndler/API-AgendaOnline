@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +35,7 @@ public class Agendamento {
 	private String obs;
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "agendamento")
 	private Atendimento atendimento;
+	private StatusAgendamento status;
 
 	// usado para salvar
 	public Agendamento(Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario,

@@ -11,7 +11,7 @@ import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.ItemEscala;
 
 public interface AgendamentoRepository extends CrudRepository<Agendamento, Long> {
-	Iterable<Agendamento> findAllByCliente(long id);
+	Iterable<Agendamento> findAllByClienteId(long id);
 
 	List<Agendamento> findByServicoFuncionarioIdOrderByHorarioAsc(long id);
 

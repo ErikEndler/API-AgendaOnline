@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apirest.TCBackEnd.Models.Agendamento;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,12 +25,13 @@ public class AgendamentoDTO {
 	private String horarioFim; // LocalDateTime
 	private Boolean notificacao;
 	private String obs;
+	private StatusAgendamento status;
 
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
 		return new AgendamentoDTO(agendamento.getId(), UsuarioDTO.usuarioResposta(agendamento.getCliente()),
 				ServicoFuncionarioDTO.ServicoFuncionarioResposta(agendamento.getServicoFuncionario()),
 				String.valueOf(agendamento.getHorario()), String.valueOf(agendamento.getHorarioFim()),
-				agendamento.getNotificacao(), agendamento.getObs());
+				agendamento.getNotificacao(), agendamento.getObs(),agendamento.getStatus());
 	}
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de

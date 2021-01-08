@@ -27,6 +27,7 @@ import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
@@ -57,7 +58,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	// mosta lista de horario livre/ocupado do funcionario
 	public List<?> timeLineFuncionario(String data, long IdServicoiFuncionario) {
 		String diaSemana = datahora.pegaDiaSemana(datahora.stringEmData(data));
-		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(IdServicoiFuncionario, diaSemana).get();
+		Escala escala = escalaRepository.findByServicoFuncionarioIdAndDiaSemana(IdServicoiFuncionario, diaSemana)
+				.orElseThrow(() -> new ResourceNotFoundException(
+						MenssagemErro() + " nao encontrado para o ID: " + IdServicoiFuncionario));
+		;
+
 		List<ItemEscala> listItemEscala = (List<ItemEscala>) itemEscalaRepository.findAllByEscalaId(escala.getId());
 		List<Agendamento> listAgendamentos = repositorio.findByHorarioAndServicoFuncionario(datahora.stringEmData(data),
 				IdServicoiFuncionario);
@@ -144,7 +149,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	public Iterable<Agendamento> listarPorCliente(long idCliente) {
 		verificaCliente(idCliente);
-		return repositorio.findAllByCliente(idCliente);
+		return repositorio.findAllByClienteId(idCliente);
 	}
 
 	public List<Agendamento> listarPorServico(long idServicoFuncionario) {
@@ -157,6 +162,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		verificaPreSave(dto);
+		dto.setStatus(StatusAgendamento.EM_ABERTO);
 	}
 
 	@Override
