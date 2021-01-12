@@ -1,5 +1,5 @@
 package com.apirest.TCBackEnd.Util;
 
 public enum StatusAgendamento {
-	EM_ABERTO, ATENDIDO, CANCELADO, FALTOU
+	PENDENTE, ATENDIDO, CANCELADO, FALTOU, AGENDADO
 }

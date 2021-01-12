@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -74,6 +75,13 @@ public class UsuarioEndPoint {
 	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
 		usuarioControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Retorna lista de funcionarios")
+	@GetMapping("/funcionarios")
+	public ResponseEntity<?> listarFuncionarios() {
+		List<Usuario>lista = usuarioControle.listarNaoClientes();
+		return new ResponseEntity<>(UsuarioDTO.listarResposta(lista), HttpStatus.OK);
 	}
 
 }

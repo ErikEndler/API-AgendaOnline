@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	RoleControle roleControle;
+	
+	
+	public List<Usuario> listarNaoClientes(){
+		List<Usuario> funcionarios = repositorio.listarFuncionarios();
+		return funcionarios;		
+	}
 
 	// verifica existencia de usuarios cadastrados na inicializaçao do sistema
 	@EventListener(ContextRefreshedEvent.class)

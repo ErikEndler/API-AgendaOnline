@@ -39,7 +39,7 @@ public class Agendamento {
 
 	// usado para salvar
 	public Agendamento(Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario,
-			LocalDateTime horarioFim, Boolean notificacao, String obs) {
+			LocalDateTime horarioFim, Boolean notificacao, String obs, StatusAgendamento status) {
 		super();
 		this.cliente = cliente;
 		this.servicoFuncionario = servicoFuncionario;
@@ -47,11 +47,13 @@ public class Agendamento {
 		this.horarioFim = horarioFim;
 		this.notificacao = notificacao;
 		this.obs = obs;
+		this.status = status;
+
 	}
 
 	// usado para o update
 	public Agendamento(long id, Usuario cliente, ServicoFuncionario servicoFuncionario, LocalDateTime horario,
-			LocalDateTime horarioFim, Boolean notificacao, String obs) {
+			LocalDateTime horarioFim, Boolean notificacao, String obs, StatusAgendamento status) {
 		super();
 		this.id = id;
 		this.cliente = cliente;
@@ -60,6 +62,7 @@ public class Agendamento {
 		this.horarioFim = horarioFim;
 		this.notificacao = notificacao;
 		this.obs = obs;
+		this.status = status;
 	}
 
 }

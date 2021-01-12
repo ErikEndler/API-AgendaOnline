@@ -84,14 +84,12 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
 						} else {
-							TimeLine disp = new TimeLine();
 							// A1I a A1F not free
 							listaFinal.add(adicionaLista(false,
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
 						}
 					} else {
-
 						// A2I=A1F
 						if (listAgendamentos.get(idx).getHorario()
 								.equals(listAgendamentos.get(idx - 1).getHorarioFim())) {
@@ -99,12 +97,12 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
 							// EF>AF
-							if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
-									.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
-								listaFinal.add(adicionaLista(true,
-										datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
-										datahora.horaEmString(itemEscala.getHrFinal())));
-							}
+//							if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
+//									.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+//								listaFinal.add(adicionaLista(true,
+//										datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
+//										datahora.horaEmString(itemEscala.getHrFinal())));
+//							}
 						} else {
 							listaFinal.add(adicionaLista(true,
 									datahora.horaEmString(listAgendamentos.get(idx - 1).getHorarioFim().toLocalTime()),
@@ -116,6 +114,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 					}
 					if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
 							.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+						System.out.println("-------- index na condiçao final " + idx);
+
 						listaFinal.add(adicionaLista(true,
 								datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
 								datahora.horaEmString(itemEscala.getHrFinal())));
@@ -162,7 +162,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		verificaPreSave(dto);
-		dto.setStatus(StatusAgendamento.EM_ABERTO);
+		dto.setStatus(StatusAgendamento.PENDENTE);
+		System.out.println("--STATUS : " + dto.getStatus());
 	}
 
 	@Override
@@ -193,7 +194,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return new Agendamento(verificaCliente(dto.getCliente().getId()),
 				verificaServicoFuncionario(dto.getServicoFuncionario().getId()),
 				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
-				dto.getNotificacao(), dto.getObs());
+				dto.getNotificacao(), dto.getObs(), dto.getStatus());
 	}
 
 	@Override
@@ -201,7 +202,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return new Agendamento(dto.getId(), verificaCliente(dto.getCliente().getId()),
 				verificaServicoFuncionario(dto.getServicoFuncionario().getId()),
 				datahora.stringemDateTime(dto.getHorarioInicio()), datahora.stringemDateTime(dto.getHorarioFim()),
-				dto.getNotificacao(), dto.getObs());
+				dto.getNotificacao(), dto.getObs(), dto.getStatus());
 	}
 
 	@Override
