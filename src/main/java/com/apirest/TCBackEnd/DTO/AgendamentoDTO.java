@@ -3,7 +3,10 @@ package com.apirest.TCBackEnd.DTO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.apirest.TCBackEnd.Models.Agendamento;
+import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.StatusAgendamento;
 
 import lombok.AllArgsConstructor;
@@ -27,11 +30,14 @@ public class AgendamentoDTO {
 	private String obs;
 	private StatusAgendamento status;
 
+	static DataHora dataHora = new DataHora();
+
 	public static AgendamentoDTO agendamentoResposta(Agendamento agendamento) {
 		return new AgendamentoDTO(agendamento.getId(), UsuarioDTO.usuarioResposta(agendamento.getCliente()),
 				ServicoFuncionarioDTO.ServicoFuncionarioResposta(agendamento.getServicoFuncionario()),
-				String.valueOf(agendamento.getHorario()), String.valueOf(agendamento.getHorarioFim()),
-				agendamento.getNotificacao(), agendamento.getObs(),agendamento.getStatus());
+				dataHora.dateTimeEmString(agendamento.getHorario()),
+				dataHora.dateTimeEmString(agendamento.getHorarioFim()), agendamento.getNotificacao(),
+				agendamento.getObs(), agendamento.getStatus());
 	}
 
 	// Recebe uma lista de Agendamentos e transforma a lista para o formato de
