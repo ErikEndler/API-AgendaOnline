@@ -47,6 +47,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Autowired
 	DataHora datahora;
 
+	public List<String> listaStatus() {
+		StatusAgendamento[] statusS = StatusAgendamento.values();
+		List<String> listaStatus = new ArrayList<>();
+		for (StatusAgendamento status : statusS) {
+			listaStatus.add(status.name());
+		}
+		return listaStatus;
+	}
+
+	// metodo auxiliar timeLineFuncionario
 	private TimeLine adicionaLista(boolean situacao, String horaI, String horaF) {
 		TimeLine timeLine = new TimeLine();
 		timeLine.setHoraF(horaF);
@@ -64,8 +74,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		;
 
 		List<ItemEscala> listItemEscala = (List<ItemEscala>) itemEscalaRepository.findAllByEscalaId(escala.getId());
+		ServicoFuncionario servicoFuncionario = servicoFuncionarioRepository.findById(IdServicoiFuncionario).get();
 		List<Agendamento> listAgendamentos = repositorio.findByHorarioAndServicoFuncionario(datahora.stringEmData(data),
-				IdServicoiFuncionario);
+				servicoFuncionario.getFuncionario().getId());
+		System.out.println("-------- size " + listAgendamentos.size());
+
 		List<TimeLine> listaFinal = new ArrayList<>();
 		System.out.println("-------- size " + listAgendamentos.size());
 		if (listItemEscala.size() > 0) {

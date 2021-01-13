@@ -24,11 +24,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	RoleControle roleControle;
-	
-	
-	public List<Usuario> listarNaoClientes(){
+
+	public List<Usuario> listarNaoClientes() {
 		List<Usuario> funcionarios = repositorio.listarFuncionarios();
-		return funcionarios;		
+		return funcionarios;
 	}
 
 	// verifica existencia de usuarios cadastrados na inicializaçao do sistema
@@ -53,8 +52,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	public Optional<Usuario> listarPorCpf(String cpf) {
 		Optional<Usuario> retorno = repositorio.findByCpf(cpf);
-		retorno.orElseThrow(
-				() -> new ResourceNotFoundException("Usuario nao encontrado para o CPF: " + cpf));
+		retorno.orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado para o CPF: " + cpf));
 		return retorno;
 	}
 
@@ -83,8 +81,8 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	protected Usuario transformaEditar(UsuarioDTO usuarioDTO) {
 		return new Usuario(usuarioDTO.getId(), buscaRole(usuarioDTO.getRole()), usuarioDTO.getNome(),
-				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getSexo(),
-				usuarioDTO.getEmail(), senhaCripto(usuarioDTO, "edite"), usuarioDTO.getNotificacaoEmail(),
+				usuarioDTO.getCpf(), usuarioDTO.getTelefone(), usuarioDTO.getWhatsapp(), usuarioDTO.getEmail(),
+				usuarioDTO.getSexo(), senhaCripto(usuarioDTO, "edite"), usuarioDTO.getNotificacaoEmail(),
 				usuarioDTO.getNotificacaoWhatsapp());
 	}
 
@@ -105,7 +103,6 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		role.orElseThrow(() -> new ResourceNotFoundException(" ROLE informada esta com fotmato invalido !!"));
 		return role.get();
 	}
-
 
 	private void validaRole(UsuarioDTO dto) {
 		if (dto.getRole().isEmpty()) {

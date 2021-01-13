@@ -99,5 +99,10 @@ public class AgendamentoEndPoint {
 		agendamentoControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	@ApiOperation(value = "Retorna lista de Status dos Agendamentos")
+	@GetMapping("/listastatus")
+	public ResponseEntity<?> listaSTatus() {
+		return new ResponseEntity<>(agendamentoControle.listaStatus(), HttpStatus.OK);
+	}
 
 }

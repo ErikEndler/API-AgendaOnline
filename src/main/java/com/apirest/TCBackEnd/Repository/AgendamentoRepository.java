@@ -35,7 +35,6 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	@Query(value = "select * from agendamento "
 			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
 			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 order by horario", nativeQuery = true)
-
 	List<Agendamento> findByHorarioAndServicoFuncionario(LocalDate data, long idFuncionario);
 
 }

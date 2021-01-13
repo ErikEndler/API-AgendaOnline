@@ -38,7 +38,7 @@ public class UsuarioEndPoint {
 
 	@ApiOperation(value = "Retorna uma lista de Usuarios")
 	@GetMapping("")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> listarTodos() {
 		return new ResponseEntity<>(UsuarioDTO.listarResposta(usuarioControle.listarTodos()), HttpStatus.OK);
 	}
