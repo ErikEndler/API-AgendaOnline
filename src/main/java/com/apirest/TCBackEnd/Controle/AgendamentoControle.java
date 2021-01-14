@@ -3,7 +3,6 @@ package com.apirest.TCBackEnd.Controle;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -175,8 +174,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		verificaPreSave(dto);
-		dto.setStatus(StatusAgendamento.PENDENTE);
-		System.out.println("--STATUS : " + dto.getStatus());
+		if(dto.getStatus()==null) {
+			dto.setStatus(StatusAgendamento.PENDENTE);
+		}
 	}
 
 	@Override

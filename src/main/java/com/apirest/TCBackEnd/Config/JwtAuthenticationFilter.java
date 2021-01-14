@@ -1,16 +1,16 @@
 package com.apirest.TCBackEnd.Config;
 
+import static com.apirest.TCBackEnd.Config.JwtConfig.SECRET_KEY;
+import static com.apirest.TCBackEnd.Config.JwtConfig.TOKEN_EXPIRATION_TIME;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
-
-import static com.apirest.TCBackEnd.Config.JwtConfig.*;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

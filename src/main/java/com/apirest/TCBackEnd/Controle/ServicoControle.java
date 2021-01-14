@@ -88,5 +88,4 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	protected void posSalvar(Servico servico) {
 		// escalaControle.cadastraEscalasServico(servico.getId());
 	}
-
 }

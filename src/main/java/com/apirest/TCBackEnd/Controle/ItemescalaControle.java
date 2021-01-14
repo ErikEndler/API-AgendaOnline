@@ -130,5 +130,4 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 			throw new EntityNotFoundException("Escala com horario conflitante");
 		}
 	}
-
 }

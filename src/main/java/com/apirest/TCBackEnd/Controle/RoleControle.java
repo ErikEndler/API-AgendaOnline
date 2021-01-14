@@ -38,5 +38,4 @@ public class RoleControle {
 		roelRespository.save(role2);
 		System.out.println("Roles Inseridas !!");
 	}
-
 }

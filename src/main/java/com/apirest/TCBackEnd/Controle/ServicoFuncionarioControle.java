@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.ServicoFuncionarioDTO;
@@ -19,7 +17,6 @@ import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoFuncionarioRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
-import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class ServicoFuncionarioControle

@@ -3,8 +3,6 @@ package com.apirest.TCBackEnd.DTO;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.StatusAgendamento;
