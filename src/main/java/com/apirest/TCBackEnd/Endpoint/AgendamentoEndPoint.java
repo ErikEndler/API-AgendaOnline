@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apirest.TCBackEnd.Controle.AgendamentoControle;
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
 import com.apirest.TCBackEnd.Models.Agendamento;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -103,6 +104,12 @@ public class AgendamentoEndPoint {
 	@GetMapping("/listastatus")
 	public ResponseEntity<?> listaSTatus() {
 		return new ResponseEntity<>(agendamentoControle.listaStatus(), HttpStatus.OK);
+	}
+	@ApiOperation(value = "Retorna lista de agendamentos pelo status")
+	@GetMapping("/listaPorStatus")
+	public ResponseEntity<?> listaAgendamentoStatus(@RequestParam long funcionario, @RequestParam StatusAgendamento status) {
+		List<Agendamento> lista = agendamentoControle.listarAgendamentosPorStatus(funcionario, status);
+		return new ResponseEntity<>(AgendamentoDTO.listarResposta(lista), HttpStatus.OK);
 	}
 
 }

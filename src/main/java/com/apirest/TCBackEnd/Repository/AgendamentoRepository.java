@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.ItemEscala;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 
 public interface AgendamentoRepository extends CrudRepository<Agendamento, Long> {
 	Iterable<Agendamento> findAllByClienteId(long id);
@@ -36,5 +37,7 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
 			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 order by horario", nativeQuery = true)
 	List<Agendamento> findByHorarioAndServicoFuncionario(LocalDate data, long idFuncionario);
+	
+	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(long id, StatusAgendamento status);
 
 }

@@ -45,6 +45,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Autowired
 	DataHora datahora;
+	
+	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status){
+		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(id, status);		
+		return lista;		
+	}
 
 	public List<String> listaStatus() {
 		StatusAgendamento[] statusS = StatusAgendamento.values();
