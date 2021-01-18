@@ -100,15 +100,25 @@ public class AgendamentoEndPoint {
 		agendamentoControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna lista de Status dos Agendamentos")
 	@GetMapping("/listastatus")
 	public ResponseEntity<?> listaSTatus() {
 		return new ResponseEntity<>(agendamentoControle.listaStatus(), HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna lista de agendamentos pelo status")
 	@GetMapping("/listaPorStatus")
-	public ResponseEntity<?> listaAgendamentoStatus(@RequestParam long funcionario, @RequestParam StatusAgendamento status) {
+	public ResponseEntity<?> listaAgendamentoStatus(@RequestParam long funcionario,
+			@RequestParam StatusAgendamento status) {
 		List<Agendamento> lista = agendamentoControle.listarAgendamentosPorStatus(funcionario, status);
+		return new ResponseEntity<>(AgendamentoDTO.listarResposta(lista), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Retorna lista de agendamentos pelo status")
+	@GetMapping("/atendivel")
+	public ResponseEntity<?> listaAgendamentoStatusDia(@RequestParam long funcionario) {
+		List<Agendamento> lista = agendamentoControle.listarAgendamentosAtendiveisDia(funcionario);
 		return new ResponseEntity<>(AgendamentoDTO.listarResposta(lista), HttpStatus.OK);
 	}
 

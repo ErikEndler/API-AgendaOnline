@@ -45,10 +45,17 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Autowired
 	DataHora datahora;
-	
-	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status){
-		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(id, status);		
-		return lista;		
+
+	// Lista os agendamentos por status de um funcioanrio
+	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status) {
+		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(id, status);
+		return lista;
+	}
+
+	// Lista os atendimentos atendiveis do dia de um funcionario
+	public List<Agendamento> listarAgendamentosAtendiveisDia(long id) {
+		List<Agendamento> lista = repositorio.listarAgendamentosAtendiveis(LocalDate.now(), id);
+		return lista;
 	}
 
 	public List<String> listaStatus() {
@@ -179,7 +186,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
 		verificaPreSave(dto);
-		if(dto.getStatus()==null) {
+		if (dto.getStatus() == null) {
 			dto.setStatus(StatusAgendamento.PENDENTE);
 		}
 	}

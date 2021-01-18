@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.UsuarioDTO;
+import com.apirest.TCBackEnd.Email.ServiceEmail;
 import com.apirest.TCBackEnd.Models.Role;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.RoleRespository;
@@ -24,6 +25,9 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	RoleControle roleControle;
+	
+	@Autowired
+	ServiceEmail serviceEmail;
 
 	public List<Usuario> listarNaoClientes() {
 		List<Usuario> funcionarios = repositorio.listarFuncionarios();
@@ -38,7 +42,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 			System.out.println("Sistema não possui Usuarios cadastrados !!!");
 			System.out.println("Iniciando Incersao de Usuario default....");
 			cadastrarUsuarios();
-		}
+		}		
 	}
 
 	private void cadastrarUsuarios() {

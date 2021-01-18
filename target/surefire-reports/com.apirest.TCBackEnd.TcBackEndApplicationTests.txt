@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.apirest.TCBackEnd.TcBackEndApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.231 s - in com.apirest.TCBackEnd.TcBackEndApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 32.103 s - in com.apirest.TCBackEnd.TcBackEndApplicationTests

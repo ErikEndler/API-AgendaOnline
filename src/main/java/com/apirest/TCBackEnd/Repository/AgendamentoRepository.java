@@ -32,12 +32,20 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	@Query(value = "select * from agendamento where horario = ?1 order by horario ", nativeQuery = true)
 	List<Agendamento> agendamentosDia(LocalDate data);
 
-	// lista de agendamentos por dia e por funcionrio
+	// lista de agendamentos por dia e por funcionario
 	@Query(value = "select * from agendamento "
 			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
 			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 order by horario", nativeQuery = true)
 	List<Agendamento> findByHorarioAndServicoFuncionario(LocalDate data, long idFuncionario);
-	
+
+	// lista os agendamentos de um funcionario por status
 	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(long id, StatusAgendamento status);
+
+	// lista os agendamento que funcionario pode atender no dia
+	@Query(value = "select * from agendamento "
+			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
+			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 and status= 4"
+			+ " order by horario", nativeQuery = true)
+	List<Agendamento> listarAgendamentosAtendiveis(LocalDate data, long id);
 
 }
