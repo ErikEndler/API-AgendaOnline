@@ -1,8 +1,10 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AtendimentoDTO;
 import com.apirest.TCBackEnd.Models.Agendamento;
@@ -14,6 +16,7 @@ import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
 import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
+@Service
 public class AtendimentoControle extends GenericControl<Atendimento, AtendimentoDTO, AtendimentoRepository> {
 
 	@Autowired
@@ -22,6 +25,10 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	DataHora datahora;
+
+	public List<Atendimento> listarPorFuncionario(long id) {
+		return repositorio.findByFuncionarioId(id);
+	}
 
 	@Override
 	protected void verificaSalvar(AtendimentoDTO dto) {
