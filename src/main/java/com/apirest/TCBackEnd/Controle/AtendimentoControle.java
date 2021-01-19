@@ -26,6 +26,7 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	@Autowired
 	DataHora datahora;
 
+	// lista os atendimentos de um funcionario
 	public List<Atendimento> listarPorFuncionario(long id) {
 		return repositorio.findByFuncionarioId(id);
 	}

@@ -58,6 +58,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return lista;
 	}
 
+	// lista os status de agendamento do sistema
 	public List<String> listaStatus() {
 		StatusAgendamento[] statusS = StatusAgendamento.values();
 		List<String> listaStatus = new ArrayList<>();

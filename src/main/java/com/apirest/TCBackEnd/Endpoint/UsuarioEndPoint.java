@@ -1,6 +1,7 @@
 package com.apirest.TCBackEnd.Endpoint;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Controle.UsuarioControle;
@@ -37,7 +39,7 @@ public class UsuarioEndPoint {
 
 	@ApiOperation(value = "Retorna uma lista de Usuarios")
 	@GetMapping("")
-	//@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> listarTodos() {
 		return new ResponseEntity<>(UsuarioDTO.listarResposta(usuarioControle.listarTodos()), HttpStatus.OK);
 	}
@@ -48,6 +50,7 @@ public class UsuarioEndPoint {
 		Optional<Usuario> user = usuarioControle.listar(id);
 		return new ResponseEntity<>(UsuarioDTO.usuarioResposta(user.get()), HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "Retorna um Usuario unico pelo CPF")
 	@GetMapping("/cpf/{cpf}")
 	public ResponseEntity<?> listarCpf(@PathVariable(value = "cpf") long id) {
@@ -75,12 +78,25 @@ public class UsuarioEndPoint {
 		usuarioControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Retorna lista de funcionarios")
 	@GetMapping("/funcionarios")
 	public ResponseEntity<?> listarFuncionarios() {
-		List<Usuario>lista = usuarioControle.listarNaoClientes();
+		List<Usuario> lista = usuarioControle.listarNaoClientes();
 		return new ResponseEntity<>(UsuarioDTO.listarResposta(lista), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Redefine a senha do usuario")
+	@PostMapping("/recuperarSenha")
+	public ResponseEntity<?> redefinirSenha(@RequestBody Map<String, String> requestParams) {
+		//usuarioControle.trocarSenha(cpf, email);
+	    String cpf = requestParams.get("cpf");
+	    String email = requestParams.get("email");
+
+
+		System.out.println("cpf :"+cpf);
+		System.out.println("email : "+email);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 }

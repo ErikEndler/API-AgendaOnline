@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -25,10 +26,36 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	RoleControle roleControle;
-	
+
 	@Autowired
 	ServiceEmail serviceEmail;
 
+	// metodo para criar nova senha
+	public void trocarSenha(String cpf, String email) {
+		Usuario usuario = listarPorCpf(cpf).get();
+		if (usuario.getEmail() != email) {
+			new ResourceNotFoundException("Email não coencide");
+		}
+		String novaSenha = novaSenha();
+		salvaNovaSenha(novaSenha, usuario);
+	}
+
+	// metodo q gera uma numeraçao para nova senha
+	private String novaSenha() {
+		Random random = new Random();
+		int numeroInteiroAleatorio = random.nextInt((9000000 - 100000) + 1) + 100000;
+		String novaSenha = String.valueOf(numeroInteiroAleatorio);
+		return novaSenha;
+	}
+
+	// salva nova senha criptografada
+	private void salvaNovaSenha(String novaSenha, Usuario user) {
+		String senhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
+		user.setSenha(senhaCriptografada);
+		repositorio.save(user);
+	}
+
+	// lista usuarios que nao sao da role 'ROLE_USER'
 	public List<Usuario> listarNaoClientes() {
 		List<Usuario> funcionarios = repositorio.listarFuncionarios();
 		return funcionarios;
@@ -42,9 +69,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 			System.out.println("Sistema não possui Usuarios cadastrados !!!");
 			System.out.println("Iniciando Incersao de Usuario default....");
 			cadastrarUsuarios();
-		}		
+		}
 	}
 
+	// cadastra um usuario padrao admin no banco
 	private void cadastrarUsuarios() {
 		Usuario usuario = new Usuario();
 		usuario.setCpf("99999999999");
@@ -54,6 +82,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		repositorio.save(usuario);
 	}
 
+	// Busca um cliente pelo cpf
 	public Optional<Usuario> listarPorCpf(String cpf) {
 		Optional<Usuario> retorno = repositorio.findByCpf(cpf);
 		retorno.orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado para o CPF: " + cpf));
@@ -90,12 +119,13 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 				usuarioDTO.getNotificacaoWhatsapp());
 	}
 
+	// auxilia na ediçao de um usuario para n perder a senha ou salvar errado
 	private String senhaCripto(UsuarioDTO usuarioDTO, String strings) {
 		if (strings.equals("edite")) {
-			Usuario old = verificaExiste(usuarioDTO.getId()).get();
-			if (old.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha().isEmpty()) {
+			Usuario oldUser = verificaExiste(usuarioDTO.getId()).get();
+			if (oldUser.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha().isEmpty()) {
 				System.out.println("entrou no sdegundo if");
-				return old.getSenha();
+				return oldUser.getSenha();
 			}
 		}
 		String senha = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
