@@ -17,15 +17,15 @@ import lombok.Setter;
 public class AtendimentoDTO {
 	private long id;
 
-	private long agendamento;
+	private AgendamentoDTO agendamento;
 
-	private long funcionario;
+	private UsuarioDTO funcionario;
 	private String inicio;
 	private String fim;
 
 	public static AtendimentoDTO atendimentoResposta(Atendimento atendimento) {
-		return new AtendimentoDTO(atendimento.getId(), atendimento.getAgendamento().getId(),
-				atendimento.getFuncionario().getId(), String.valueOf(atendimento.getInicio()),
+		return new AtendimentoDTO(atendimento.getId(), AgendamentoDTO.agendamentoResposta(atendimento.getAgendamento()),
+				UsuarioDTO.usuarioResposta(atendimento.getFuncionario()), String.valueOf(atendimento.getInicio()),
 				String.valueOf(atendimento.getFim()));
 	}
 

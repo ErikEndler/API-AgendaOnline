@@ -14,6 +14,7 @@ import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.AtendimentoRepository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
@@ -33,15 +34,16 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 
 	@Override
 	protected void verificaSalvar(AtendimentoDTO dto) {
-		verificaAgendamento(dto.getAgendamento());
-		verificaFuncionario(dto.getFuncionario());
+		verificaAgendamento(dto.getAgendamento().getId());
+		verificaFuncionario(dto.getFuncionario().getId());
+		verificaStatus(dto);
 	}
 
 	@Override
 	protected Atendimento verificUpdate(AtendimentoDTO dto) {
 		Atendimento retorno = verificaExixte(dto.getId()).get();
-		verificaAgendamento(dto.getAgendamento());
-		verificaFuncionario(dto.getFuncionario());
+		verificaAgendamento(dto.getAgendamento().getId());
+		verificaFuncionario(dto.getFuncionario().getId());
 		return retorno;
 	}
 
@@ -64,14 +66,15 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 
 	@Override
 	protected Atendimento transformaSalvar(AtendimentoDTO dto) {
-		return new Atendimento(verificaAgendamento(dto.getAgendamento()), verificaFuncionario(dto.getFuncionario()),
-				datahora.stringemDateTime(dto.getInicio()), datahora.stringemDateTime(dto.getFim()));
+		return new Atendimento(verificaAgendamento(dto.getAgendamento().getId()),
+				verificaFuncionario(dto.getFuncionario().getId()), datahora.stringemDateTime(dto.getInicio()),
+				datahora.stringemDateTime(dto.getFim()));
 	}
 
 	@Override
 	protected Atendimento transformaEditar(AtendimentoDTO dto) {
-		return new Atendimento(dto.getId(), verificaAgendamento(dto.getAgendamento()),
-				verificaFuncionario(dto.getFuncionario()), datahora.stringemDateTime(dto.getInicio()),
+		return new Atendimento(dto.getId(), verificaAgendamento(dto.getAgendamento().getId()),
+				verificaFuncionario(dto.getFuncionario().getId()), datahora.stringemDateTime(dto.getInicio()),
 				datahora.stringemDateTime(dto.getFim()));
 	}
 
@@ -81,7 +84,13 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 		return msg;
 	}
 
-	// --------------------------------
+	// --------------------------------METODOS AUXULIARES-------------
+	private void verificaStatus(AtendimentoDTO dto) {
+		if (!dto.getAgendamento().getStatus().equals(StatusAgendamento.AGENDADO)) {
+			throw new ResourceNotFoundException("Agendamento não pode ser atendido status ≠ de AGENDADO!");
+		}
+	}
+
 	private Optional<Atendimento> verificaExixte(long id) {
 		Optional<Atendimento> atendimento = repositorio.findById(id);
 		atendimento
@@ -106,8 +115,9 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 
 	@Override
 	protected void posSalvar(Atendimento modelo) {
-		// TODO Auto-generated method stub
-
+		modelo.getAgendamento().setStatus(StatusAgendamento.ATENDIDO);
+		agendamentoRepository.save(modelo.getAgendamento());
+		System.out.println("STATUS : "+modelo.getAgendamento().getStatus());
 	}
 
 }
