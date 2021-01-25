@@ -1,5 +1,7 @@
 package com.apirest.TCBackEnd.Endpoint;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,13 @@ public class AtendimentoEndPoint {
 		return new ResponseEntity<>(AtendimentoDTO.listarResposta(atendimentoControle.listarTodos()), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorna um atendimento unico pelo ID")
+	@GetMapping("/{id}")
+	public ResponseEntity<?> listar(@PathVariable(value = "id") long id) {
+		Optional<Atendimento> atendimento = atendimentoControle.listar(id);
+		return new ResponseEntity<>(AtendimentoDTO.atendimentoResposta(atendimento.get()), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Retorna uma lista de Atendimentos por Funcionario")
 	@GetMapping("/funcionario/{id}")
 	public ResponseEntity<?> listarPorCliente(@PathVariable(value = "id") long id) {
@@ -44,14 +53,14 @@ public class AtendimentoEndPoint {
 				HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Salva uma Atendimento")
+	@ApiOperation(value = "Salva um Atendimento")
 	@PostMapping("")
 	public ResponseEntity<?> salvar(@RequestBody @Valid AtendimentoDTO atendimentoDTO) {
 		Atendimento atendimento = atendimentoControle.salvar(atendimentoDTO);
 		return new ResponseEntity<>(AtendimentoDTO.atendimentoResposta(atendimento), HttpStatus.CREATED);
 	}
 
-	@ApiOperation(value = "Edita uma Atendimento")
+	@ApiOperation(value = "Edita um Atendimento")
 	@PutMapping("")
 	public ResponseEntity<?> editar(@RequestBody @Valid AtendimentoDTO atendimentoDTO) {
 		Atendimento atendimento = atendimentoControle.salvar(atendimentoDTO);

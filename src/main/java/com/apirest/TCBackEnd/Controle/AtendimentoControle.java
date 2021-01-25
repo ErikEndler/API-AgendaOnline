@@ -55,8 +55,8 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	@Override
 	protected void verificaList(long id) {
 		verificaExixte(id);
-		verificaAgendamento(id);
-		verificaFuncionario(id);
+		//verificaAgendamento(id);
+		//verificaFuncionario(id);
 	}
 
 	@Override
