@@ -9,18 +9,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AvaliacaoDTO {
 	private long id;
 	private AtendimentoDTO atendimento;
 	private int notaCliente;
 	private int notaFuncionario;
 	private String obsCliente;
-	private String obsuncionario;
+	private String obsFuncionario;
 
 	public static AvaliacaoDTO avaliacaoResposta(Avaliacao avaliacao) {
 		return new AvaliacaoDTO(avaliacao.getId(), AtendimentoDTO.atendimentoResposta(avaliacao.getAtendimento()),

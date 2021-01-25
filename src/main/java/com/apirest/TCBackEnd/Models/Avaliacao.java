@@ -26,5 +26,17 @@ public class Avaliacao {
 	private int notaFuncionario;
 	private String obsCliente;
 	private String obsuncionario;
+	
+	public Avaliacao(Atendimento atendimento, int notaCliente, int notaFuncionario, String obsCliente,
+			String obsuncionario) {
+		super();
+		this.atendimento = atendimento;
+		this.notaCliente = notaCliente;
+		this.notaFuncionario = notaFuncionario;
+		this.obsCliente = obsCliente;
+		this.obsuncionario = obsuncionario;
+	}
+	
+	
 
 }

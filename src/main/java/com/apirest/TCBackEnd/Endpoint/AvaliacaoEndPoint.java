@@ -46,9 +46,17 @@ public class AvaliacaoEndPoint {
 		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao.get()), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorna uma Avaliação unica pelo ID do atendimento")
+	@GetMapping("/atendimento/{id}")
+	public ResponseEntity<?> listarPorAtendimento(@PathVariable(value = "id") long id) {
+		Avaliacao avaliacao = avaliacaoControle.findByAtendimento(id);
+		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Salva uma Avaliação")
 	@PostMapping("")
 	public ResponseEntity<?> salvar(@RequestBody @Valid AvaliacaoDTO avaliacaoDTO) {
+		System.out.println("avaliacaoDTO : " + avaliacaoDTO.toString());
 		Avaliacao avaliacao = avaliacaoControle.salvar(avaliacaoDTO);
 		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.CREATED);
 	}
@@ -56,7 +64,7 @@ public class AvaliacaoEndPoint {
 	@ApiOperation(value = "Edita uma Avaliação")
 	@PutMapping("")
 	public ResponseEntity<?> editar(@RequestBody @Valid AvaliacaoDTO avaliacaoDTO) {
-		Avaliacao avaliacao = avaliacaoControle.salvar(avaliacaoDTO);
+		Avaliacao avaliacao = avaliacaoControle.editar(avaliacaoDTO);
 		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.ACCEPTED);
 	}
 

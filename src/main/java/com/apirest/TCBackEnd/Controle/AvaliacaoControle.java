@@ -22,7 +22,6 @@ public class AvaliacaoControle extends GenericControl<Avaliacao, AvaliacaoDTO, A
 	@Override
 	protected void verificaSalvar(AvaliacaoDTO dto) {
 		verificaAtendimento(dto.getAtendimento().getId());
-
 	}
 
 	@Override
@@ -50,21 +49,25 @@ public class AvaliacaoControle extends GenericControl<Avaliacao, AvaliacaoDTO, A
 
 	@Override
 	protected Avaliacao transformaSalvar(AvaliacaoDTO dto) {
-		return null;
+		return new Avaliacao(verificaAtendimento(dto.getAtendimento().getId()), dto.getNotaCliente(),
+				dto.getNotaFuncionario(), dto.getObsCliente(), dto.getObsFuncionario());
 	}
 
 	@Override
 	protected Avaliacao transformaEditar(AvaliacaoDTO dto) {
-		// TODO Auto-generated method stub
 		return new Avaliacao(dto.getId(), verificaAtendimento(dto.getAtendimento().getId()), dto.getNotaCliente(),
-				dto.getNotaFuncionario(), dto.getObsCliente(), dto.getObsuncionario());
+				dto.getNotaFuncionario(), dto.getObsCliente(), dto.getObsFuncionario());
 	}
 
 	@Override
 	protected void posSalvar(Avaliacao avaliacao) {
 		Optional<Atendimento> atendimento = atendimentoRepository.findById(avaliacao.getAtendimento().getId());
-		atendimento.get().setAvaliacao(avaliacao);	
+		atendimento.get().setAvaliacao(avaliacao);
 		atendimentoRepository.save(atendimento.get());
+	}
+
+	public Avaliacao findByAtendimento(long id) {
+		return repositorio.findByAtendimentoId(id).get();
 	}
 
 	// -------------------------AUXILIARES---------------------------------
