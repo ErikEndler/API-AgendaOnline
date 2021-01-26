@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
@@ -31,8 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().cors().and()  //	
-				
+		http.csrf().disable().cors().and() //
+
 				.sessionManagement() //
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS) //
 				.and() //
@@ -40,8 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilter(new JwtAuthorizationFilter(authenticationManager(), myUserDetailsService))
 				.authorizeRequests() //
 				.antMatchers(publicEndPoints()).permitAll() //
-				.antMatchers(HttpMethod.GET).permitAll()
-				.antMatchers(HttpMethod.POST).permitAll()
+				.antMatchers(HttpMethod.GET).permitAll().antMatchers(HttpMethod.POST).permitAll()
 
 				.anyRequest().authenticated();
 	}
@@ -55,6 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new String[] { "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**", "/error/**",
 				"/h2-console/**", "/resources/**", "/v2/rest-docs", "/v2/api-docs", "/swagger-resources/configuration",
 				"/swagger-resources", "/**.html", "/webjars/**", "/login", "/csrf", "/" };
+	}
+
+	public void teste() {
+		String teste = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("teste = " + teste);
 	}
 
 }

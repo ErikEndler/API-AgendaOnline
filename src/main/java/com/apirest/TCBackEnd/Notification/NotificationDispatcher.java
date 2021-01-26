@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 
 @Service
 public class NotificationDispatcher {
-	
+
 	// https://github.com/codesandnotes/spring-websockets-notification-system
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationDispatcher.class);
@@ -23,6 +24,7 @@ public class NotificationDispatcher {
 	private final SimpMessagingTemplate template;
 
 	private Set<String> listeners = new HashSet<>();
+	private Set<String> listeners2 = new HashSet<>();
 
 	public NotificationDispatcher(SimpMessagingTemplate template) {
 		this.template = template;
@@ -45,11 +47,31 @@ public class NotificationDispatcher {
 			headerAccessor.setSessionId(listener);
 			headerAccessor.setLeaveMutable(true);
 
+			System.out.println("SecurityContextHolder.getContext().getAuthentication().getName() = "
+					+ SecurityContextHolder.getContext().getAuthentication().getName());
 			int value = (int) Math.round(Math.random() * 100d);
-			String msgG="TESTE DE MSG ERIK " +listener;
+			String msgG = "TESTE DE MSG ERIK " + listener;
 			template.convertAndSendToUser(listener, "/notification/item", new Notification(msgG),
 					headerAccessor.getMessageHeaders());
 		}
+	}
+
+	public void add2(String cpf) {
+		listeners2.add(cpf);
+	}
+
+	public void remove2(String cpf) {
+		listeners2.remove(cpf);
+	}
+
+	public void enviarMSG(String cpf, String msg) {
+		LOGGER.info("Sending notification to " + cpf);
+		SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+		headerAccessor.setSessionId(cpf);
+		headerAccessor.setLeaveMutable(true);
+
+		template.convertAndSendToUser(cpf, "/notification/" + cpf, new Notification(msg),
+				headerAccessor.getMessageHeaders());
 	}
 
 	@EventListener

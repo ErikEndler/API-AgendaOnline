@@ -9,15 +9,19 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.apirest.TCBackEnd.Config.SecurityConfig;
 import com.apirest.TCBackEnd.Models.Usuario;
 
 @Controller
 @CrossOrigin(origins = "*")
 
 public class NotificationsController {
+	@Autowired
+	SecurityConfig securityConfig;
 
 	private final NotificationDispatcher dispatcher;
 
@@ -31,28 +35,34 @@ public class NotificationsController {
 		dispatcher.add(stompHeaderAccessor.getSessionId());
 		System.out.println("stompHeaderAccessor.getSessionId() : " + stompHeaderAccessor.getSessionId());
 		dispatcher.dispatch();
-		System.out.println("METODO PEGAR USUARIO : "+pegar()); 
-
 	}
 
 	@MessageMapping("/stop")
 	public void stop(StompHeaderAccessor stompHeaderAccessor) {
 		dispatcher.remove(stompHeaderAccessor.getSessionId());
-
 	}
 
-	public Usuario pegar() {
-		Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+	@MessageMapping("/start2")
+	public void start2() {
+		// Object principal =
+		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (authentication != null) {
-			Object obj = authentication.getPrincipal();
+		// System.out.println("principal.getName() = "+principal.getName());
+		securityConfig.teste();
+		// dispatcher.add2(cpf);
 
-			if (obj instanceof Usuario) {
-				return (Usuario) obj;
-			}
-		}
-		return null;
-
+		// System.out.println("SecurityContextHolder.getContext().getAuthentication().getName()
+		// : "
+		// + SecurityContextHolder.getContext().getAuthentication().getName());
+		// dispatcher.enviarMSG(cpf, "seu cpf é : " + cpf);
+		;
 	}
+
+	@MessageMapping("/stop2")
+	public void stop2() {
+		dispatcher.remove2(SecurityContextHolder.getContext().getAuthentication().getName());
+	}
+	
+	
 
 }

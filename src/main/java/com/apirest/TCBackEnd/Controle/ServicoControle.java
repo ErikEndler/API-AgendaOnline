@@ -2,12 +2,20 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.apirest.TCBackEnd.DTO.ServicoDTO;
 import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
+import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
@@ -87,5 +95,16 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	@Override
 	protected void posSalvar(Servico servico) {
 		// escalaControle.cadastraEscalasServico(servico.getId());
+	}
+
+	public void pegar() {
+		Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("SecurityContextHolder.getContext().getAuthentication().getName()= "
+				+ SecurityContextHolder.getContext().getAuthentication().getName());
+		System.out.println("SecurityContextHolder.getContext().getAuthentication() " + authentication);
+		System.out.println(" RequestContextHolder.currentRequestAttributes().getSessionId() : "
+				+ RequestContextHolder.currentRequestAttributes().getSessionId());
+		System.out.println("RequestContextHolder.getRequestAttributes().getSessionId() : "
+				+ RequestContextHolder.getRequestAttributes().getSessionId());
 	}
 }

@@ -11,7 +11,6 @@ import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 
 @Component
-
 public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
