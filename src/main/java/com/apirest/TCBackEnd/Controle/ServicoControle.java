@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import com.apirest.TCBackEnd.DTO.ServicoDTO;
 import com.apirest.TCBackEnd.Models.Categoria;
 import com.apirest.TCBackEnd.Models.Servico;
 import com.apirest.TCBackEnd.Models.Usuario;
+import com.apirest.TCBackEnd.Notification.NotificationDispatcher;
 import com.apirest.TCBackEnd.Repository.CategoriaRepository;
 import com.apirest.TCBackEnd.Repository.ServicoRepository;
 import com.apirest.TCBackEnd.Util.DataHora;
@@ -30,6 +32,8 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	EscalaControle escalaControle;
 	@Autowired
 	DataHora dataHora;
+	@Autowired
+	NotificationDispatcher NotificationDispatcher;
 
 	@Override
 	protected void verificaSalvar(ServicoDTO dto) {
@@ -46,6 +50,10 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	@Override
 	protected void verificaListAll() {
 		// TODO Auto-generated method stub
+		
+		NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(), "metodo listar todos");
+		NotificationDispatcher.dispatch();
+		
 
 	}
 

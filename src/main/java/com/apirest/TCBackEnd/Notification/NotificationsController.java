@@ -1,20 +1,14 @@
 package com.apirest.TCBackEnd.Notification;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.apirest.TCBackEnd.Config.SecurityConfig;
-import com.apirest.TCBackEnd.Models.Usuario;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -34,7 +28,7 @@ public class NotificationsController {
 	public void start(StompHeaderAccessor stompHeaderAccessor) {
 		dispatcher.add(stompHeaderAccessor.getSessionId());
 		System.out.println("stompHeaderAccessor.getSessionId() : " + stompHeaderAccessor.getSessionId());
-		dispatcher.dispatch();
+		//dispatcher.dispatch();
 	}
 
 	@MessageMapping("/stop")
@@ -43,12 +37,11 @@ public class NotificationsController {
 	}
 
 	@MessageMapping("/start2")
-	public void start2() {
-		// Object principal =
-		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+	public void start2(Authentication auth) {
+		System.out.println("auth.getName() = "+auth.getName());
+		
 		// System.out.println("principal.getName() = "+principal.getName());
-		securityConfig.teste();
+		//securityConfig.teste();
 		// dispatcher.add2(cpf);
 
 		// System.out.println("SecurityContextHolder.getContext().getAuthentication().getName()
