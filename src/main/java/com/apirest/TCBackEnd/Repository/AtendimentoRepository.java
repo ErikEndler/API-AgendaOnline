@@ -8,5 +8,7 @@ import com.apirest.TCBackEnd.Models.Atendimento;
 
 public interface AtendimentoRepository extends CrudRepository<Atendimento, Long>{
 	List<Atendimento> findByFuncionarioId(long id);
+	
+	Atendimento findByAgendamentoId(long id);
 
 }

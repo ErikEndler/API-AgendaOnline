@@ -31,6 +31,10 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	public List<Atendimento> listarPorFuncionario(long id) {
 		return repositorio.findByFuncionarioId(id);
 	}
+	public Atendimento findByAgendamento(long id) {
+		
+		return repositorio.findByAgendamentoId(id);		
+	}
 
 	@Override
 	protected void verificaSalvar(AtendimentoDTO dto) {

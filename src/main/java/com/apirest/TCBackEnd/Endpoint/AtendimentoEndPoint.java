@@ -48,8 +48,15 @@ public class AtendimentoEndPoint {
 
 	@ApiOperation(value = "Retorna uma lista de Atendimentos por Funcionario")
 	@GetMapping("/funcionario/{id}")
-	public ResponseEntity<?> listarPorCliente(@PathVariable(value = "id") long id) {
+	public ResponseEntity<?> listarPorFuncionario(@PathVariable(value = "id") long id) {
 		return new ResponseEntity<>(AtendimentoDTO.listarResposta(atendimentoControle.listarPorFuncionario(id)),
+				HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Retorna um Atendimentos de um Agendamento")
+	@GetMapping("/agendamento/{id}")
+	public ResponseEntity<?> listarPorAgendamento(@PathVariable(value = "id") long id) {
+		return new ResponseEntity<>(AtendimentoDTO.atendimentoResposta(atendimentoControle.findByAgendamento(id)),
 				HttpStatus.OK);
 	}
 

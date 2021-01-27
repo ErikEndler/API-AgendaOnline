@@ -18,7 +18,8 @@ import java.util.Set;
 public class NotificationDispatcher {
 
 	// https://github.com/codesandnotes/spring-websockets-notification-system
-	// opçao 2 https://www.stackextend.com/angular/websocket-with-spring-boot-and-angular/
+	// opçao 2
+	// https://www.stackextend.com/angular/websocket-with-spring-boot-and-angular/
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationDispatcher.class);
 
@@ -48,7 +49,6 @@ public class NotificationDispatcher {
 			headerAccessor.setSessionId(listener);
 			headerAccessor.setLeaveMutable(true);
 
-			
 			int value = (int) Math.round(Math.random() * 100d);
 			String msgG = "TESTE DE MSG ERIK " + listener;
 			template.convertAndSendToUser(listener, "/notification/item", new Notification(msgG),
@@ -65,13 +65,10 @@ public class NotificationDispatcher {
 	}
 
 	public void enviarMSG(String cpf, String msg) {
-		LOGGER.info("Sending notification to " + cpf);
-		SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-		headerAccessor.setSessionId(cpf);
-		headerAccessor.setLeaveMutable(true);
+		LOGGER.info("Sending notification to " + cpf);		
 
-		template.convertAndSendToUser(cpf, "/notification/item", new Notification(msg),
-				headerAccessor.getMessageHeaders());
+		//template.convertAndSendToUser(cpf, "/notification/item", new Notification(msg));
+		template.convertAndSend("/notification/"+cpf, new Notification(msg));
 	}
 
 	@EventListener

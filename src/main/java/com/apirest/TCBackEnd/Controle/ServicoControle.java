@@ -51,9 +51,8 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 	protected void verificaListAll() {
 		// TODO Auto-generated method stub
 		
-		NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(), "metodo listar todos");
-		NotificationDispatcher.dispatch();
-		
+		NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(), "metodo listar todos Serviços");
+		//NotificationDispatcher.dispatch();	
 
 	}
 

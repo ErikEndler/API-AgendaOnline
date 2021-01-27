@@ -2,22 +2,29 @@ package com.apirest.TCBackEnd.Notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Config.SecurityConfig;
 
-@Controller
+@RestController
 @CrossOrigin(origins = "*")
 
 public class NotificationsController {
+	
 	@Autowired
 	SecurityConfig securityConfig;
 
 	private final NotificationDispatcher dispatcher;
+	
+	@Autowired
+    private SimpMessagingTemplate template;
 
 	@Autowired
 	public NotificationsController(NotificationDispatcher dispatcher) {
@@ -56,6 +63,13 @@ public class NotificationsController {
 		dispatcher.remove2(SecurityContextHolder.getContext().getAuthentication().getName());
 	}
 	
-	
+	@GetMapping("/notify")
+    public String getNotification() {        
+
+        // Push notifications to front-end
+        template.convertAndSend("/notification", "Msg a ser enviada");
+
+        return "Notifications successfully sent to Angular !";
+    }
 
 }
