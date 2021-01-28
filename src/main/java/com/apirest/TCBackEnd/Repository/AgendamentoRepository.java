@@ -22,6 +22,11 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	@Query(value = "select count(*) from agendamento"
 			+ " where servico_funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario", nativeQuery = true)
 	int countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long servicoFuncionario_id);
+	
+	@Query(value = "select count(*) from agendamento"
+			+ " where servico_funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario "
+			+ " and agendamento.id not in (?4)", nativeQuery = true)
+	int countChoquesEdit(LocalDateTime dataInicial, LocalDateTime datafinal, long servicoFuncionario_id, long idAgendamento);
 
 	@Query(value = "select item_escala.* from item_escala " + "join escala on escala.id = item_escala.escala_id "
 			+ "join servico on servico.id = escala.servico_id "
@@ -39,7 +44,7 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	List<Agendamento> findByHorarioAndServicoFuncionario(LocalDate data, long idFuncionario);
 
 	// lista os agendamentos de um funcionario por status
-	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(long id, StatusAgendamento status);
+	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(long id, StatusAgendamento status);
 
 	// lista os agendamento que funcionario pode atender no dia
 	@Query(value = "select * from agendamento "

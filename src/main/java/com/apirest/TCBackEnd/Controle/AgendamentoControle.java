@@ -48,7 +48,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	// Lista os agendamentos por status de um funcioanrio
 	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status) {
-		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorario(id, status);
+		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(id, status);
 		return lista;
 	}
 
@@ -197,6 +197,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		Agendamento agendamento = verificaExixte(dto.getId()).get();
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
+		verificaPreEdit(dto);
 		return agendamento;
 	}
 
@@ -282,6 +283,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		}
 		// }
 	}
+	private void verificaPreEdit(AgendamentoDTO dto) {
+		// if (verificaDisponibilidadeGeral(dto) == true) {
+		if (verificaEscala(dto) == true) {
+			verificaHorarioEdit(dto);
+		}
+		// }
+	}
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
 		DayOfWeek day = datahora.stringemDateTime(dto.getHorarioInicio()).getDayOfWeek();
@@ -301,6 +309,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	private void verificaHorario(AgendamentoDTO dto) {
 		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getId());
+		if (qtd > 0) {
+			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
+		}
+	}
+	private void verificaHorarioEdit(AgendamentoDTO dto) {
+		int qtd = repositorio.countChoquesEdit(datahora.stringemDateTime(dto.getHorarioInicio()),
+				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getId(),dto.getId());
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}
