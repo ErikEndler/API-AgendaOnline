@@ -48,7 +48,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	// Lista os agendamentos por status de um funcioanrio
 	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status) {
-		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(id, status);
+		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(id,
+				status);
 		return lista;
 	}
 
@@ -288,6 +289,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 			verificaHorarioEdit(dto);
 		}
 	}
+
 	private void verificaPreEdit(AgendamentoDTO dto) {
 		// if (verificaDisponibilidadeGeral(dto) == true) {
 		if (verificaEscala(dto) == true) {
@@ -323,13 +325,6 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		int qtd = repositorio.countChoquesEdit(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId(),
 				dto.getId());
-		if (qtd > 0) {
-			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
-		}
-	}
-	private void verificaHorarioEdit(AgendamentoDTO dto) {
-		int qtd = repositorio.countChoquesEdit(datahora.stringemDateTime(dto.getHorarioInicio()),
-				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getId(),dto.getId());
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}
