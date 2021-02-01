@@ -1,30 +1,36 @@
 package com.apirest.TCBackEnd.Notification;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.TCBackEnd.Config.SecurityConfig;
+import com.apirest.TCBackEnd.DTO.ServicoDTO;
 
 @RestController
 @CrossOrigin(origins = "*")
 
 public class NotificationsController {
-	
+
 	@Autowired
 	SecurityConfig securityConfig;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationDispatcher.class);
+
 	private final NotificationDispatcher dispatcher;
-	
+
 	@Autowired
-    private SimpMessagingTemplate template;
+	private SimpMessagingTemplate template;
 
 	@Autowired
 	public NotificationsController(NotificationDispatcher dispatcher) {
@@ -35,7 +41,7 @@ public class NotificationsController {
 	public void start(StompHeaderAccessor stompHeaderAccessor) {
 		dispatcher.add(stompHeaderAccessor.getSessionId());
 		System.out.println("stompHeaderAccessor.getSessionId() : " + stompHeaderAccessor.getSessionId());
-		//dispatcher.dispatch();
+		// dispatcher.dispatch();
 	}
 
 	@MessageMapping("/stop")
@@ -43,33 +49,12 @@ public class NotificationsController {
 		dispatcher.remove(stompHeaderAccessor.getSessionId());
 	}
 
-	@MessageMapping("/start2")
-	public void start2(Authentication auth) {
-		System.out.println("auth.getName() = "+auth.getName());
-		
-		// System.out.println("principal.getName() = "+principal.getName());
-		//securityConfig.teste();
-		// dispatcher.add2(cpf);
+	@GetMapping("/subscribe/notification")
+	public ResponseEntity<?> getNotification() {
+		LOGGER.info(SecurityContextHolder.getContext().getAuthentication().getName());
+		dispatcher.add2(SecurityContextHolder.getContext().getAuthentication().getName());
 
-		// System.out.println("SecurityContextHolder.getContext().getAuthentication().getName()
-		// : "
-		// + SecurityContextHolder.getContext().getAuthentication().getName());
-		// dispatcher.enviarMSG(cpf, "seu cpf é : " + cpf);
-		;
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
-	@MessageMapping("/stop2")
-	public void stop2() {
-		dispatcher.remove2(SecurityContextHolder.getContext().getAuthentication().getName());
-	}
-	
-	@GetMapping("/notify")
-    public String getNotification() {        
-
-        // Push notifications to front-end
-        template.convertAndSend("/notification", "Msg a ser enviada");
-
-        return "Notifications successfully sent to Angular !";
-    }
 
 }

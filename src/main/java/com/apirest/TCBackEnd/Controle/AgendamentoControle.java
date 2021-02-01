@@ -194,6 +194,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected Agendamento verificUpdate(AgendamentoDTO dto) {
+		verificaPreUpdate(dto);
 		Agendamento agendamento = verificaExixte(dto.getId()).get();
 		verificaCliente(dto.getCliente().getId());
 		verificaServicoFuncionario(dto.getServicoFuncionario().getId());
@@ -277,11 +278,15 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void verificaPreSave(AgendamentoDTO dto) {
-		// if (verificaDisponibilidadeGeral(dto) == true) {
 		if (verificaEscala(dto) == true) {
 			verificaHorario(dto);
 		}
-		// }
+	}
+
+	private void verificaPreUpdate(AgendamentoDTO dto) {
+		if (verificaEscala(dto) == true) {
+			verificaHorarioEdit(dto);
+		}
 	}
 	private void verificaPreEdit(AgendamentoDTO dto) {
 		// if (verificaDisponibilidadeGeral(dto) == true) {
@@ -308,7 +313,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private void verificaHorario(AgendamentoDTO dto) {
 		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorarioInicio()),
-				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getId());
+				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId());
+		if (qtd > 0) {
+			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
+		}
+	}
+
+	private void verificaHorarioEdit(AgendamentoDTO dto) {
+		int qtd = repositorio.countChoquesEdit(datahora.stringemDateTime(dto.getHorarioInicio()),
+				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId(),
+				dto.getId());
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}

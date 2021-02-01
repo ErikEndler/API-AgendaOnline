@@ -88,9 +88,10 @@ public class UsuarioEndPoint {
 	@ApiOperation(value = "Redefine a senha do usuario")
 	@PostMapping("/recuperarSenha")
 	public ResponseEntity<?> redefinirSenha(@RequestBody Map<String, String> requestParams) {
-		//usuarioControle.trocarSenha(cpf, email);
 	    String cpf = requestParams.get("cpf");
 	    String email = requestParams.get("email");
+		usuarioControle.trocarSenha(cpf, email);
+
 
 
 		System.out.println("cpf :"+cpf);

@@ -48,9 +48,13 @@ public class AvaliacaoEndPoint {
 
 	@ApiOperation(value = "Retorna uma Avaliação unica pelo ID do atendimento")
 	@GetMapping("/atendimento/{id}")
-	public ResponseEntity<?> listarPorAtendimento(@PathVariable(value = "id") long id) {
-		Avaliacao avaliacao = avaliacaoControle.findByAtendimento(id);
-		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.OK);
+	public ResponseEntity<AvaliacaoDTO> listarPorAtendimento(@PathVariable(value = "id") long id) {
+		if (avaliacaoControle.findByAtendimento(id).isPresent()) {
+			Avaliacao avaliacao = avaliacaoControle.findByAtendimento(id).get();
+			return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 
 	@ApiOperation(value = "Salva uma Avaliação")

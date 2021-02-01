@@ -30,11 +30,14 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	@Autowired
 	ServiceEmail serviceEmail;
 
+	@Autowired
+	NotificacaoControle notificacaoControle;
+
 	// metodo para criar nova senha
 	public void trocarSenha(String cpf, String email) {
 		Usuario usuario = listarPorCpf(cpf).get();
 		if (usuario.getEmail() != email) {
-			new ResourceNotFoundException("Email não coencide");
+			throw new ResourceNotFoundException("Email não coencide");
 		}
 		String novaSenha = novaSenha();
 		salvaNovaSenha(novaSenha, usuario);
@@ -67,7 +70,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		roleControle.verificaRoles();
 		if (repositorio.count() == 0) {
 			System.out.println("Sistema não possui Usuarios cadastrados !!!");
-			System.out.println("Iniciando Incersao de Usuario default....");
+			System.out.println("Iniciando Inserção de Usuario default....");
 			cadastrarUsuarios();
 		}
 	}
@@ -80,6 +83,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		usuario.setSenha(new BCryptPasswordEncoder().encode("123"));
 		usuario.setRole(rolereposiRespository.findByNameRole("ROLE_ADMIN").get());
 		repositorio.save(usuario);
+		notificacaoControle.notificacaoCriacao(usuario);
 	}
 
 	// Busca um cliente pelo cpf

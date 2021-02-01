@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apirest.TCBackEnd.DTO.AtendimentoDTO;
 import com.apirest.TCBackEnd.DTO.AvaliacaoDTO;
 import com.apirest.TCBackEnd.Models.Atendimento;
 import com.apirest.TCBackEnd.Models.Avaliacao;
@@ -66,8 +65,8 @@ public class AvaliacaoControle extends GenericControl<Avaliacao, AvaliacaoDTO, A
 		atendimentoRepository.save(atendimento.get());
 	}
 
-	public Avaliacao findByAtendimento(long id) {
-		return repositorio.findByAtendimentoId(id).get();
+	public Optional<Avaliacao>  findByAtendimento(long id) {		
+		return repositorio.findByAtendimentoId(id);
 	}
 
 	// -------------------------AUXILIARES---------------------------------
