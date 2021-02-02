@@ -19,10 +19,20 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	@Query(value = "select count(*) from agendamento where ?1 < horario_fim and ?2 > horario", nativeQuery = true)
 	int qtdSimultaneos(LocalDateTime dataInicial, LocalDateTime datafinal);
 
-	@Query(value = "select count(*) from agendamento "
+	// cancela os agendamentos em conflito com um agendamento em especifico
+	@Query(value = " UPDATE agendamento SET status = 3 WHERE agendamento.id=( "
+			+ "SELECT agendamento.id FROM agendamento "
+			+ " JOIN servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
+			+ " WEHERE servico_funcionario.funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario AND status=1 "
+			+ " AND agendamento.id not in(?4))", nativeQuery = true)
+	int cancelaAgendamentosConflito(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id,
+			long idAgendamento);
+
+	// retorna lista de ids de choque de horario por status
+	@Query(value = "select agendamento.id from agendamento "
 			+ " join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
-			+ " where servico_funcionario.funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario AND status=4", nativeQuery = true)
-	int countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id);
+			+ " where servico_funcionario.funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario AND status=?4", nativeQuery = true)
+	List<Integer> countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id, int status);
 
 	@Query(value = "select count(*) from agendamento "
 			+ " join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
@@ -39,11 +49,17 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	@Query(value = "select * from agendamento where horario = ?1 order by horario ", nativeQuery = true)
 	List<Agendamento> agendamentosDia(LocalDate data);
 
-	// lista de agendamentos por dia e por funcionario
+	// lista de agendamentos(todos status) por dia e por funcionario
 	@Query(value = "select * from agendamento "
 			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
-			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 order by horario", nativeQuery = true)
+			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 order by horario ", nativeQuery = true)
 	List<Agendamento> findByHorarioAndServicoFuncionario(LocalDate data, long idFuncionario);
+
+	// lista de agendamentos(todos status) por dia e por funcionario
+	@Query(value = "select * from agendamento "
+			+ "join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
+			+ " where date_trunc('day', horario)= ?1 and servico_funcionario.funcionario_id=?2 and status=4 order by horario ", nativeQuery = true)
+	List<Agendamento> agendamentosConfirmadosDia(LocalDate data, long idFuncionario);
 
 	// lista os agendamentos de um funcionario por status
 	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(long id,

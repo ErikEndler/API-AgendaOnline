@@ -107,6 +107,14 @@ public class AgendamentoEndPoint {
 		return new ResponseEntity<>(agendamentoControle.listaStatus(), HttpStatus.OK);
 	}
 
+	// agendamentosPendentesConflitantes
+	@ApiOperation(value = "Retorna IDs dos horarios em aberto conflitantes")
+	@GetMapping("/listar/conflitos/{id}")
+	public ResponseEntity<?> listarIdsConflitantes(@PathVariable(value = "id") long id) {
+		List<Integer> lista = agendamentoControle.agendamentosPendentesConflitantes(id);
+		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Retorna lista de agendamentos pelo status")
 	@GetMapping("/listaPorStatus")
 	public ResponseEntity<?> listaAgendamentoStatus(@RequestParam long funcionario,

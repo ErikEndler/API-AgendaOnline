@@ -88,7 +88,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 		List<ItemEscala> listItemEscala = (List<ItemEscala>) itemEscalaRepository.findAllByEscalaId(escala.getId());
 		ServicoFuncionario servicoFuncionario = servicoFuncionarioRepository.findById(IdServicoiFuncionario).get();
-		List<Agendamento> listAgendamentos = repositorio.findByHorarioAndServicoFuncionario(datahora.stringEmData(data),
+		List<Agendamento> listAgendamentos = repositorio.agendamentosConfirmadosDia(datahora.stringEmData(data),
 				servicoFuncionario.getFuncionario().getId());
 		System.out.println("-------- size " + listAgendamentos.size());
 
@@ -102,7 +102,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 					// para o primeiro indice
 					if (idx == 0) {
 						// if T1>T2
-						if (listAgendamentos.get(idx).getHorario().toLocalTime().isAfter(itemEscala.getHrInicial())) {
+						if (listAgendamentos.get(idx).getHorario().toLocalTime().isAfter(itemEscala.getHrInicial())
+								&& listAgendamentos.get(idx).getStatus() == StatusAgendamento.AGENDADO) {
 							listaFinal.add(adicionaLista(true, datahora.horaEmString(itemEscala.getHrInicial()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime())));
 							// 09:00 as 10:00 ocupado A1I a A1F not free
@@ -117,8 +118,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 						}
 					} else {
 						// A2I=A1F
-						if (listAgendamentos.get(idx).getHorario()
-								.equals(listAgendamentos.get(idx - 1).getHorarioFim())) {
+						if (listAgendamentos.get(idx).getHorario().equals(listAgendamentos.get(idx - 1).getHorarioFim())
+								&& listAgendamentos.get(idx).getStatus() == StatusAgendamento.AGENDADO) {
 							listaFinal.add(adicionaLista(false,
 									datahora.horaEmString(listAgendamentos.get(idx).getHorario().toLocalTime()),
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
@@ -138,8 +139,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 									datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime())));
 						}
 					}
-					if (idx == (listAgendamentos.size() - 1) && itemEscala.getHrFinal()
-							.isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())) {
+					if (idx == (listAgendamentos.size() - 1)
+							&& itemEscala.getHrFinal().isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())
+							&& listAgendamentos.get(idx).getStatus() == StatusAgendamento.AGENDADO) {
 						System.out.println("-------- index na condiçao final " + idx);
 
 						listaFinal.add(adicionaLista(true,
@@ -240,6 +242,14 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return msg;
 	}
 
+	public List<Integer> agendamentosPendentesConflitantes(long id) {
+		Agendamento agendamento = verificaExixte(id).get();
+		List<Integer> num = repositorio.countChoques(agendamento.getHorario(), agendamento.getHorarioFim(),
+				agendamento.getServicoFuncionario().getFuncionario().getId(), 0);
+		System.out.println("----IDS = " + num);
+		return num;
+	}
+
 	// --------------------- METODOS AUXILIARES------------
 
 	private Optional<Agendamento> verificaExixte(long id) {
@@ -315,7 +325,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private void verificaHorario(AgendamentoDTO dto) {
 		int qtd = repositorio.countChoques(datahora.stringemDateTime(dto.getHorarioInicio()),
-				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId());
+				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId(), 4)
+				.size();
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}
