@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.UsuarioDTO;
 import com.apirest.TCBackEnd.Email.ServiceEmail;
+import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.Role;
 import com.apirest.TCBackEnd.Models.Usuario;
 import com.apirest.TCBackEnd.Repository.RoleRespository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
+import com.apirest.TCBackEnd.Util.StatusAgendamento;
 import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
@@ -32,6 +35,23 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 
 	@Autowired
 	NotificacaoControle notificacaoControle;
+	@Autowired
+	AgendamentoControle agendamentoControle;
+
+	// Notificaçoes usuario ao logar
+	public List<Integer> buscaNotificacoesUsuario(long idFunc) {
+		List<Integer> lista = new ArrayList<>();
+		List<Agendamento> agendados = agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.AGENDADO);
+		int qtdAgendado = agendados.size();
+		lista.add(qtdAgendado);
+		List<Agendamento> pendentes = agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.PENDENTE);
+		int qtdPendente = pendentes.size();
+		lista.add(qtdPendente);
+		System.out.println("----LISTA  = " + lista);
+		return lista;
+	}
 
 	// metodo para criar nova senha
 	public void trocarSenha(String cpf, String email) {

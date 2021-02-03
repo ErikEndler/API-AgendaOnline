@@ -85,17 +85,21 @@ public class UsuarioEndPoint {
 		return new ResponseEntity<>(UsuarioDTO.listarResposta(lista), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorna a Qtd de agendamentos agendados e pendentes para a notificação")
+	@GetMapping("/notificacao/geral/{id}")
+	public ResponseEntity<?> listarQtdAgendamentosNotificao(@PathVariable(value = "id") long id) {
+		List<Integer> lista = usuarioControle.buscaNotificacoesUsuario(id);
+		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Redefine a senha do usuario")
 	@PostMapping("/recuperarSenha")
 	public ResponseEntity<?> redefinirSenha(@RequestBody Map<String, String> requestParams) {
-	    String cpf = requestParams.get("cpf");
-	    String email = requestParams.get("email");
+		String cpf = requestParams.get("cpf");
+		String email = requestParams.get("email");
 		usuarioControle.trocarSenha(cpf, email);
-
-
-
-		System.out.println("cpf :"+cpf);
-		System.out.println("email : "+email);
+		System.out.println("cpf :" + cpf);
+		System.out.println("email : " + email);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 

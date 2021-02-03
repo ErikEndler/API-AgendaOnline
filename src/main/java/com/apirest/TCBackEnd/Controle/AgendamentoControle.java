@@ -47,8 +47,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	DataHora datahora;
 
 	// Lista os agendamentos por status de um funcioanrio
-	public List<Agendamento> listarAgendamentosPorStatus(long id, StatusAgendamento status) {
-		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(id,
+	public List<Agendamento> listarAgendamentosPorStatus(long idfuncionario, StatusAgendamento status) {
+		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(idfuncionario,
 				status);
 		return lista;
 	}
