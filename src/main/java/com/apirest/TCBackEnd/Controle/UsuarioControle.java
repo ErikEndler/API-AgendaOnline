@@ -16,6 +16,7 @@ import com.apirest.TCBackEnd.Email.ServiceEmail;
 import com.apirest.TCBackEnd.Models.Agendamento;
 import com.apirest.TCBackEnd.Models.Role;
 import com.apirest.TCBackEnd.Models.Usuario;
+import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.RoleRespository;
 import com.apirest.TCBackEnd.Repository.UsuarioRepository;
 import com.apirest.TCBackEnd.Util.StatusAgendamento;
@@ -37,8 +38,10 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	NotificacaoControle notificacaoControle;
 	@Autowired
 	AgendamentoControle agendamentoControle;
+	@Autowired
+	AgendamentoRepository agendamentoRepository;
 
-	// Notificaçoes usuario ao logar
+	// Notificaçoes Funcionario ao logar
 	public List<Integer> buscaNotificacoesUsuario(long idFunc) {
 		List<Integer> lista = new ArrayList<>();
 		List<Agendamento> agendados = agendamentoControle.listarAgendamentosPorStatus(idFunc,
@@ -46,6 +49,20 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		int qtdAgendado = agendados.size();
 		lista.add(qtdAgendado);
 		List<Agendamento> pendentes = agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.PENDENTE);
+		int qtdPendente = pendentes.size();
+		lista.add(qtdPendente);
+		System.out.println("----LISTA  = " + lista);
+		return lista;
+	}
+
+	public List<Integer> buscaNotificacoesCliente(long idCliente) {
+		List<Integer> lista = new ArrayList<>();
+		List<Agendamento> agendados = agendamentoRepository.findByClienteIdAndStatusOrderByHorarioDesc(idCliente,
+				StatusAgendamento.AGENDADO);
+		int qtdAgendado = agendados.size();
+		lista.add(qtdAgendado);
+		List<Agendamento> pendentes = agendamentoRepository.findByClienteIdAndStatusOrderByHorarioDesc(idCliente,
 				StatusAgendamento.PENDENTE);
 		int qtdPendente = pendentes.size();
 		lista.add(qtdPendente);
