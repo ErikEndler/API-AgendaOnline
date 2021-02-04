@@ -29,16 +29,18 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 			long idAgendamento);
 
 	// retorna lista de ids de choque de horario por status
-	@Query(value = "select agendamento.id from agendamento "
+	@Query(value = "select agendamento.* from agendamento "
 			+ " join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
 			+ " where servico_funcionario.funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario AND status=?4", nativeQuery = true)
-	List<Integer> countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id, int status);
+	List<Agendamento> countChoques(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id, int status);
 
-	@Query(value = "select count(*) from agendamento "
+	// retorna os agendamentos que chocam com o horario de um certo atendimento
+	@Query(value = "select agendamento.* from agendamento "
 			+ " join servico_funcionario on servico_funcionario.id=agendamento.servico_funcionario_id"
 			+ " where servico_funcionario.funcionario_id = ?3 and ?1 < horario_fim and ?2 > horario AND status=4 "
 			+ " AND agendamento.id not in(?4)", nativeQuery = true)
-	int countChoquesEdit(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id, long idAgendamento);
+	List<Agendamento> countChoquesEdit(LocalDateTime dataInicial, LocalDateTime datafinal, long funcionario_id,
+			long idAgendamento);
 
 	@Query(value = "select item_escala.* from item_escala " + "join escala on escala.id = item_escala.escala_id "
 			+ "join servico on servico.id = escala.servico_id "
@@ -64,9 +66,9 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 	// lista os agendamentos de um funcionario por status
 	List<Agendamento> findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(long id,
 			StatusAgendamento status);
+
 	// lista de agendamentos do cliente
-	List<Agendamento> findByClienteIdAndStatusOrderByHorarioDesc(long id,
-			StatusAgendamento status);
+	List<Agendamento> findByClienteIdAndStatusOrderByHorarioDesc(long id, StatusAgendamento status);
 
 	// lista os agendamento que funcionario pode atender no dia
 	@Query(value = "select * from agendamento "

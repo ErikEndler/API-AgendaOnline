@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +43,30 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	ServicoFuncionarioRepository servicoFuncionarioRepository;
 	@Autowired
 	DisponibilidadeControle disponibilidadeControle;
-
 	@Autowired
 	DataHora datahora;
 
+	// retorna lista dos agendamentos que conflitam com um agendamento
+	public List<Agendamento> listarAgendamentosConflitantes(long id) {
+		Optional<Agendamento> agendamento = repositorio.findById(id);
+		System.out.println("---TO STRING----" + agendamento.get().toString());
+		List<Agendamento> lista = new ArrayList<>();
+		if (agendamento.isPresent()) {
+			System.out.println("---ENTROU IF----");
+			lista = repositorio
+					.countChoques(agendamento.get().getHorario(), agendamento.get().getHorarioFim(),
+							agendamento.get().getServicoFuncionario().getFuncionario().getId(), 0)
+					.stream().filter(a -> a.getId() != id).collect(Collectors.toList());
+			System.out.println("--SIZE----" + lista.size());
+			return lista;
+		}
+		return lista;
+	}
+
 	// Lista os agendamentos por status de um funcioanrio
 	public List<Agendamento> listarAgendamentosPorStatus(long idfuncionario, StatusAgendamento status) {
-		List<Agendamento> lista = repositorio.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(idfuncionario,
-				status);
+		List<Agendamento> lista = repositorio
+				.findByServicoFuncionarioFuncionarioIdAndStatusOrderByHorarioDesc(idfuncionario, status);
 		return lista;
 	}
 
@@ -175,6 +192,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		return listaAgendamentos;
 	}
 
+	// lista agendamentos de um cliente
 	public Iterable<Agendamento> listarPorCliente(long idCliente) {
 		verificaCliente(idCliente);
 		return repositorio.findAllByClienteId(idCliente);
@@ -240,14 +258,6 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	protected String MenssagemErro() {
 		String msg = "Agendamento";
 		return msg;
-	}
-
-	public List<Integer> agendamentosPendentesConflitantes(long id) {
-		Agendamento agendamento = verificaExixte(id).get();
-		List<Integer> num = repositorio.countChoques(agendamento.getHorario(), agendamento.getHorarioFim(),
-				agendamento.getServicoFuncionario().getFuncionario().getId(), 0);
-		System.out.println("----IDS = " + num);
-		return num;
 	}
 
 	// --------------------- METODOS AUXILIARES------------
@@ -318,7 +328,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 				.findByServicoFuncionarioIdAndDiaSemana(dto.getServicoFuncionario().getId(),
 						day.getDisplayName(TextStyle.FULL, new Locale("pt")))
 				.orElseThrow(() -> new ResourceNotFoundException("Não Há Escala"));
-		ItemEscala itemEscala = itemEscalaRepository.escala(escala.getId(), hrInicial, hrFinal)
+		itemEscalaRepository.escala(escala.getId(), hrInicial, hrFinal)
 				.orElseThrow(() -> new ResourceNotFoundException("Horario fora de escala disponivel"));
 		return true;
 	}
@@ -335,7 +345,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	private void verificaHorarioEdit(AgendamentoDTO dto) {
 		int qtd = repositorio.countChoquesEdit(datahora.stringemDateTime(dto.getHorarioInicio()),
 				datahora.stringemDateTime(dto.getHorarioFim()), dto.getServicoFuncionario().getFuncionario().getId(),
-				dto.getId());
+				dto.getId()).size();
 		if (qtd > 0) {
 			throw new ResourceNotFoundException("Horario do funcionario ja ocupado");
 		}

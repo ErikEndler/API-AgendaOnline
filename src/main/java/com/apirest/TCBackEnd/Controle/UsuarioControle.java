@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -54,6 +55,17 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		lista.add(qtdPendente);
 		System.out.println("----LISTA  = " + lista);
 		return lista;
+	}
+
+	// Score cliente
+	public int scoreCliente(long id) {
+		// busca os agendamentos do cliente
+		List<Agendamento> agendamentos = (List<Agendamento>) agendamentoControle.listarPorCliente(id);
+		// Filtra os agendamentos que cliente faltou
+		List<Agendamento> agendamentoFaltou = agendamentos.stream()
+				.filter(a -> a.getStatus() == StatusAgendamento.FALTOU).collect(Collectors.toList());
+		int qtd = agendamentoFaltou.size();
+		return qtd;
 	}
 
 	public List<Integer> buscaNotificacoesCliente(long idCliente) {
