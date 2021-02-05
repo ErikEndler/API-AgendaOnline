@@ -77,7 +77,7 @@ public class ItemEscalaEndPoint {
 
 	@ApiOperation(value = "Retorna uma lista completa da Escalas de um funcionario")
 	@GetMapping("servicofuncionario")
-	public ResponseEntity<?> teste(@RequestParam long funcionario, @RequestParam List<Long> servico) {
+	public ResponseEntity<?> escalasFuncionario(@RequestParam long funcionario, @RequestParam List<Long> servico) {
 		//itemEscalaControle.itensEscalaCompletas(funcionario, servico);
 		return new ResponseEntity<>(
 				ItemEscalaDTO.listarResposta(itemEscalaControle.itensEscalaCompletas(funcionario, servico)),

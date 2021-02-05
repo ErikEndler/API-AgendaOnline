@@ -28,9 +28,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 	ServicoControle servicoControle;
 
 	public List<ItemEscala> itensEscalaCompletas(long funcionarioId, List<Long> servicosId) {
-
 		List<ItemEscala> listaEscalas = new ArrayList<>();
-
 		for (long servico : servicosId) {
 			listaEscalas = verificaERetorna(funcionarioId, servico, listaEscalas);
 		}
@@ -111,8 +109,7 @@ public class ItemescalaControle extends GenericControl<ItemEscala, ItemEscalaDTO
 
 		}
 		Optional<Escala> escala = escalaRepository.findById(id);
-		return escala
-				.orElseThrow(() -> new ResourceNotFoundException( "ItemEscala nao encontrado para o ID: " + id));
+		return escala.orElseThrow(() -> new ResourceNotFoundException("ItemEscala nao encontrado para o ID: " + id));
 	}
 
 	@Override
