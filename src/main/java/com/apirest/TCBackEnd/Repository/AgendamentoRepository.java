@@ -77,4 +77,7 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 			+ " order by horario", nativeQuery = true)
 	List<Agendamento> listarAgendamentosAtendiveis(LocalDate data, long id);
 
+	// Lista todos agendamentos com status passado por parementro
+	List<Agendamento> findByStatus(StatusAgendamento status);
+
 }

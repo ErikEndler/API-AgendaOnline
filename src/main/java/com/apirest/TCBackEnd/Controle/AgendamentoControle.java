@@ -2,6 +2,7 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -11,7 +12,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
@@ -21,6 +28,7 @@ import com.apirest.TCBackEnd.Models.ItemEscala;
 import com.apirest.TCBackEnd.Models.ServicoFuncionario;
 import com.apirest.TCBackEnd.Models.TimeLine;
 import com.apirest.TCBackEnd.Models.Usuario;
+import com.apirest.TCBackEnd.Notification.NotificationDispatcher;
 import com.apirest.TCBackEnd.Repository.AgendamentoRepository;
 import com.apirest.TCBackEnd.Repository.EscalaRepository;
 import com.apirest.TCBackEnd.Repository.ItemEscalaRepository;
@@ -32,6 +40,8 @@ import com.apirest.TCBackEnd.Util.Error.ResourceNotFoundException;
 
 @Service
 public class AgendamentoControle extends GenericControl<Agendamento, AgendamentoDTO, AgendamentoRepository> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationDispatcher.class);
 
 	@Autowired
 	UsuarioRepository usuarioRepository;
@@ -45,6 +55,34 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	DisponibilidadeControle disponibilidadeControle;
 	@Autowired
 	DataHora datahora;
+
+	// cancela pedidos pendentes que tem datra inferior a atual
+	@Scheduled(cron = "0 0 8/1 * * * ", zone = "America/Sao_Paulo")
+	public void cancelamentoAutomaticoAgendamento() {
+		List<Agendamento> agendamentos = repositorio.findByStatus(StatusAgendamento.PENDENTE);
+
+		agendamentos.stream().filter(agd -> agd.getHorario().toLocalDate().isBefore(LocalDate.now()))// filtra
+				.forEach(agd -> {
+					agd.setStatus(StatusAgendamento.CANCELADO);
+					repositorio.save(agd);
+				});
+		LOGGER.info("cancelamentoAutomaticoAgendamento() executado!");
+		// System.out.println("EXECUTOU CRON");
+	}
+
+	// atribui NAOTENDIDO a agendamentos confirmados com data inferior a atual
+	@Scheduled(cron = "0 0 8/1 * * * ", zone = "America/Sao_Paulo")
+	public void naoAtendidoAutomatico() {
+		List<Agendamento> agendamentos = repositorio.findByStatus(StatusAgendamento.AGENDADO);
+
+		agendamentos.stream().filter(agd -> agd.getHorario().toLocalDate().isBefore(LocalDate.now()))// filtra
+				.forEach(agd -> {
+					agd.setStatus(StatusAgendamento.NAOATENDIDO);
+					repositorio.save(agd);
+				});
+		LOGGER.info("naoAtendidoAutomatico() executado!");
+		// System.out.println("EXECUTOU CRON");
+	}
 
 	// retorna lista dos agendamentos que conflitam com um agendamento
 	public List<Agendamento> listarAgendamentosConflitantes(long id) {
