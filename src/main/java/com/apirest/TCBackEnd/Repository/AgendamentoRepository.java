@@ -69,6 +69,9 @@ public interface AgendamentoRepository extends CrudRepository<Agendamento, Long>
 
 	// lista de agendamentos do cliente
 	List<Agendamento> findByClienteIdAndStatusOrderByHorarioDesc(long id, StatusAgendamento status);
+	
+	// Lista agendamentos do cliente que são igual a ??
+	List<Agendamento> findByClienteIdAndStatusIs(Long id, StatusAgendamento status);
 
 	// lista os agendamento que funcionario pode atender no dia
 	@Query(value = "select * from agendamento "

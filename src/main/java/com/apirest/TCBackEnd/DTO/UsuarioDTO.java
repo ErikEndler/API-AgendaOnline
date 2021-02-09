@@ -30,11 +30,12 @@ public class UsuarioDTO {
 	private String senha;
 	private Boolean notificacaoEmail;
 	private Boolean notificacaoWhatsapp;
+	private int score;
 
 	public static UsuarioDTO usuarioResposta(Usuario usuario) {
 		return new UsuarioDTO(usuario.getId(), usuario.getRole().getNameRole(), usuario.getNome(), usuario.getCpf(),
 				usuario.getTelefone(), usuario.getWhatsapp(), usuario.getEmail(), usuario.getSexo(), usuario.getSenha(),
-				usuario.getNotificacaoEmail(), usuario.getNotificacaoWhats());
+				usuario.getNotificacaoEmail(), usuario.getNotificacaoWhats(),usuario.getScore());
 	}
 
 	// Recebe uma lista de usuarios e transforma a lista para o formato de resposta

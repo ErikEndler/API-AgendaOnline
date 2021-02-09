@@ -2,7 +2,6 @@ package com.apirest.TCBackEnd.Controle;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -15,10 +14,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
@@ -56,6 +52,15 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	@Autowired
 	DataHora datahora;
 
+	public void atualizaScore(long idCliente) {
+		List<Agendamento> agendamentos = repositorio.findByClienteIdAndStatusIs(idCliente, StatusAgendamento.FALTOU);
+		long qtd = agendamentos.stream().count();
+		Usuario cliente = usuarioRepository.findById(idCliente)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado! id=" + idCliente));
+		cliente.setScore((int) qtd);
+		usuarioRepository.save(cliente);
+	}
+
 	// cancela pedidos pendentes que tem datra inferior a atual
 	@Scheduled(cron = "0 0 8/1 * * * ", zone = "America/Sao_Paulo")
 	public void cancelamentoAutomaticoAgendamento() {
@@ -87,15 +92,12 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	// retorna lista dos agendamentos que conflitam com um agendamento
 	public List<Agendamento> listarAgendamentosConflitantes(long id) {
 		Optional<Agendamento> agendamento = repositorio.findById(id);
-		System.out.println("---TO STRING----" + agendamento.get().toString());
 		List<Agendamento> lista = new ArrayList<>();
 		if (agendamento.isPresent()) {
-			System.out.println("---ENTROU IF----");
 			lista = repositorio
 					.countChoques(agendamento.get().getHorario(), agendamento.get().getHorarioFim(),
-							agendamento.get().getServicoFuncionario().getFuncionario().getId(), 0)
-					.stream().filter(a -> a.getId() != id).collect(Collectors.toList());
-			System.out.println("--SIZE----" + lista.size());
+							agendamento.get().getServicoFuncionario().getFuncionario().getId(), 0);
+					//.stream().filter(a -> a.getId() != id).collect(Collectors.toList());
 			return lista;
 		}
 		return lista;
@@ -325,8 +327,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	@Override
 	protected void posSalvar(Agendamento retorno) {
-		// TODO Auto-generated method stub
-
+		if (retorno.getStatus() == StatusAgendamento.FALTOU) {
+			atualizaScore(retorno.getCliente().getId());
+		}
 	}
 
 	// lista todos horarios do dia
@@ -397,6 +400,16 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 			throw new ResourceNotFoundException("Horario esta cheio");
 		}
 		return true;
+	}
+
+	@Override
+	public Agendamento editar(AgendamentoDTO dto) {
+		verificUpdate(dto);
+		Agendamento agendamento = repositorio.save(transformaEditar(dto));
+		if (agendamento.getStatus() == StatusAgendamento.FALTOU) {
+			atualizaScore(agendamento.getCliente().getId());
+		}
+		return agendamento;
 	}
 
 }
