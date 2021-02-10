@@ -38,9 +38,11 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String sexo;
 	private String senha;
+	@Column(nullable = true, columnDefinition = "boolean default true")
 	private Boolean notificacaoEmail;
+	@Column(nullable = true, columnDefinition = "boolean default true")
 	private Boolean notificacaoWhats;
-	@Column(nullable = true)
+	@Column(nullable = true, columnDefinition = "integer default 0")
 	private int score;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")

@@ -45,14 +45,15 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	// Notificaçoes Funcionario ao logar
 	public List<Integer> buscaNotificacoesUsuario(long idFunc) {
 		List<Integer> lista = new ArrayList<>();
-		List<Agendamento> agendados = agendamentoControle.listarAgendamentosPorStatus(idFunc,
-				StatusAgendamento.AGENDADO);
-		int qtdAgendado = agendados.size();
+		int qtdAgendado = agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.AGENDADO).size();
 		lista.add(qtdAgendado);
-		List<Agendamento> pendentes = agendamentoControle.listarAgendamentosPorStatus(idFunc,
-				StatusAgendamento.PENDENTE);
-		int qtdPendente = pendentes.size();
-		lista.add(qtdPendente);
+		int qtdPendente = agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.PENDENTE).size();
+		lista.add(qtdPendente);		
+		int qtdNaoAtendido =agendamentoControle.listarAgendamentosPorStatus(idFunc,
+				StatusAgendamento.NAOATENDIDO).size() ;
+		lista.add(qtdNaoAtendido);
 		System.out.println("----LISTA  = " + lista);
 		return lista;
 	}
