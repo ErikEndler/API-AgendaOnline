@@ -122,8 +122,6 @@ public class AgendamentoEndPoint {
 		return new ResponseEntity<>(AgendamentoDTO.listarResposta(lista), HttpStatus.OK);
 	}
 
-	
-
 	@ApiOperation(value = "Retorna lista de agendamentos que conflitam com o agendamento informado")
 	@GetMapping("/conflitos/{id}")
 	public ResponseEntity<?> agendamentosConflitantes(@PathVariable(value = "id") long id) {

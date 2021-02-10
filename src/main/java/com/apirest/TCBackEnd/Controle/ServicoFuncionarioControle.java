@@ -94,7 +94,7 @@ public class ServicoFuncionarioControle
 	}
 
 	// -------------------------//---------------------
-	// verifica se funcionario ja possui aquele serviço atribuido ha ele
+	// verifica se funcionario ja possui aquele serviço atribuido a ele
 	private void verificaAtribuicao(ServicoFuncionarioDTO dto) {
 		if (repositorio.findByFuncionarioIdAndServicoId(dto.getFuncionario().getId(), dto.getServico().getId())
 				.isPresent()) {
