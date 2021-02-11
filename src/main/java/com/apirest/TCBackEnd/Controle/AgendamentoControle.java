@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.apirest.TCBackEnd.DTO.AgendamentoDTO;
@@ -50,6 +51,8 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	DisponibilidadeControle disponibilidadeControle;
 	@Autowired
 	DataHora datahora;
+	@Autowired
+	NotificationDispatcher NotificationDispatcher;
 
 	public void atualizaScore(long idCliente) {
 		List<Agendamento> agendamentos = repositorio.findByClienteIdAndStatusIs(idCliente, StatusAgendamento.FALTOU);
@@ -93,10 +96,9 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		Optional<Agendamento> agendamento = repositorio.findById(id);
 		List<Agendamento> lista = new ArrayList<>();
 		if (agendamento.isPresent()) {
-			lista = repositorio
-					.countChoques(agendamento.get().getHorario(), agendamento.get().getHorarioFim(),
-							agendamento.get().getServicoFuncionario().getFuncionario().getId(), 0);
-					//.stream().filter(a -> a.getId() != id).collect(Collectors.toList());
+			lista = repositorio.countChoques(agendamento.get().getHorario(), agendamento.get().getHorarioFim(),
+					agendamento.get().getServicoFuncionario().getFuncionario().getId(), 0);
+			// .stream().filter(a -> a.getId() != id).collect(Collectors.toList());
 			return lista;
 		}
 		return lista;
@@ -329,6 +331,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		if (retorno.getStatus() == StatusAgendamento.FALTOU) {
 			atualizaScore(retorno.getCliente().getId());
 		}
+		enviarNotificacao(retorno);
 	}
 
 	// lista todos horarios do dia
@@ -408,7 +411,19 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		if (agendamento.getStatus() == StatusAgendamento.FALTOU) {
 			atualizaScore(agendamento.getCliente().getId());
 		}
+		enviarNotificacao(agendamento);
 		return agendamento;
+	}
+
+	private void enviarNotificacao(Agendamento agendamento) {
+		if (agendamento.getStatus() == StatusAgendamento.PENDENTE) {
+			NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(),
+					"SINO" + agendamento.getId() + "Novo Agendamento pendente");
+		}
+		if (agendamento.getStatus() == StatusAgendamento.AGENDADO) {
+			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
+					"SINO" + agendamento.getId() + "Novo Agendamento Confirmado");
+		}
 	}
 
 }
