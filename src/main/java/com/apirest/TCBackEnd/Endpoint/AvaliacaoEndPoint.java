@@ -54,7 +54,6 @@ public class AvaliacaoEndPoint {
 			return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
-
 	}
 
 	@ApiOperation(value = "Salva uma Avaliação")
@@ -77,6 +76,12 @@ public class AvaliacaoEndPoint {
 	public ResponseEntity<?> deleteById(@PathVariable(value = "id") long id) {
 		avaliacaoControle.deletarById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Retorna Lista de avaliaçoes pelo ID do usuario")
+	@GetMapping("/usuario/{id}")
+	public ResponseEntity<?> minhasAvaliacoes(@PathVariable(value = "id") long id) {
+		return new ResponseEntity<>(AvaliacaoDTO.listarResposta(avaliacaoControle.minhasAvaliacoes(id)), HttpStatus.OK);
 	}
 
 }

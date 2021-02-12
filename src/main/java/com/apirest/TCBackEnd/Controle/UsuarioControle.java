@@ -144,7 +144,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	}
 
 //---------------------METODOS AUXILIARES-----------------------------------------
-	private Optional<Usuario> verificaExiste(long id) {
+	public Optional<Usuario> verificaExiste(long id) {
 		Optional<Usuario> retorno = repositorio.findById(id);
 		retorno.orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado para o ID: " + id));
 		return retorno;
