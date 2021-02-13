@@ -26,7 +26,7 @@ public class AvaliacaoControle extends GenericControl<Avaliacao, AvaliacaoDTO, A
 	public List<Avaliacao> minhasAvaliacoes(long idUsuario) {
 		List<Avaliacao> avaliacoes = new ArrayList<>();
 		Usuario usuario = usuarioControle.verificaExiste(idUsuario).get();
-		if (usuario.getRole().getNameRole() == "ROLE_USER") {
+		if (usuario.getRole().getNameRole().equals("ROLE_USER")) {
 			avaliacoes = repositorio.findByAtendimentoAgendamentoClienteId(idUsuario);
 		} else {
 			avaliacoes = repositorio.findByAtendimentoFuncionarioId(idUsuario);

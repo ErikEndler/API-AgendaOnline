@@ -177,7 +177,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	private String senhaCripto(UsuarioDTO usuarioDTO, String strings) {
 		if (strings.equals("edite")) {
 			Usuario oldUser = verificaExiste(usuarioDTO.getId()).get();
-			if (oldUser.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha().isEmpty()) {
+			if (oldUser.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha()==null) {
 				System.out.println("entrou no sdegundo if");
 				return oldUser.getSenha();
 			}
