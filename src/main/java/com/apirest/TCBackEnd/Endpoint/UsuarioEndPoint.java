@@ -88,7 +88,7 @@ public class UsuarioEndPoint {
 	@ApiOperation(value = "Retorna a Qtd de agendamentos agendados e pendentes para a notificação")
 	@GetMapping("/notificacao/geral/{id}")
 	public ResponseEntity<?> listarQtdAgendamentosNotificao(@PathVariable(value = "id") long id) {
-		List<Integer> lista = usuarioControle.buscaNotificacoesUsuario(id);
+		List<Integer> lista = usuarioControle.buscaNotificacaoUsuario(id);
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 
@@ -98,8 +98,6 @@ public class UsuarioEndPoint {
 		String cpf = requestParams.get("cpf");
 		String email = requestParams.get("email");
 		usuarioControle.trocarSenha(cpf, email);
-		System.out.println("cpf :" + cpf);
-		System.out.println("email : " + email);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 

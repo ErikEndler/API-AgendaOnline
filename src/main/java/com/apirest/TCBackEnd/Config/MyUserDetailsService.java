@@ -22,14 +22,14 @@ public class MyUserDetailsService implements UserDetailsService {
 		if (usuario == null) {
 			throw new UsernameNotFoundException("Usuario não encontrado!");
 		}
-		System.out.println("Autorizaçoes:" + usuario.getAuthorities().toArray().toString());
+		//System.out.println("Autorizaçoes:" + usuario.getAuthorities().toArray().toString());
 
-		System.out.println("USUARIO: " + usuario.getCpf() + "  -  " + usuario.getSenha());
+		//System.out.println("USUARIO: " + usuario.getCpf() + "  -  " + usuario.getSenha());
 
-		System.out.println("IMPRIMIR: ");
+		//System.out.println("IMPRIMIR: ");
 
 		User user = new User(usuario.getCpf(), usuario.getSenha(), true, true, true, true, usuario.getAuthorities());
-		System.out.println("NEW USER- USERNAME: " + (user.getUsername()));
+		//System.out.println("NEW USER- USERNAME: " + (user.getUsername()));
 
 		return new User(usuario.getCpf(), usuario.getSenha(), usuario.getAuthorities());
 	}

@@ -121,7 +121,6 @@ public class AtendimentoControle extends GenericControl<Atendimento, Atendimento
 	protected void posSalvar(Atendimento modelo) {
 		modelo.getAgendamento().setStatus(StatusAgendamento.ATENDIDO);
 		agendamentoRepository.save(modelo.getAgendamento());
-		System.out.println("STATUS : "+modelo.getAgendamento().getStatus());
 	}
 
 }

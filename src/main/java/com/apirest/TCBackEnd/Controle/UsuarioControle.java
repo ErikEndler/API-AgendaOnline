@@ -42,19 +42,28 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	@Autowired
 	AgendamentoRepository agendamentoRepository;
 
-	// Notificaçoes Funcionario ao logar
-	public List<Integer> buscaNotificacoesUsuario(long idFunc) {
+	public List<Integer> buscaNotificacaoUsuario(long id) {
 		List<Integer> lista = new ArrayList<>();
-		int qtdAgendado = agendamentoControle.listarAgendamentosPorStatus(idFunc,
-				StatusAgendamento.AGENDADO).size();
+		Usuario user = verificaExiste(id).get();
+		if (user.getRole().getNameRole().equals("ROLE_USER")) {
+			lista = buscaNotificacoesCliente(id);
+		} else {
+			lista = buscaNotificacoesFuncionario(id);
+		}
+		return lista;
+
+	}
+
+	// Notificaçoes Funcionario ao logar
+	public List<Integer> buscaNotificacoesFuncionario(long idFunc) {
+		List<Integer> lista = new ArrayList<>();
+		int qtdAgendado = agendamentoControle.listarAgendamentosPorStatus(idFunc, StatusAgendamento.AGENDADO).size();
 		lista.add(qtdAgendado);
-		int qtdPendente = agendamentoControle.listarAgendamentosPorStatus(idFunc,
-				StatusAgendamento.PENDENTE).size();
-		lista.add(qtdPendente);		
-		int qtdNaoAtendido =agendamentoControle.listarAgendamentosPorStatus(idFunc,
-				StatusAgendamento.NAOATENDIDO).size() ;
+		int qtdPendente = agendamentoControle.listarAgendamentosPorStatus(idFunc, StatusAgendamento.PENDENTE).size();
+		lista.add(qtdPendente);
+		int qtdNaoAtendido = agendamentoControle.listarAgendamentosPorStatus(idFunc, StatusAgendamento.NAOATENDIDO)
+				.size();
 		lista.add(qtdNaoAtendido);
-		System.out.println("----LISTA  = " + lista);
 		return lista;
 	}
 
@@ -79,7 +88,6 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 				StatusAgendamento.PENDENTE);
 		int qtdPendente = pendentes.size();
 		lista.add(qtdPendente);
-		System.out.println("----LISTA  = " + lista);
 		return lista;
 	}
 
@@ -177,8 +185,7 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 	private String senhaCripto(UsuarioDTO usuarioDTO, String strings) {
 		if (strings.equals("edite")) {
 			Usuario oldUser = verificaExiste(usuarioDTO.getId()).get();
-			if (oldUser.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha()==null) {
-				System.out.println("entrou no sdegundo if");
+			if (oldUser.getSenha().equals(usuarioDTO.getSenha()) || usuarioDTO.getSenha() == null) {
 				return oldUser.getSenha();
 			}
 		}

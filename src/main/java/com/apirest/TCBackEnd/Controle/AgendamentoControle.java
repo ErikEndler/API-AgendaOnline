@@ -148,15 +148,12 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 		ServicoFuncionario servicoFuncionario = servicoFuncionarioRepository.findById(IdServicoiFuncionario).get();
 		List<Agendamento> listAgendamentos = repositorio.agendamentosConfirmadosDia(datahora.stringEmData(data),
 				servicoFuncionario.getFuncionario().getId());
-		System.out.println("-------- size " + listAgendamentos.size());
 
 		List<TimeLine> listaFinal = new ArrayList<>();
-		System.out.println("-------- size " + listAgendamentos.size());
 		if (listItemEscala.size() > 0) {
 			ItemEscala itemEscala = listItemEscala.get(0);
 			if (listAgendamentos.size() > 0) {
 				IntStream.range(0, listAgendamentos.size()).forEach(idx -> {
-					System.out.println("-------- index " + idx);
 					// para o primeiro indice
 					if (idx == 0) {
 						// if T1>T2
@@ -200,8 +197,6 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 					if (idx == (listAgendamentos.size() - 1)
 							&& itemEscala.getHrFinal().isAfter(listAgendamentos.get(idx).getHorarioFim().toLocalTime())
 							&& listAgendamentos.get(idx).getStatus() == StatusAgendamento.AGENDADO) {
-						System.out.println("-------- index na condiçao final " + idx);
-
 						listaFinal.add(adicionaLista(true,
 								datahora.horaEmString(listAgendamentos.get(idx).getHorarioFim().toLocalTime()),
 								datahora.horaEmString(itemEscala.getHrFinal())));
@@ -363,8 +358,6 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 
 	private boolean verificaEscala(AgendamentoDTO dto) {
 		DayOfWeek day = datahora.stringemDateTime(dto.getHorarioInicio()).getDayOfWeek();
-		System.out.println("--day " + day);
-
 		LocalTime hrInicial = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		LocalTime hrFinal = datahora.stringemDateTime(dto.getHorarioInicio()).toLocalTime();
 		Escala escala = escalaRepository
@@ -418,11 +411,13 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	private void enviarNotificacao(Agendamento agendamento) {
 		if (agendamento.getStatus() == StatusAgendamento.PENDENTE) {
 			NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(),
-					"SINO" + agendamento.getId() + "Novo Agendamento pendente");
+					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
+			NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
+					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
 		}
 		if (agendamento.getStatus() == StatusAgendamento.AGENDADO) {
 			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
-					"SINO" + agendamento.getId() + "Novo Agendamento Confirmado");
+					"SINO#" + agendamento.getId() + "#Novo Agendamento Confirmado");
 		}
 	}
 

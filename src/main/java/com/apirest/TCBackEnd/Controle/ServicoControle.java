@@ -100,12 +100,6 @@ public class ServicoControle extends GenericControl<Servico, ServicoDTO, Servico
 
 	public void pegar() {
 		Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("SecurityContextHolder.getContext().getAuthentication().getName()= "
-				+ SecurityContextHolder.getContext().getAuthentication().getName());
-		System.out.println("SecurityContextHolder.getContext().getAuthentication() " + authentication);
-		System.out.println(" RequestContextHolder.currentRequestAttributes().getSessionId() : "
-				+ RequestContextHolder.currentRequestAttributes().getSessionId());
-		System.out.println("RequestContextHolder.getRequestAttributes().getSessionId() : "
-				+ RequestContextHolder.getRequestAttributes().getSessionId());
+		
 	}
 }

@@ -134,7 +134,6 @@ public class ServicoFuncionarioControle
 
 	@Override
 	protected void posSalvar(ServicoFuncionario servicoFuncionario) {
-		System.out.println("servicoFuncionario id :" + servicoFuncionario.getId());
 		escalaControle.cadastraEscalasServicoFuncionario(servicoFuncionario);
 	}
 

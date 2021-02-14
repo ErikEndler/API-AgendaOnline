@@ -59,7 +59,6 @@ public class AvaliacaoEndPoint {
 	@ApiOperation(value = "Salva uma Avaliação")
 	@PostMapping("")
 	public ResponseEntity<?> salvar(@RequestBody @Valid AvaliacaoDTO avaliacaoDTO) {
-		System.out.println("avaliacaoDTO : " + avaliacaoDTO.toString());
 		Avaliacao avaliacao = avaliacaoControle.salvar(avaliacaoDTO);
 		return new ResponseEntity<>(AvaliacaoDTO.avaliacaoResposta(avaliacao), HttpStatus.CREATED);
 	}
