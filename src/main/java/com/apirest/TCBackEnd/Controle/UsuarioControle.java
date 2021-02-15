@@ -1,5 +1,6 @@
 package com.apirest.TCBackEnd.Controle;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,12 @@ public class UsuarioControle extends GenericControl<Usuario, UsuarioDTO, Usuario
 		int qtdNaoAtendido = agendamentoControle.listarAgendamentosPorStatus(idFunc, StatusAgendamento.NAOATENDIDO)
 				.size();
 		lista.add(qtdNaoAtendido);
+		int qtdAgendadoHoje = agendamentoControle.listarAgendamentosPorStatus(idFunc, StatusAgendamento.AGENDADO).stream()
+				.filter(ag -> ag.getHorario().toLocalDate()
+						.equals(LocalDate.now())).collect(Collectors.toList())
+				.size();
+		lista.add(qtdAgendadoHoje);
+
 		return lista;
 	}
 

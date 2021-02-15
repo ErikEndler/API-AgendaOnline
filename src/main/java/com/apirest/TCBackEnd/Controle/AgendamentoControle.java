@@ -231,7 +231,7 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	// lista agendamentos de um cliente
 	public Iterable<Agendamento> listarPorCliente(long idCliente) {
 		verificaCliente(idCliente);
-		return repositorio.findAllByClienteId(idCliente);
+		return repositorio.findAllByClienteIdOrderByHorarioDesc(idCliente);
 	}
 
 	public List<Agendamento> listarPorServico(long idServicoFuncionario) {
@@ -409,15 +409,34 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void enviarNotificacao(Agendamento agendamento) {
+		String cpf = SecurityContextHolder.getContext().getAuthentication().getName();
 		if (agendamento.getStatus() == StatusAgendamento.PENDENTE) {
 			NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(),
 					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
+			// Manda notificação para funcionario
 			NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
 					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
 		}
 		if (agendamento.getStatus() == StatusAgendamento.AGENDADO) {
+			// Manda notificação para o cliente
 			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
 					"SINO#" + agendamento.getId() + "#Novo Agendamento Confirmado");
+		}
+		if (agendamento.getStatus() == StatusAgendamento.CANCELADO) {
+			if (agendamento.getHorario().toLocalDate().isBefore(LocalDate.now())) {
+				// nao faz nada
+			} else {
+				// verifica se quem disparou cancelanmento é o cliente
+				if (cpf == agendamento.getCliente().getCpf()) {
+					// MAnda notificação para funcionario
+					NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
+							"SINO#" + agendamento.getId() + "#Agendamento cancelado");
+				} else {
+					// MAnda notificação para Cliente
+					NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
+							"SINO#" + agendamento.getId() + "#Agendamento cancelado");
+				}
+			}
 		}
 	}
 
