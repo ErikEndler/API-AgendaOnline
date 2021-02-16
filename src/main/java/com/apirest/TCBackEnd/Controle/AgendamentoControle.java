@@ -401,6 +401,11 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	public Agendamento editar(AgendamentoDTO dto) {
 		verificUpdate(dto);
 		Agendamento agendamento = repositorio.save(transformaEditar(dto));
+		listarAgendamentosConflitantes(agendamento.getId()).stream().filter(agd -> agd.getId() != agendamento.getId())
+				.forEach(agd -> {
+					agd.setStatus(StatusAgendamento.CANCELADO);
+					repositorio.save(agd);
+				});
 		if (agendamento.getStatus() == StatusAgendamento.FALTOU) {
 			atualizaScore(agendamento.getCliente().getId());
 		}
@@ -409,35 +414,37 @@ public class AgendamentoControle extends GenericControl<Agendamento, Agendamento
 	}
 
 	private void enviarNotificacao(Agendamento agendamento) {
-		String cpf = SecurityContextHolder.getContext().getAuthentication().getName();
-		if (agendamento.getStatus() == StatusAgendamento.PENDENTE) {
-			NotificationDispatcher.enviarMSG(SecurityContextHolder.getContext().getAuthentication().getName(),
-					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
-			// Manda notificação para funcionario
+		if (agendamento.getHorario().toLocalDate().isBefore(LocalDate.now())) {
+			// Data do agendamento é inferior a data atual, enão nada ocorre
+		} else {
+			enviaFuncionario(agendamento.getStatus(), agendamento);
+			enviaCliente(agendamento.getStatus(), agendamento);
+		}
+	}
+
+	private void enviaFuncionario(StatusAgendamento status, Agendamento agendamento) {
+		if (status == StatusAgendamento.PENDENTE) {
 			NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
 					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
+		} else if (status == StatusAgendamento.CANCELADO) {
+			NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
+					"SINO#" + agendamento.getId() + "#Agendamento cancelado");
 		}
-		if (agendamento.getStatus() == StatusAgendamento.AGENDADO) {
-			// Manda notificação para o cliente
+
+	}
+
+	private void enviaCliente(StatusAgendamento status, Agendamento agendamento) {
+		if (status == StatusAgendamento.PENDENTE) {
+			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
+					"SINO#" + agendamento.getId() + "#Novo Agendamento pendente");
+		} else if (status == StatusAgendamento.AGENDADO) {
 			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
 					"SINO#" + agendamento.getId() + "#Novo Agendamento Confirmado");
+		} else if (status == StatusAgendamento.CANCELADO) {
+			NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
+					"SINO#" + agendamento.getId() + "#Agendamento cancelado");
 		}
-		if (agendamento.getStatus() == StatusAgendamento.CANCELADO) {
-			if (agendamento.getHorario().toLocalDate().isBefore(LocalDate.now())) {
-				// nao faz nada
-			} else {
-				// verifica se quem disparou cancelanmento é o cliente
-				if (cpf == agendamento.getCliente().getCpf()) {
-					// MAnda notificação para funcionario
-					NotificationDispatcher.enviarMSG(agendamento.getServicoFuncionario().getFuncionario().getCpf(),
-							"SINO#" + agendamento.getId() + "#Agendamento cancelado");
-				} else {
-					// MAnda notificação para Cliente
-					NotificationDispatcher.enviarMSG(agendamento.getCliente().getCpf(),
-							"SINO#" + agendamento.getId() + "#Agendamento cancelado");
-				}
-			}
-		}
+
 	}
 
 }
